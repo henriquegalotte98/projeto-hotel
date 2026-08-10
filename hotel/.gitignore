@@ -1,33 +1,121 @@
+# Ignora o arquivo HELP.md, normalmente criado automaticamente pelo Spring Initializr.
 HELP.md
+
+# Ignora a pasta target na raiz do projeto.
+# O Maven coloca nela os arquivos compilados, .jar gerados, classes etc.
 target/
+
+# Ignora o arquivo JAR do Maven Wrapper.
+# OBS: normalmente é recomendado versionar esse arquivo,
+# então talvez você não queira ignorá-lo.
 .mvn/wrapper/maven-wrapper.jar
+
+# Exceção: permite uma pasta target caso ela esteja dentro de src/main.
+# O "!" significa "não ignore".
 !**/src/main/**/target/
+
+# Exceção: permite uma pasta target caso ela esteja dentro de src/test.
 !**/src/test/**/target/
 
-### STS ###
+
+### STS
+
+# Ignora arquivos gerados pelo Eclipse/STS relacionados ao processamento
+# automático de anotações.
 .apt_generated
+
+# Ignora o arquivo de configuração do classpath do Eclipse/STS.
 .classpath
+
+# Ignora configurações relacionadas a Annotation Processing no Eclipse.
 .factorypath
+
+# Ignora o arquivo de configuração do projeto Eclipse/STS.
 .project
+
+# Ignora a pasta de configurações específicas do Eclipse/STS.
 .settings
+
+# Ignora arquivos de configuração específicos do Spring Tool Suite.
 .springBeans
+
+# Ignora o cache criado pelo STS 4.
 .sts4-cache
 
-### IntelliJ IDEA ###
+
+### IntelliJ IDEA
+
+# Ignora a pasta de configurações do IntelliJ IDEA.
 .idea
+
+# Ignora qualquer arquivo com extensão .iws.
+# Esses arquivos armazenam configurações de workspace do IntelliJ.
 *.iws
+
+# Ignora qualquer arquivo .iml.
+# Esses arquivos armazenam configurações de módulos do IntelliJ.
 *.iml
+
+# Ignora qualquer arquivo .ipr.
+# Formato antigo de configuração de projetos IntelliJ.
 *.ipr
 
-### NetBeans ###
+
+### NetBeans
+
+# Ignora configurações privadas do projeto NetBeans.
+# Essas configurações podem variar de computador para computador.
 /nbproject/private/
+
+# Ignora a pasta de build do NetBeans.
 /nbbuild/
+
+# Ignora a pasta dist, normalmente usada para arquivos distribuíveis.
 /dist/
+
+# Ignora outra pasta de distribuição/build utilizada pelo NetBeans.
 /nbdist/
+
+# Ignora configurações relacionadas ao Gradle criadas pelo NetBeans.
 /.nb-gradle/
+
+# Ignora a pasta build na raiz do projeto.
+# Gradle normalmente coloca os arquivos compilados aqui.
 build/
+
+# Exceção: permite uma pasta build caso esteja dentro de src/main.
 !**/src/main/**/build/
+
+# Exceção: permite uma pasta build caso esteja dentro de src/test.
 !**/src/test/**/build/
 
-### VS Code ###
+
+### VS Code
+
+# Ignora a pasta de configurações do Visual Studio Code.
 .vscode/
+
+# Ignora novamente a pasta target.
+# Esta linha é redundante porque "target/" já aparece no começo.
+target/
+
+# Ignora novamente a pasta de configurações do IntelliJ IDEA.
+# Também é redundante, pois ".idea" já foi declarado anteriormente.
+.idea/
+
+# Ignora novamente a pasta de configurações do VS Code.
+# Também é redundante, pois ".vscode/" já aparece logo acima.
+.vscode/
+
+# Ignora todos os arquivos com extensão .iml.
+# Também é redundante, pois "*.iml" já aparece na seção IntelliJ.
+*.iml
+
+# Ignora o arquivo .env.
+# IMPORTANTE: normalmente contém senhas, tokens,
+# URLs de banco de dados e chaves de API.
+.env
+
+# Ignora o arquivo .DS_Store.
+# Esse arquivo é criado automaticamente pelo macOS.
+.DS_Store
