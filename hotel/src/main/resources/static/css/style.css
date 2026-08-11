@@ -1,0 +1,60 @@
+/* 1. Reset para o molde encaixar perfeitamente na tela */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  overflow: hidden; /* Evita rolagem na página inteira, a rolagem vai ficar só no 'main' */
+}
+
+/* 2. O Molde (CSS Grid) */
+.layout-mold {
+  display: grid;
+  
+  /* TAMANHOS DAS COLUNAS: 250px para o Aside, '1fr' (o resto) para o Conteúdo/Header */
+  grid-template-columns: 250px 1fr; 
+  
+  /* TAMANHOS DAS LINHAS: 70px para o Header, '1fr' (o resto) para o Conteúdo */
+  grid-template-rows: 70px 1fr; 
+  
+  height: 100vh; /* Força o molde a ter exatamente a altura da tela */
+}
+
+/* 3. Encaixando o Aside */
+.sidebar {
+  grid-column: 1 / 2; /* Ocupa a coluna 1 */
+  grid-row: 1 / 3;    /* Ocupa da linha 1 até a 3 (Altura total da tela) */
+  background-color: #2C3E50; /* Cor escura para visualização */
+  color: white;
+  padding: 20px;
+}
+
+/* 4. Encaixando o Header */
+.topbar {
+  grid-column: 2 / 3; /* Ocupa a coluna 2 (ao lado do aside) */
+  grid-row: 1 / 2;    /* Ocupa a linha 1 (no topo) */
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E0E0E0; /* Linha sutil separando do conteúdo */
+  display: flex;
+  align-items: center; /* Centraliza o conteúdo verticalmente */
+  padding: 0 20px;
+}
+
+/* 5. Encaixando o Conteúdo (Main) */
+.content {
+  grid-column: 2 / 3; /* Ocupa a coluna 2 */
+  grid-row: 2 / 3;    /* Ocupa a linha 2 (abaixo do header) */
+  background-color: #F4F6F7; /* Cor de fundo leve */
+  padding: 30px;
+  overflow-y: auto;   /* Se o conteúdo crescer, cria uma barra de rolagem APENAS aqui */
+}
+
+.logo-img{
+
+    height: 240px;
+    width: 240px;
+    padding: 20px;
+}
