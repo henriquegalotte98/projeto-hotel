@@ -1,0 +1,93 @@
+/* Seleciona body para aplicar os estilos deste bloco. */
+body {
+  /* Define o fundo do elemento. */
+  background: #2c3e50;
+}
+
+/* Seleciona .login-container para aplicar os estilos deste bloco. */
+.login-container {
+  /* Define a altura mínima do elemento. */
+  min-height: 100vh;
+  /* Define o modelo de exibição e organização do elemento. */
+  display: flex;
+  /* Alinha os itens no eixo transversal do contêiner. */
+  align-items: center;
+  /* Distribui ou alinha os itens no eixo principal. */
+  justify-content: center;
+  /* Define o espaçamento interno do elemento. */
+  padding: 20px;
+}
+
+/* Seleciona .login-card para aplicar os estilos deste bloco. */
+.login-card {
+  /* Define a largura do elemento. */
+  width: 100%;
+  /* Limita a largura máxima do elemento. */
+  max-width: 380px;
+  /* Define o fundo do elemento. */
+  background: white;
+  /* Define o espaçamento interno do elemento. */
+  padding: 30px;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 10px;
+}
+
+/* Seleciona .login-card h1 para aplicar os estilos deste bloco. */
+.login-card h1 {
+  /* Define a cor do texto. */
+  color: #2c3e50;
+  /* Define o alinhamento horizontal do texto. */
+  text-align: center;
+  /* Define o espaço externo abaixo do elemento. */
+  margin-bottom: 25px;
+}
+
+/* Seleciona .login-card input para aplicar os estilos deste bloco. */
+.login-card input {
+  /* Define o espaço externo abaixo do elemento. */
+  margin-bottom: 15px;
+}
+
+/* Seleciona .login-card button para aplicar os estilos deste bloco. */
+.login-card button {
+  /* Define a largura do elemento. */
+  width: 100%;
+  /* Define o fundo do elemento. */
+  background: #c9a227;
+  /* Define a cor do texto. */
+  color: white;
+  /* Define a borda do elemento. */
+  border: none;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 5px;
+  /* Define o espaçamento interno do elemento. */
+  padding: 12px;
+  /* Define o formato do ponteiro sobre o elemento. */
+  cursor: pointer;
+}
+
+/* Seleciona .login-card button:hover para aplicar os estilos deste bloco. */
+.login-card button:hover {
+  /* Define o fundo do elemento. */
+  background: #ad891d;
+}
+
+/* Seleciona .login-logo para aplicar os estilos deste bloco. */
+.login-logo {
+  /* Define o modelo de exibição e organização do elemento. */
+  display: block;
+  /* Define a largura do elemento. */
+  width: 150px;
+  /* Remove ou define o espaçamento externo do elemento. */
+  margin: 0 auto 20px;
+}
+
+/* Seleciona .mensagem-erro para aplicar os estilos deste bloco. */
+.mensagem-erro {
+  /* Define a cor do texto. */
+  color: #c0392b;
+  /* Define o espaço externo acima do elemento. */
+  margin-top: 15px;
+  /* Define o alinhamento horizontal do texto. */
+  text-align: center;
+}

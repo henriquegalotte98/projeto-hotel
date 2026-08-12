@@ -1,0 +1,96 @@
+/* 1. Reset para o molde encaixar perfeitamente na tela */
+/* Seleciona todos os elementos da página. */
+* {
+  /* Remove ou define o espaçamento externo do elemento. */
+  margin: 0;
+  /* Define o espaçamento interno do elemento. */
+  padding: 0;
+  /* Inclui bordas e preenchimentos no cálculo das dimensões. */
+  box-sizing: border-box;
+}
+
+/* Seleciona body para aplicar os estilos deste bloco. */
+body {
+  /* Define a família de fontes usada no texto. */
+  font-family: sans-serif;
+  /* Controla como o conteúdo excedente é exibido. */
+  overflow: hidden; /* Evita rolagem na página inteira, a rolagem vai ficar só no 'main' */
+}
+
+/* 2. O Molde (CSS Grid) */
+/* Seleciona .layout-mold para aplicar os estilos deste bloco. */
+.layout-mold {
+  /* Define o modelo de exibição e organização do elemento. */
+  display: grid;
+  
+  /* TAMANHOS DAS COLUNAS: 250px para o Aside, '1fr' (o resto) para o Conteúdo/Header */
+  /* Define a quantidade e a largura das colunas da grade. */
+  grid-template-columns: 250px 1fr; 
+  
+  /* TAMANHOS DAS LINHAS: 70px para o Header, '1fr' (o resto) para o Conteúdo */
+  /* Define a quantidade e a altura das linhas da grade. */
+  grid-template-rows: 70px 1fr; 
+  
+  /* Define a altura do elemento. */
+  height: 100vh; /* Força o molde a ter exatamente a altura da tela */
+}
+
+/* 3. Encaixando o Aside */
+/* Seleciona .sidebar para aplicar os estilos deste bloco. */
+.sidebar {
+  /* Posiciona o elemento entre colunas específicas da grade. */
+  grid-column: 1 / 2; /* Ocupa a coluna 1 */
+  /* Posiciona o elemento entre linhas específicas da grade. */
+  grid-row: 1 / 3;    /* Ocupa da linha 1 até a 3 (Altura total da tela) */
+  /* Define a cor de fundo do elemento. */
+  background-color: #2C3E50; /* Cor escura para visualização */
+  /* Define a cor do texto. */
+  color: white;
+  /* Define o espaçamento interno do elemento. */
+  padding: 20px;
+}
+
+/* 4. Encaixando o Header */
+/* Seleciona .topbar para aplicar os estilos deste bloco. */
+.topbar {
+  /* Posiciona o elemento entre colunas específicas da grade. */
+  grid-column: 2 / 3; /* Ocupa a coluna 2 (ao lado do aside) */
+  /* Posiciona o elemento entre linhas específicas da grade. */
+  grid-row: 1 / 2;    /* Ocupa a linha 1 (no topo) */
+  /* Define a cor de fundo do elemento. */
+  background-color: #FFFFFF;
+  /* Define a borda inferior do elemento. */
+  border-bottom: 1px solid #E0E0E0; /* Linha sutil separando do conteúdo */
+  /* Define o modelo de exibição e organização do elemento. */
+  display: flex;
+  /* Alinha os itens no eixo transversal do contêiner. */
+  align-items: center; /* Centraliza o conteúdo verticalmente */
+  /* Define o espaçamento interno do elemento. */
+  padding: 0 20px;
+}
+
+/* 5. Encaixando o Conteúdo (Main) */
+/* Seleciona .content para aplicar os estilos deste bloco. */
+.content {
+  /* Posiciona o elemento entre colunas específicas da grade. */
+  grid-column: 2 / 3; /* Ocupa a coluna 2 */
+  /* Posiciona o elemento entre linhas específicas da grade. */
+  grid-row: 2 / 3;    /* Ocupa a linha 2 (abaixo do header) */
+  /* Define a cor de fundo do elemento. */
+  background-color: #F4F6F7; /* Cor de fundo leve */
+  /* Define o espaçamento interno do elemento. */
+  padding: 30px;
+  /* Controla a rolagem vertical do conteúdo excedente. */
+  overflow-y: auto;   /* Se o conteúdo crescer, cria uma barra de rolagem APENAS aqui */
+}
+
+/* Seleciona .logo-img para aplicar os estilos deste bloco. */
+.logo-img{
+
+    /* Define a altura do elemento. */
+    height: 240px;
+    /* Define a largura do elemento. */
+    width: 240px;
+    /* Define o espaçamento interno do elemento. */
+    padding: 20px;
+}
