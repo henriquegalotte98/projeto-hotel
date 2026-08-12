@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dashboard | HotelWeb</title>
+    <link rel="stylesheet" href="../css/painel.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="logo">HotelWeb</div>
+        <nav class="menu">
+          <a href="dashboard.html">Dashboard</a
+          ><a href="reservas.html">Reservas</a
+          ><a href="nova-reserva.html">Nova reserva</a
+          ><a href="hospedes.html">Hóspedes</a
+          ><a href="checkin-checkout.html">Check-in/out</a
+          ><a href="quartos.html">Quartos</a
+          ><a href="governanca.html">Governança</a
+          ><a href="usuarios.html">Usuários</a
+          ><a href="perfil.html">Meu perfil</a>
+        </nav>
+      </aside>
+      <section class="conteudo">
+        <header class="topo">
+          <h1>Dashboard</h1>
+          <span class="usuario">Olá, Recepção</span>
+        </header>
+        <main>
+          <section class="cards">
+            <article class="card">
+              <span>Quartos disponíveis</span><strong>18</strong>
+            </article>
+            <article class="card">
+              <span>Quartos ocupados</span><strong>12</strong>
+            </article>
+            <article class="card">
+              <span>Check-ins hoje</span><strong>6</strong>
+            </article>
+            <article class="card">
+              <span>Check-outs hoje</span><strong>4</strong>
+            </article>
+          </section>
+          <section class="painel">
+            <div class="painel-cabecalho">
+              <h2>Próximas movimentações</h2>
+              <a class="btn" href="reservas.html">Ver reservas</a>
+            </div>
+            <div class="tabela-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Hóspede</th>
+                    <th>Quarto</th>
+                    <th>Movimentação</th>
+                    <th>Horário</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Ana Souza</td>
+                    <td>102</td>
+                    <td>Check-in</td>
+                    <td>14:00</td>
+                    <td><span class="status confirmada">Confirmada</span></td>
+                  </tr>
+                  <tr>
+                    <td>Carlos Lima</td>
+                    <td>205</td>
+                    <td>Check-out</td>
+                    <td>11:00</td>
+                    <td><span class="status pendente">Pendente</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </section>
+    </div>
+    <script src="../js/painel.js"></script>
+  </body>
+</html>
