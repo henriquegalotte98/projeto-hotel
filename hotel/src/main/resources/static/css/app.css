@@ -1,0 +1,139 @@
+/* Importa do Google Fonts as fontes utilizadas na identidade visual do hotel. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap");
+
+/*
+ * Variáveis globais do projeto.
+ * Centralizar cores e fontes aqui facilita futuras alterações na identidade visual.
+ */
+:root {
+    /* Verde escuro usado em títulos, links e elementos principais. */
+    --cor-primaria: #1f4d3e;
+
+    /* Dourado usado em detalhes e elementos de destaque. */
+    --cor-secundaria: #c49a5a;
+
+    /* Bege claro usado como fundo geral das páginas. */
+    --cor-fundo: #f7f5f0;
+
+    /* Branco usado no fundo de cards, formulários e outros componentes. */
+    --cor-superficie: #ffffff;
+
+    /* Cor principal dos textos. */
+    --cor-texto: #26332f;
+
+    /* Cor destinada a textos menos importantes ou auxiliares. */
+    --cor-texto-suave: #6b756f;
+
+    /* Cor usada em bordas e divisórias. */
+    --cor-borda: #dedfd9;
+
+    /* Fonte utilizada nos textos comuns da aplicação. */
+    --fonte-principal: "Inter", Arial, sans-serif;
+
+    /* Fonte utilizada nos títulos da aplicação. */
+    --fonte-titulo: "Montserrat", Arial, sans-serif;
+}
+
+/*
+ * Aplica o box-sizing a todos os elementos e aos seus pseudoelementos.
+ * Com border-box, padding e borda passam a fazer parte da largura total.
+ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Configura uma rolagem suave ao navegar para uma seção da página. */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Define o estilo padrão de todas as páginas da aplicação. */
+body {
+    /* Faz o corpo ocupar, no mínimo, toda a altura da tela. */
+    min-height: 100vh;
+
+    /* Remove a margem padrão adicionada pelo navegador. */
+    margin: 0;
+
+    /* Aplica a cor de fundo definida na identidade visual. */
+    background-color: var(--cor-fundo);
+
+    /* Define a cor padrão dos textos. */
+    color: var(--cor-texto);
+
+    /* Aplica a fonte principal importada do Google Fonts. */
+    font-family: var(--fonte-principal);
+
+    /* Define o tamanho base da fonte como 16 pixels na maioria dos navegadores. */
+    font-size: 1rem;
+
+    /* Melhora o espaçamento vertical e a legibilidade dos textos. */
+    line-height: 1.5;
+}
+
+/* Aplica a mesma identidade visual a todos os níveis de título. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    /* Remove a margem superior padrão dos títulos. */
+    margin-top: 0;
+
+    /* Destaca os títulos com a cor principal da aplicação. */
+    color: var(--cor-primaria);
+
+    /* Utiliza Montserrat para diferenciar títulos dos textos comuns. */
+    font-family: var(--fonte-titulo);
+
+    /* Mantém títulos de várias linhas mais compactos. */
+    line-height: 1.2;
+}
+
+/* Remove a margem superior padrão dos parágrafos. */
+p {
+    margin-top: 0;
+}
+
+/* Define a aparência padrão dos links. */
+a {
+    /* Usa a cor principal para identificar elementos clicáveis. */
+    color: var(--cor-primaria);
+
+    /* Remove o sublinhado padrão. */
+    text-decoration: none;
+}
+
+/* Altera a cor do link quando o usuário passa o mouse sobre ele. */
+a:hover {
+    color: var(--cor-secundaria);
+}
+
+/* Faz os controles de formulário herdarem a fonte definida no body. */
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+/* Configura imagens para serem responsivas. */
+img {
+    /* Remove o pequeno espaço inferior que imagens inline costumam possuir. */
+    display: block;
+
+    /* Impede que uma imagem ultrapasse a largura do elemento que a contém. */
+    max-width: 100%;
+}
+
+/* Personaliza as cores exibidas quando o usuário seleciona um texto. */
+::selection {
+    /* Usa a cor secundária como fundo da seleção. */
+    background-color: var(--cor-secundaria);
+
+    /* Mantém o texto selecionado legível sobre o fundo dourado. */
+    color: #ffffff;
+}
