@@ -1,22 +1,20 @@
 package br.com.jprog.hotel.model;
 
-public class Quarto {
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
-    
-    private static final long serialVersionUID = 1L;
+
+public class Quarto {
     
     // Identificação
     private Long id;
     private String numero;
     private String andar;
-    private TipoQuarto tipo;
-    private StatusQuarto status;
-    private StatusLimpeza statusLimpeza;
+    private String tipo;
+    private String status;
+    private String statusLimpeza;
     
-    // Características
+    //Características
     private int capacidade;
     private int quantidadeCamas;
     private String descricao;
@@ -39,7 +37,7 @@ import java.util.Objects;
     private String responsavelLimpeza;
     private String observacoesLimpeza;
     private boolean precisaLimpeza;
-    private PrioridadeLimpeza prioridadeLimpeza;
+    private String prioridadeLimpeza;
     
     // Controle interno
     private LocalDateTime dataCriacao;
@@ -48,24 +46,24 @@ import java.util.Objects;
     
     // Construtores
     public Quarto() {
-        this.status = StatusQuarto.DISPONIVEL;
-        this.statusLimpeza = StatusLimpeza.LIMPO;
+        this.status = "DISPONIVEL";
+        this.statusLimpeza = "LIMPO";
         this.disponivel = true;
         this.ativo = true;
         this.dataCriacao = LocalDateTime.now();
         this.dataAtualizacao = LocalDateTime.now();
         this.precisaLimpeza = false;
-        this.prioridadeLimpeza = PrioridadeLimpeza.NORMAL;
+        this.prioridadeLimpeza = "NORMAL";
     }
     
-    public Quarto(String numero, TipoQuarto tipo, int capacidade) {
+    public Quarto(String numero, String tipo, int capacidade) {
         this();
         this.numero = numero;
         this.tipo = tipo;
         this.capacidade = capacidade;
     }
     
-    public Quarto(String numero, String andar, TipoQuarto tipo, int capacidade, BigDecimal tarifaDiaria) {
+    public Quarto(String numero, String andar, String tipo, int capacidade, BigDecimal tarifaDiaria) {
         this(numero, tipo, capacidade);
         this.andar = andar;
         this.tarifaDiaria = tarifaDiaria;
@@ -96,28 +94,28 @@ import java.util.Objects;
         this.andar = andar;
     }
     
-    public TipoQuarto getTipo() {
+    public String getTipo() {
         return tipo;
     }
     
-    public void setTipo(TipoQuarto tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
     
-    public StatusQuarto getStatus() {
+    public String getStatus() {
         return status;
     }
     
-    public void setStatus(StatusQuarto status) {
+    public void setStatus(String status) {
         this.status = status;
         this.dataAtualizacao = LocalDateTime.now();
     }
     
-    public StatusLimpeza getStatusLimpeza() {
+    public String getStatusLimpeza() {
         return statusLimpeza;
     }
     
-    public void setStatusLimpeza(StatusLimpeza statusLimpeza) {
+    public void setStatusLimpeza(String statusLimpeza) {
         this.statusLimpeza = statusLimpeza;
         this.dataAtualizacao = LocalDateTime.now();
     }
@@ -253,15 +251,15 @@ import java.util.Objects;
     public void setPrecisaLimpeza(boolean precisaLimpeza) {
         this.precisaLimpeza = precisaLimpeza;
         if (precisaLimpeza) {
-            this.statusLimpeza = StatusLimpeza.SUJO;
+            this.statusLimpeza = "SUJO";
         }
     }
     
-    public PrioridadeLimpeza getPrioridadeLimpeza() {
+    public String getPrioridadeLimpeza() {
         return prioridadeLimpeza;
     }
     
-    public void setPrioridadeLimpeza(PrioridadeLimpeza prioridadeLimpeza) {
+    public void setPrioridadeLimpeza(String prioridadeLimpeza) {
         this.prioridadeLimpeza = prioridadeLimpeza;
     }
     
@@ -293,15 +291,15 @@ import java.util.Objects;
     public void registrarLimpeza(String responsavel) {
         this.dataUltimaLimpeza = LocalDateTime.now();
         this.responsavelLimpeza = responsavel;
-        this.statusLimpeza = StatusLimpeza.LIMPO;
+        this.statusLimpeza = "LIMPO";
         this.precisaLimpeza = false;
         this.dataAtualizacao = LocalDateTime.now();
     }
     
-    public void solicitarLimpeza(PrioridadeLimpeza prioridade) {
+    public void solicitarLimpeza(String prioridade) {
         this.precisaLimpeza = true;
         this.prioridadeLimpeza = prioridade;
-        this.statusLimpeza = StatusLimpeza.SUJO;
+        this.statusLimpeza = "SUJO";
         this.dataAtualizacao = LocalDateTime.now();
     }
     
@@ -313,35 +311,39 @@ import java.util.Objects;
     // Métodos de gerenciamento de disponibilidade
     public void reservar() {
         this.disponivel = false;
-        this.status = StatusQuarto.OCUPADO;
+        this.status = "OCUPADO";
         this.dataUltimaReserva = LocalDateTime.now();
         this.dataAtualizacao = LocalDateTime.now();
     }
     
     public void liberar() {
         this.disponivel = true;
-        this.status = StatusQuarto.DISPONIVEL;
+        this.status = "DISPONIVEL";
         this.precisaLimpeza = true;
-        this.statusLimpeza = StatusLimpeza.SUJO;
+        this.statusLimpeza = "SUJO";
         this.dataAtualizacao = LocalDateTime.now();
     }
     
     public void manutencao() {
         this.disponivel = false;
-        this.status = StatusQuarto.MANUTENCAO;
+        this.status = "MANUTENCAO";
         this.dataAtualizacao = LocalDateTime.now();
     }
     
     // Métodos de tarifas
-    public BigDecimal getTarifaPorPeriodo(TipoPeriodo periodo) {
-        switch (periodo) {
-            case DIARIO:
+    public BigDecimal getTarifaPorPeriodo(String periodo) {
+        if (periodo == null) {
+            return tarifaDiaria;
+        }
+
+        switch (periodo.toUpperCase()) {
+            case "DIARIO":
                 return tarifaDiaria;
-            case SEMANAL:
+            case "SEMANAL":
                 return tarifaSemanal != null ? tarifaSemanal : tarifaDiaria.multiply(new BigDecimal("7"));
-            case MENSAL:
+            case "MENSAL":
                 return tarifaMensal != null ? tarifaMensal : tarifaDiaria.multiply(new BigDecimal("30"));
-            case PROMOCIONAL:
+            case "PROMOCIONAL":
                 return tarifaPromocional != null ? tarifaPromocional : tarifaDiaria;
             default:
                 return tarifaDiaria;
@@ -354,16 +356,16 @@ import java.util.Objects;
     
     // Métodos de validação
     public boolean isCheckinPermitido() {
-        return disponivel && status == StatusQuarto.DISPONIVEL && 
-               statusLimpeza == StatusLimpeza.LIMPO && ativo;
+        return disponivel && "DISPONIVEL".equalsIgnoreCase(status) && 
+               "LIMPO".equalsIgnoreCase(statusLimpeza) && ativo;
     }
     
     public boolean isCheckoutPermitido() {
-        return status == StatusQuarto.OCUPADO && ativo;
+        return "OCUPADO".equalsIgnoreCase(status) && ativo;
     }
     
     public boolean precisaLimpezaUrgente() {
-        return precisaLimpeza && prioridadeLimpeza == PrioridadeLimpeza.URGENTE;
+        return precisaLimpeza && "URGENTE".equalsIgnoreCase(prioridadeLimpeza);
     }
     
     // Métodos auxiliares

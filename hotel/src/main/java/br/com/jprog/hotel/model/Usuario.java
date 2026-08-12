@@ -6,8 +6,6 @@ import java.util.Objects;
 
 public class Usuario {
     
-    private static final long serialVersionUID = 1L;
-    
     private Long id;
     private String nome;
     private String cpf;
@@ -58,7 +56,7 @@ public class Usuario {
     }
     
     public void setCpf(String cpf) {
-        this.cpf = cpf.replaceAll("[^0-9]", "");
+        this.cpf = cpf == null ? null : cpf.replaceAll("[^0-9]", "");
     }
     
     public String getSenha() {
@@ -143,10 +141,6 @@ public class Usuario {
             return false;
         }
         return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
-    }
-    
-    public boolean isAtivo() {
-        return ativo;
     }
     
     public void ativar() {
