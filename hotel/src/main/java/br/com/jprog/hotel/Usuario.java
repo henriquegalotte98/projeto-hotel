@@ -21,7 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 
 // Declara a classe principal da aplicação.
-public class HotelwebApplication {
+public class Usuario {
 
     // Método main, responsável por iniciar a aplicação Java.
     // É o primeiro método executado quando o projeto é iniciado.
@@ -34,6 +34,6 @@ public class HotelwebApplication {
         //
         // Depois dessa linha, o Spring começa a carregar as configurações,
         // controllers, services, repositories e demais componentes do sistema.
-        SpringApplication.run(HotelwebApplication.class, args);
+        SpringApplication.run(Usuario.class, args);
     }
 }
