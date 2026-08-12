@@ -1,0 +1,152 @@
+/* Cards */
+/* Seleciona .card para aplicar os estilos deste bloco. */
+.card {
+  /* Define o fundo do elemento. */
+  background: white;
+  /* Define o espaçamento interno do elemento. */
+  padding: 20px;
+  /* Define a borda do elemento. */
+  border: 1px solid #e0e0e0;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 8px;
+  /* Define o espaço externo abaixo do elemento. */
+  margin-bottom: 20px;
+}
+
+/* Botões */
+/* Seleciona .btn para aplicar os estilos deste bloco. */
+.btn {
+  /* Define a borda do elemento. */
+  border: none;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 5px;
+  /* Define o espaçamento interno do elemento. */
+  padding: 10px 16px;
+  /* Define o formato do ponteiro sobre o elemento. */
+  cursor: pointer;
+}
+
+/* Seleciona .btn-primary para aplicar os estilos deste bloco. */
+.btn-primary {
+  /* Define o fundo do elemento. */
+  background: #2c3e50;
+  /* Define a cor do texto. */
+  color: white;
+}
+
+/* Seleciona .btn-secondary para aplicar os estilos deste bloco. */
+.btn-secondary {
+  /* Define o fundo do elemento. */
+  background: #c9a227;
+  /* Define a cor do texto. */
+  color: white;
+}
+
+/* Seleciona .btn-danger para aplicar os estilos deste bloco. */
+.btn-danger {
+  /* Define o fundo do elemento. */
+  background: #c0392b;
+  /* Define a cor do texto. */
+  color: white;
+}
+
+/* Formulários */
+/* Seleciona .form-group para aplicar os estilos deste bloco. */
+.form-group {
+  /* Define o espaço externo abaixo do elemento. */
+  margin-bottom: 15px;
+}
+
+/* Seleciona label para aplicar os estilos deste bloco. */
+label {
+  /* Define o modelo de exibição e organização do elemento. */
+  display: block;
+  /* Define o espaço externo abaixo do elemento. */
+  margin-bottom: 5px;
+  /* Define o peso visual da fonte. */
+  font-weight: bold;
+}
+
+/* Seleciona input para aplicar os estilos deste bloco. */
+input,
+/* Seleciona select para aplicar os estilos deste bloco. */
+select,
+/* Seleciona textarea para aplicar os estilos deste bloco. */
+textarea {
+  /* Define a largura do elemento. */
+  width: 100%;
+  /* Define o espaçamento interno do elemento. */
+  padding: 10px;
+  /* Define a borda do elemento. */
+  border: 1px solid #cccccc;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 5px;
+}
+
+/* Tabelas */
+/* Seleciona table para aplicar os estilos deste bloco. */
+table {
+  /* Define a largura do elemento. */
+  width: 100%;
+  /* Une as bordas adjacentes das células da tabela. */
+  border-collapse: collapse;
+  /* Define o fundo do elemento. */
+  background: white;
+}
+
+/* Seleciona th para aplicar os estilos deste bloco. */
+th,
+/* Seleciona td para aplicar os estilos deste bloco. */
+td {
+  /* Define o espaçamento interno do elemento. */
+  padding: 12px;
+  /* Define a borda inferior do elemento. */
+  border-bottom: 1px solid #dddddd;
+  /* Define o alinhamento horizontal do texto. */
+  text-align: left;
+}
+
+/* Seleciona th para aplicar os estilos deste bloco. */
+th {
+  /* Define o fundo do elemento. */
+  background: #2c3e50;
+  /* Define a cor do texto. */
+  color: white;
+}
+
+/* Status */
+/* Seleciona .badge para aplicar os estilos deste bloco. */
+.badge {
+  /* Define o modelo de exibição e organização do elemento. */
+  display: inline-block;
+  /* Define o espaçamento interno do elemento. */
+  padding: 5px 10px;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 20px;
+  /* Define o tamanho do texto. */
+  font-size: 12px;
+}
+
+/* Seleciona .badge-success para aplicar os estilos deste bloco. */
+.badge-success {
+  /* Define o fundo do elemento. */
+  background: #d5f5e3;
+  /* Define a cor do texto. */
+  color: #198754;
+}
+
+/* Seleciona .badge-warning para aplicar os estilos deste bloco. */
+.badge-warning {
+  /* Define o fundo do elemento. */
+  background: #fff3cd;
+  /* Define a cor do texto. */
+  color: #856404;
+}
+
+/* Seleciona .badge-danger para aplicar os estilos deste bloco. */
+.badge-danger {
+  /* Define o fundo do elemento. */
+  background: #f8d7da;
+  /* Define a cor do texto. */
+  color: #c0392b;
+}

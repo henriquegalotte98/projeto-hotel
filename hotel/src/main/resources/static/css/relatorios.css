@@ -1,0 +1,76 @@
+/* Seleciona .relatorios-title para aplicar os estilos deste bloco. */
+.relatorios-title {
+  /* Define a cor do texto. */
+  color: #2c3e50;
+  /* Define o espaço externo abaixo do elemento. */
+  margin-bottom: 20px;
+}
+
+/* Seleciona .filtros para aplicar os estilos deste bloco. */
+.filtros {
+  /* Define o modelo de exibição e organização do elemento. */
+  display: flex;
+  /* Alinha os itens no eixo transversal do contêiner. */
+  align-items: end;
+  /* Define o espaço entre os itens do contêiner. */
+  gap: 15px;
+  /* Define o fundo do elemento. */
+  background: white;
+  /* Define o espaçamento interno do elemento. */
+  padding: 20px;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 8px;
+  /* Define o espaço externo abaixo do elemento. */
+  margin-bottom: 20px;
+}
+
+/* Seleciona .filtros .form-group para aplicar os estilos deste bloco. */
+.filtros .form-group {
+  /* Define como o item cresce e ocupa o espaço disponível. */
+  flex: 1;
+  /* Remove ou define o espaçamento externo do elemento. */
+  margin: 0;
+}
+
+/* Seleciona .relatorio-card para aplicar os estilos deste bloco. */
+.relatorio-card {
+  /* Define o fundo do elemento. */
+  background: white;
+  /* Define o espaçamento interno do elemento. */
+  padding: 20px;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 8px;
+  /* Define o espaço externo abaixo do elemento. */
+  margin-bottom: 20px;
+}
+
+/* Seleciona .grafico para aplicar os estilos deste bloco. */
+.grafico {
+  /* Define a largura do elemento. */
+  width: 100%;
+  /* Define a altura mínima do elemento. */
+  min-height: 300px;
+  /* Define o modelo de exibição e organização do elemento. */
+  display: flex;
+  /* Alinha os itens no eixo transversal do contêiner. */
+  align-items: center;
+  /* Distribui ou alinha os itens no eixo principal. */
+  justify-content: center;
+  /* Define a cor do texto. */
+  color: #777777;
+  /* Define a borda do elemento. */
+  border: 1px solid #dddddd;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 5px;
+}
+
+/* Aplica os estilos internos somente quando essa condição de tela for atendida. */
+@media (max-width: 700px) {
+  /* Seleciona .filtros para aplicar os estilos deste bloco. */
+  .filtros {
+    /* Define a direção em que os itens flexíveis são organizados. */
+    flex-direction: column;
+    /* Alinha os itens no eixo transversal do contêiner. */
+    align-items: stretch;
+  }
+}

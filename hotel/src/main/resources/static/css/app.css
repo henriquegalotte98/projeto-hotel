@@ -1,139 +1,187 @@
-/* Importa do Google Fonts as fontes utilizadas na identidade visual do hotel. */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap");
+/* Reset */
+/* Seleciona todos os elementos da página. */
+* {
+  /* Remove ou define o espaçamento externo do elemento. */
+  margin: 0;
+  /* Define o espaçamento interno do elemento. */
+  padding: 0;
+  /* Inclui bordas e preenchimentos no cálculo das dimensões. */
+  box-sizing: border-box;
+}
 
-/*
- * Variáveis globais do projeto.
- * Centralizar cores e fontes aqui facilita futuras alterações na identidade visual.
- */
+/* Seleciona o elemento raiz para declarar variáveis CSS globais. */
 :root {
-    /* Verde escuro usado em títulos, links e elementos principais. */
-    --cor-primaria: #1f4d3e;
-
-    /* Dourado usado em detalhes e elementos de destaque. */
-    --cor-secundaria: #c49a5a;
-
-    /* Bege claro usado como fundo geral das páginas. */
-    --cor-fundo: #f7f5f0;
-
-    /* Branco usado no fundo de cards, formulários e outros componentes. */
-    --cor-superficie: #ffffff;
-
-    /* Cor principal dos textos. */
-    --cor-texto: #26332f;
-
-    /* Cor destinada a textos menos importantes ou auxiliares. */
-    --cor-texto-suave: #6b756f;
-
-    /* Cor usada em bordas e divisórias. */
-    --cor-borda: #dedfd9;
-
-    /* Fonte utilizada nos textos comuns da aplicação. */
-    --fonte-principal: "Inter", Arial, sans-serif;
-
-    /* Fonte utilizada nos títulos da aplicação. */
-    --fonte-titulo: "Montserrat", Arial, sans-serif;
+  /* Declara a variável CSS --azul para reutilizar esse valor no projeto. */
+  --azul: #2c3e50;
+  /* Declara a variável CSS --dourado para reutilizar esse valor no projeto. */
+  --dourado: #c9a227;
+  /* Declara a variável CSS --branco para reutilizar esse valor no projeto. */
+  --branco: #ffffff;
+  /* Declara a variável CSS --fundo para reutilizar esse valor no projeto. */
+  --fundo: #f4f6f7;
+  /* Declara a variável CSS --texto para reutilizar esse valor no projeto. */
+  --texto: #333333;
+  /* Declara a variável CSS --borda para reutilizar esse valor no projeto. */
+  --borda: #e0e0e0;
 }
 
-/*
- * Aplica o box-sizing a todos os elementos e aos seus pseudoelementos.
- * Com border-box, padding e borda passam a fazer parte da largura total.
- */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-/* Configura uma rolagem suave ao navegar para uma seção da página. */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Define o estilo padrão de todas as páginas da aplicação. */
+/* Seleciona body para aplicar os estilos deste bloco. */
 body {
-    /* Faz o corpo ocupar, no mínimo, toda a altura da tela. */
-    min-height: 100vh;
-
-    /* Remove a margem padrão adicionada pelo navegador. */
-    margin: 0;
-
-    /* Aplica a cor de fundo definida na identidade visual. */
-    background-color: var(--cor-fundo);
-
-    /* Define a cor padrão dos textos. */
-    color: var(--cor-texto);
-
-    /* Aplica a fonte principal importada do Google Fonts. */
-    font-family: var(--fonte-principal);
-
-    /* Define o tamanho base da fonte como 16 pixels na maioria dos navegadores. */
-    font-size: 1rem;
-
-    /* Melhora o espaçamento vertical e a legibilidade dos textos. */
-    line-height: 1.5;
+  /* Define a família de fontes usada no texto. */
+  font-family: Arial, sans-serif;
+  /* Define a cor do texto. */
+  color: var(--texto);
+  /* Define o fundo do elemento. */
+  background: var(--fundo);
+  /* Controla como o conteúdo excedente é exibido. */
+  overflow: hidden;
 }
 
-/* Aplica a mesma identidade visual a todos os níveis de título. */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    /* Remove a margem superior padrão dos títulos. */
-    margin-top: 0;
-
-    /* Destaca os títulos com a cor principal da aplicação. */
-    color: var(--cor-primaria);
-
-    /* Utiliza Montserrat para diferenciar títulos dos textos comuns. */
-    font-family: var(--fonte-titulo);
-
-    /* Mantém títulos de várias linhas mais compactos. */
-    line-height: 1.2;
+/* Estrutura principal */
+/* Seleciona .layout-mold para aplicar os estilos deste bloco. */
+.layout-mold {
+  /* Define o modelo de exibição e organização do elemento. */
+  display: grid;
+  /* Define a quantidade e a largura das colunas da grade. */
+  grid-template-columns: 250px 1fr;
+  /* Define a quantidade e a altura das linhas da grade. */
+  grid-template-rows: 70px 1fr;
+  /* Define a altura do elemento. */
+  height: 100vh;
 }
 
-/* Remove a margem superior padrão dos parágrafos. */
-p {
-    margin-top: 0;
+/* Menu lateral */
+/* Seleciona .sidebar para aplicar os estilos deste bloco. */
+.sidebar {
+  /* Posiciona o elemento entre colunas específicas da grade. */
+  grid-column: 1 / 2;
+  /* Posiciona o elemento entre linhas específicas da grade. */
+  grid-row: 1 / 3;
+  /* Define o fundo do elemento. */
+  background: var(--azul);
+  /* Define a cor do texto. */
+  color: var(--branco);
+  /* Define o espaçamento interno do elemento. */
+  padding: 20px;
 }
 
-/* Define a aparência padrão dos links. */
-a {
-    /* Usa a cor principal para identificar elementos clicáveis. */
-    color: var(--cor-primaria);
-
-    /* Remove o sublinhado padrão. */
-    text-decoration: none;
+/* Seleciona .logo-img para aplicar os estilos deste bloco. */
+.logo-img {
+  /* Define o modelo de exibição e organização do elemento. */
+  display: block;
+  /* Define a largura do elemento. */
+  width: 180px;
+  /* Define a altura do elemento. */
+  height: auto;
+  /* Remove ou define o espaçamento externo do elemento. */
+  margin: 0 auto 25px;
 }
 
-/* Altera a cor do link quando o usuário passa o mouse sobre ele. */
-a:hover {
-    color: var(--cor-secundaria);
+/* Menu */
+/* Seleciona .sidebar nav para aplicar os estilos deste bloco. */
+.sidebar nav {
+  /* Define o modelo de exibição e organização do elemento. */
+  display: flex;
+  /* Define a direção em que os itens flexíveis são organizados. */
+  flex-direction: column;
+  /* Define o espaço entre os itens do contêiner. */
+  gap: 8px;
 }
 
-/* Faz os controles de formulário herdarem a fonte definida no body. */
-button,
-input,
-select,
-textarea {
-    font: inherit;
+/* Seleciona .sidebar a para aplicar os estilos deste bloco. */
+.sidebar a {
+  /* Define a cor do texto. */
+  color: var(--branco);
+  /* Controla decorações do texto, como sublinhado. */
+  text-decoration: none;
+  /* Define o espaçamento interno do elemento. */
+  padding: 12px;
+  /* Arredonda os cantos do elemento. */
+  border-radius: 5px;
 }
 
-/* Configura imagens para serem responsivas. */
-img {
-    /* Remove o pequeno espaço inferior que imagens inline costumam possuir. */
+/* Seleciona .sidebar a:hover para aplicar os estilos deste bloco. */
+.sidebar a:hover,
+/* Seleciona .sidebar a.ativo para aplicar os estilos deste bloco. */
+.sidebar a.ativo {
+  /* Define o fundo do elemento. */
+  background: var(--dourado);
+  /* Define a cor do texto. */
+  color: var(--azul);
+}
+
+/* Cabeçalho */
+/* Seleciona .topbar para aplicar os estilos deste bloco. */
+.topbar {
+  /* Posiciona o elemento entre colunas específicas da grade. */
+  grid-column: 2 / 3;
+  /* Posiciona o elemento entre linhas específicas da grade. */
+  grid-row: 1 / 2;
+  /* Define o fundo do elemento. */
+  background: var(--branco);
+  /* Define a borda inferior do elemento. */
+  border-bottom: 1px solid var(--borda);
+  /* Define o modelo de exibição e organização do elemento. */
+  display: flex;
+  /* Alinha os itens no eixo transversal do contêiner. */
+  align-items: center;
+  /* Distribui ou alinha os itens no eixo principal. */
+  justify-content: space-between;
+  /* Define o espaçamento interno do elemento. */
+  padding: 0 25px;
+}
+
+/* Conteúdo */
+/* Seleciona .content para aplicar os estilos deste bloco. */
+.content {
+  /* Posiciona o elemento entre colunas específicas da grade. */
+  grid-column: 2 / 3;
+  /* Posiciona o elemento entre linhas específicas da grade. */
+  grid-row: 2 / 3;
+  /* Define o espaçamento interno do elemento. */
+  padding: 30px;
+  /* Controla a rolagem vertical do conteúdo excedente. */
+  overflow-y: auto;
+}
+
+/* Responsividade */
+/* Aplica os estilos internos somente quando essa condição de tela for atendida. */
+@media (max-width: 700px) {
+  /* Seleciona body para aplicar os estilos deste bloco. */
+  body {
+    /* Controla como o conteúdo excedente é exibido. */
+    overflow: auto;
+  }
+
+  /* Seleciona .layout-mold para aplicar os estilos deste bloco. */
+  .layout-mold {
+    /* Define o modelo de exibição e organização do elemento. */
     display: block;
+    /* Define a altura do elemento. */
+    height: auto;
+  }
 
-    /* Impede que uma imagem ultrapasse a largura do elemento que a contém. */
-    max-width: 100%;
-}
+  /* Seleciona .sidebar para aplicar os estilos deste bloco. */
+  .sidebar {
+    /* Define o espaçamento interno do elemento. */
+    padding: 15px;
+  }
 
-/* Personaliza as cores exibidas quando o usuário seleciona um texto. */
-::selection {
-    /* Usa a cor secundária como fundo da seleção. */
-    background-color: var(--cor-secundaria);
+  /* Seleciona .logo-img para aplicar os estilos deste bloco. */
+  .logo-img {
+    /* Define a largura do elemento. */
+    width: 120px;
+  }
 
-    /* Mantém o texto selecionado legível sobre o fundo dourado. */
-    color: #ffffff;
+  /* Seleciona .topbar para aplicar os estilos deste bloco. */
+  .topbar {
+    /* Define a altura do elemento. */
+    height: 70px;
+  }
+
+  /* Seleciona .content para aplicar os estilos deste bloco. */
+  .content {
+    /* Define o espaçamento interno do elemento. */
+    padding: 20px;
+  }
 }
