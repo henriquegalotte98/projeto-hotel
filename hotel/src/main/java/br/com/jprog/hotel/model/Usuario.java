@@ -1,6 +1,6 @@
 // Define o pacote onde esta classe está localizada.
 // O pacote ajuda a organizar as classes do projeto.
-package br.com.jprog.hotel;
+package br.com.jprog.hotel.model;
 
 
 // Importa a classe SpringApplication.
