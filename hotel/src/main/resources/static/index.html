@@ -1,36 +1,44 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Molde Base.</title>
-    <!-- O CSS estaria no seu app.css ou importado via React -->
-    <link rel="stylesheet" href="../css/style.css" />
-  </head>
-  <body>
-    
-
-
-    <div id="root" class="layout-mold">
-      
-      
-      <aside class="sidebar">
-        <div>
-        <img  class="logo-img" src="../assets/img/images (6).jpg">
-        </div>
-        ASIDE (250px)
-      </aside>
-
-      <!-- Barra Superior (Direita, no topo) -->
-      <header class="topbar">
-        HEADER (70px)
-      </header>
-
-      <!-- Conteúdo Principal (Direita, abaixo do header) -->
-      <main class="content">
-        CONTEÚDO PRINCIPAL (Espaço restante)
-      </main>
-
-    </div>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelWeb - Redirecionando</title>
+    <style>
+        body { 
+            background: #0f172a; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            font-family: 'Inter', sans-serif; 
+            color: #94a3b8; 
+            gap: 16px;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-left-color: #b45309;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="spinner"></div>
+    <p>Carregando HotelWeb...</p>
+    <script>
+        const usuario = localStorage.getItem("usuarioLogado");
+        setTimeout(() => {
+            if (usuario) {
+                window.location.href = "html/dashboard.html";
+            } else {
+                window.location.href = "html/login.html";
+            }
+        }, 300);
+    </script>
+</body>
 </html>
