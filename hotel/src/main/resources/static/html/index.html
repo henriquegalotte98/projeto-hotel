@@ -3,22 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Molde Base.</title>
-    <!-- O CSS estaria no seu app.css ou importado via React -->
+    <title>Hotel Painel</title>
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
-    
-
-
     <div id="root" class="layout-mold">
-      
-      
-      <aside class="sidebar">
-        <div>
-        <img  class="logo-img" src="../assets/img/images (6).jpg">
+      <aside class="sidebar" aria-label="Navegação principal">
+        <div class="sidebar-brand">
+          <img
+            class="logo-img"
+            src="../assets/img/images (6).jpg"
+            alt="Logo do Hotel"
+          />
+          <div class="brand-text">
+            <strong>Hotel</strong>
+            <span>Gestão hoteleira</span>
+          </div>
         </div>
-        ASIDE (250px)
+
+        <nav class="sidebar-nav">
+          <a class="nav-link ativo" href="index.html" aria-current="page">
+            <span class="nav-icon" aria-hidden="true">⌂</span>
+            Visão geral
+          </a>
+          <a class="nav-link" href="quartos.html">
+            <span class="nav-icon" aria-hidden="true">▦</span>
+            Quartos
+          </a>
+          <a class="nav-link" href="#reservas">
+            <span class="nav-icon" aria-hidden="true">▣</span>
+            Reservas
+          </a>
+          <a class="nav-link" href="#hospedes">
+            <span class="nav-icon" aria-hidden="true">●</span>
+            Hóspedes
+          </a>
+        </nav>
+
+        <p class="sidebar-footer">© 2026 Hotel Imperial</p>
       </aside>
 
       <!-- Barra Superior (Direita, no topo) -->

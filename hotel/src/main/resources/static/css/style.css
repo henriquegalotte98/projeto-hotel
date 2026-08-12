@@ -1,96 +1,372 @@
-/* 1. Reset para o molde encaixar perfeitamente na tela */
-/* Seleciona todos os elementos da página. */
+/* Paleta de cores e valores reutilizáveis da página. */
+:root {
+  --azul-profundo: #172a3a;
+  --azul-medio: #24445c;
+  --dourado: #c9a96e;
+  --dourado-claro: #ead8b5;
+  --fundo: #f4f6f8;
+  --superficie: #ffffff;
+  --texto: #25313a;
+  --texto-suave: #687680;
+  --borda: #dfe5e9;
+  --sombra: 0 12px 32px rgba(23, 42, 58, 0.1);
+}
+
+/* Remove os espaçamentos padrão de todos os elementos. */
 * {
-  /* Remove ou define o espaçamento externo do elemento. */
   margin: 0;
-  /* Define o espaçamento interno do elemento. */
   padding: 0;
-  /* Inclui bordas e preenchimentos no cálculo das dimensões. */
   box-sizing: border-box;
 }
 
-/* Seleciona body para aplicar os estilos deste bloco. */
+/* Garante que a aplicação possa ocupar toda a altura da tela. */
+html,
 body {
-  /* Define a família de fontes usada no texto. */
-  font-family: sans-serif;
-  /* Controla como o conteúdo excedente é exibido. */
-  overflow: hidden; /* Evita rolagem na página inteira, a rolagem vai ficar só no 'main' */
+  min-height: 100%;
 }
 
-/* 2. O Molde (CSS Grid) */
-/* Seleciona .layout-mold para aplicar os estilos deste bloco. */
+/* Define a aparência geral e o fundo da página. */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--texto);
+  background: var(--fundo);
+  overflow: hidden;
+}
+
+/* Organiza a sidebar, o cabeçalho e o conteúdo em uma grade. */
 .layout-mold {
-  /* Define o modelo de exibição e organização do elemento. */
   display: grid;
-  
-  /* TAMANHOS DAS COLUNAS: 250px para o Aside, '1fr' (o resto) para o Conteúdo/Header */
-  /* Define a quantidade e a largura das colunas da grade. */
-  grid-template-columns: 250px 1fr; 
-  
-  /* TAMANHOS DAS LINHAS: 70px para o Header, '1fr' (o resto) para o Conteúdo */
-  /* Define a quantidade e a altura das linhas da grade. */
-  grid-template-rows: 70px 1fr; 
-  
-  /* Define a altura do elemento. */
-  height: 100vh; /* Força o molde a ter exatamente a altura da tela */
+  grid-template-columns: 270px minmax(0, 1fr);
+  grid-template-rows: 76px minmax(0, 1fr);
+  min-height: 100vh;
 }
 
-/* 3. Encaixando o Aside */
-/* Seleciona .sidebar para aplicar os estilos deste bloco. */
+/* Estiliza a barra lateral principal. */
 .sidebar {
-  /* Posiciona o elemento entre colunas específicas da grade. */
-  grid-column: 1 / 2; /* Ocupa a coluna 1 */
-  /* Posiciona o elemento entre linhas específicas da grade. */
-  grid-row: 1 / 3;    /* Ocupa da linha 1 até a 3 (Altura total da tela) */
-  /* Define a cor de fundo do elemento. */
-  background-color: #2C3E50; /* Cor escura para visualização */
-  /* Define a cor do texto. */
-  color: white;
-  /* Define o espaçamento interno do elemento. */
-  padding: 20px;
-}
-
-/* 4. Encaixando o Header */
-/* Seleciona .topbar para aplicar os estilos deste bloco. */
-.topbar {
-  /* Posiciona o elemento entre colunas específicas da grade. */
-  grid-column: 2 / 3; /* Ocupa a coluna 2 (ao lado do aside) */
-  /* Posiciona o elemento entre linhas específicas da grade. */
-  grid-row: 1 / 2;    /* Ocupa a linha 1 (no topo) */
-  /* Define a cor de fundo do elemento. */
-  background-color: #FFFFFF;
-  /* Define a borda inferior do elemento. */
-  border-bottom: 1px solid #E0E0E0; /* Linha sutil separando do conteúdo */
-  /* Define o modelo de exibição e organização do elemento. */
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  position: relative;
   display: flex;
-  /* Alinha os itens no eixo transversal do contêiner. */
-  align-items: center; /* Centraliza o conteúdo verticalmente */
-  /* Define o espaçamento interno do elemento. */
-  padding: 0 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 28px 22px;
+  color: #ffffff;
+  background:
+    linear-gradient(180deg, rgba(36, 68, 92, 0.96), rgba(23, 42, 58, 0.99)),
+    var(--azul-profundo);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 8px 0 28px rgba(23, 42, 58, 0.14);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  z-index: 2;
 }
 
-/* 5. Encaixando o Conteúdo (Main) */
-/* Seleciona .content para aplicar os estilos deste bloco. */
+/* Cria um detalhe dourado na lateral. */
+.sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, var(--dourado), transparent);
+}
+
+/* Centraliza o contêiner da imagem da marca. */
+.sidebar > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Organiza a logo e o nome do hotel no topo do aside. */
+.sidebar .sidebar-brand {
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Agrupa o nome e a descrição curta da marca. */
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Destaca o nome principal do hotel. */
+.brand-text strong {
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.12rem;
+  letter-spacing: 0.08em;
+}
+
+/* Exibe a descrição da marca com menor destaque. */
+.brand-text span {
+  color: var(--dourado-claro);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+}
+
+/* Exibe a logo em formato circular sem distorcer a imagem. */
+.logo-img {
+  display: block;
+  width: 172px;
+  height: 172px;
+  object-fit: cover;
+  object-position: center;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 2px solid var(--dourado);
+  border-radius: 50%;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+}
+
+/* Organiza verticalmente os links do menu lateral. */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Define a aparência padrão dos itens de navegação. */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  color: rgba(255, 255, 255, 0.78);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+/* Realça o link apontado pelo cursor ou pelo teclado. */
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.1);
+  outline: none;
+  transform: translateX(3px);
+}
+
+/* Identifica visualmente a página atualmente aberta. */
+.nav-link.ativo {
+  color: var(--azul-profundo);
+  background: linear-gradient(135deg, var(--dourado-claro), var(--dourado));
+  box-shadow: 0 8px 20px rgba(201, 169, 110, 0.2);
+}
+
+/* Reserva uma largura constante para os símbolos do menu. */
+.nav-icon {
+  width: 22px;
+  font-size: 1.08rem;
+  line-height: 1;
+  text-align: center;
+}
+
+/* Mantém as informações finais na base do aside. */
+.sidebar-footer {
+  margin-top: auto;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+/* Estiliza a barra superior. */
+.topbar {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  color: var(--azul-profundo);
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid var(--borda);
+  box-shadow: 0 4px 18px rgba(23, 42, 58, 0.05);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+/* Adiciona uma marca visual dourada ao texto do cabeçalho. */
+.topbar::before {
+  content: "";
+  width: 34px;
+  height: 3px;
+  margin-right: 14px;
+  background: var(--dourado);
+  border-radius: 999px;
+}
+
+/* Define a área rolável onde ficará o conteúdo das páginas. */
 .content {
-  /* Posiciona o elemento entre colunas específicas da grade. */
-  grid-column: 2 / 3; /* Ocupa a coluna 2 */
-  /* Posiciona o elemento entre linhas específicas da grade. */
-  grid-row: 2 / 3;    /* Ocupa a linha 2 (abaixo do header) */
-  /* Define a cor de fundo do elemento. */
-  background-color: #F4F6F7; /* Cor de fundo leve */
-  /* Define o espaçamento interno do elemento. */
-  padding: 30px;
-  /* Controla a rolagem vertical do conteúdo excedente. */
-  overflow-y: auto;   /* Se o conteúdo crescer, cria uma barra de rolagem APENAS aqui */
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  position: relative;
+  margin: 28px;
+  padding: clamp(28px, 4vw, 52px);
+  color: var(--texto-suave);
+  background:
+    linear-gradient(135deg, rgba(201, 169, 110, 0.08), transparent 40%),
+    var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 18px;
+  box-shadow: var(--sombra);
+  font-size: 1rem;
+  line-height: 1.7;
+  overflow-y: auto;
 }
 
-/* Seleciona .logo-img para aplicar os estilos deste bloco. */
-.logo-img{
+/* Cria um detalhe decorativo no canto do conteúdo. */
+.content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 92px;
+  height: 5px;
+  background: linear-gradient(90deg, var(--dourado), var(--dourado-claro));
+  border-radius: 18px 0 10px 0;
+}
 
-    /* Define a altura do elemento. */
-    height: 240px;
-    /* Define a largura do elemento. */
-    width: 240px;
-    /* Define o espaçamento interno do elemento. */
-    padding: 20px;
+/* Ajusta o layout para tablets e telas médias. */
+@media (max-width: 820px) {
+  body {
+    overflow: auto;
+  }
+
+  .layout-mold {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 68px minmax(0, 1fr);
+  }
+
+  .sidebar {
+    grid-column: 1;
+    grid-row: 1;
+    flex-direction: row;
+    justify-content: flex-start;
+    min-height: 110px;
+    padding: 18px 24px;
+    text-align: left;
+  }
+
+  .sidebar::after {
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+  }
+
+  .sidebar > div {
+    width: auto;
+  }
+
+  .sidebar .sidebar-brand {
+    flex-direction: row;
+    flex-shrink: 0;
+  }
+
+  .brand-text {
+    align-items: flex-start;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    justify-content: flex-end;
+    overflow-x: auto;
+  }
+
+  .nav-link {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .logo-img {
+    width: 74px;
+    height: 74px;
+    padding: 3px;
+  }
+
+  .topbar {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 0 24px;
+  }
+
+  .content {
+    grid-column: 1;
+    grid-row: 3;
+    min-height: 50vh;
+    margin: 20px;
+  }
+}
+
+/* Simplifica os espaçamentos em celulares. */
+@media (max-width: 480px) {
+  .sidebar {
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 14px 18px;
+    font-size: 0.72rem;
+  }
+
+  .logo-img {
+    width: 62px;
+    height: 62px;
+  }
+
+  .brand-text strong {
+    font-size: 0.9rem;
+  }
+
+  .sidebar-nav {
+    justify-content: flex-start;
+    order: 2;
+  }
+
+  .nav-link {
+    padding: 10px 12px;
+    font-size: 0.68rem;
+  }
+
+  .topbar {
+    padding: 0 18px;
+    font-size: 0.78rem;
+  }
+
+  .topbar::before {
+    width: 22px;
+    margin-right: 10px;
+  }
+
+  .content {
+    margin: 14px;
+    padding: 26px 20px;
+    border-radius: 14px;
+  }
 }
