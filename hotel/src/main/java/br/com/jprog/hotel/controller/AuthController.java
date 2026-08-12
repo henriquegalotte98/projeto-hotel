@@ -1,5 +1,5 @@
 package br.com.jprog.hotel.controller;
 
-public class ManutencaoController {
+public class AuthController {
 
 }
