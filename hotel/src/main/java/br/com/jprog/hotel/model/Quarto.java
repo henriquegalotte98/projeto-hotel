@@ -1,10 +1,10 @@
 package br.com.jprog.hotel.model;
 
-public class Quarto {
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+public class Quarto {
     
     private static final long serialVersionUID = 1L;
     
