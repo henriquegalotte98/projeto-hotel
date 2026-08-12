@@ -1,5 +1,8 @@
 package br.com.jprog.hotel.exception;
 
-public class RecursoNaoEncontradoException {
-
+/** Indica que um recurso solicitado não foi encontrado. */
+public class RecursoNaoEncontradoException extends RuntimeException {
+    public RecursoNaoEncontradoException(String mensagem) {
+        super(mensagem);
+    }
 }
