@@ -7,6 +7,12 @@ package br.com.jprog.hotel.controller;
 import br.com.jprog.hotel.model.Quarto;
 
 
+// Importa todos os enums do pacote "enums".
+// Neste Controller são usados, por exemplo:
+// StatusOcupacao e StatusLimpeza.
+import br.com.jprog.hotel.model.enums.*;
+
+
 // Importa o QuartoService.
 // O Service contém as regras de negócio relacionadas aos quartos.
 import br.com.jprog.hotel.service.QuartoService;
