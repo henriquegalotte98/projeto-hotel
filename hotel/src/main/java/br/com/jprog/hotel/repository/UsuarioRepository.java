@@ -25,6 +25,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Se não encontrar, o Optional fica vazio.
 
     boolean existsByCpf(String cpf);
+
+    boolean existsByCpfAndIdNot(String cpf, Long id);
     // ❓ Pergunta se já existe um usuário com esse CPF.
     // true  = ✅ existe
     // false = ❌ não existe

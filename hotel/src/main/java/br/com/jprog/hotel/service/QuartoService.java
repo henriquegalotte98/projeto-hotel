@@ -133,4 +133,8 @@ public class QuartoService {
         quarto.setStatusLimpeza(novoStatus);
         return quartoRepository.save(quarto);
     }
+
+    public Quarto atualizarLimpeza(Long id, StatusLimpeza novoStatus) {
+        return atualizarStatusLimpeza(id, novoStatus);
+    }
 }

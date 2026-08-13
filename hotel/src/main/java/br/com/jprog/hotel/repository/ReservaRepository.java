@@ -69,6 +69,8 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     // Retorna a quantidade de reservas com status RESERVADA.
     long countByStatus(StatusReserva status);
 
+    boolean existsByQuartoIdAndStatus(Long quartoId, StatusReserva status);
+
     // Cria uma consulta JPQL personalizada.
     //
     // JPQL consulta classes Java e atributos Java:

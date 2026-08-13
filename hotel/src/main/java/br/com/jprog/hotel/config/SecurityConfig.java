@@ -142,6 +142,12 @@ public class SecurityConfig {
                 // /api/auth/login
                 // → realiza o login.
                 .requestMatchers(
+                        "/",
+                        "/index.html",
+                        "/html/**",
+                        "/css/**",
+                        "/js/**",
+                        "/assets/**",
                         "/api/health",
                         "/api/auth/login"
                 ).permitAll()

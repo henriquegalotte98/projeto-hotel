@@ -105,6 +105,8 @@ public class DadosIniciaisConfig {
                 // identificar o administrador inicial.
                 admin.setCpf("00000000000");
 
+                admin.setEmail("admin@hotel.local");
+
 
                 // Define a senha do administrador.
                 //
@@ -128,7 +130,7 @@ public class DadosIniciaisConfig {
                 //
                 // Papel.ADMIN significa que esse usuário
                 // terá permissões de administrador.
-                admin.setPapel(Papel.ADMIN);
+                admin.setPapel(Papel.ADMIN.name());
 
 
                 // Define que o usuário está ativo.

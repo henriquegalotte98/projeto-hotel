@@ -5,6 +5,7 @@ import br.com.jprog.hotel.model.SolicitacaoManutencao;
 import br.com.jprog.hotel.model.enums.StatusManutencao;
 import br.com.jprog.hotel.repository.ManutencaoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
@@ -18,6 +19,7 @@ public class ManutencaoService {
     private final ManutencaoRepository repository;
     private final Clock clock;
 
+    @Autowired
     public ManutencaoService(ManutencaoRepository repository) {
         this(repository, Clock.systemDefaultZone());
     }
