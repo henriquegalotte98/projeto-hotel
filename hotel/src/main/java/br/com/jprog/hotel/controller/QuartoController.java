@@ -128,10 +128,9 @@ public class QuartoController {
     public List<Quarto> ocupacao(
 
             // @RequestParam recebe o parâmetro da URL.
-            //
-            // O Spring tenta converter automaticamente o texto
-            // recebido para o enum StatusOcupacao.
-            @RequestParam StatusOcupacao ocupacao) {
+            // O valor é tratado como texto para evitar dependência
+            // de enums inexistentes no projeto atual.
+            @RequestParam String ocupacao) {
 
         // Chama o Service para buscar quartos
         // com o status de ocupação informado.
@@ -155,9 +154,10 @@ public class QuartoController {
     // pelo status de limpeza.
     public List<Quarto> limpeza(
 
-            // Recebe o parâmetro "limpeza" enviado pela URL
-            // e converte para o enum StatusLimpeza.
-            @RequestParam StatusLimpeza limpeza) {
+            // Recebe o parâmetro "limpeza" enviado pela URL.
+            // Como não existe enum para esse status no projeto atual,
+            // ele é tratado como texto.
+            @RequestParam String limpeza) {
 
         // Chama o Service para buscar os quartos
         // com o status de limpeza informado.

@@ -1,11 +1,16 @@
 package br.com.jprog.hotel.model.enums;
 
-/** Define as categorias de quartos oferecidas pelo hotel. */
+/**
+ * Define as categorias de quarto oferecidas pelo hotel.
+ */
 public enum TipoQuarto {
-    /** Categoria básica. */
+
+    /** Quarto da categoria básica. */
     SIMPLES,
-    /** Categoria preparada para acomodação dupla. */
+
+    /** Quarto preparado para acomodação dupla. */
     DUPLO,
-    /** Categoria suíte. */
+
+    /** Quarto da categoria suíte. */
     SUITE
 }
