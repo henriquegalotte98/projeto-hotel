@@ -1,51 +1,64 @@
-// URL da API
-const API_URL = "https://6a7a62528c69b3eb4a172df5.mockapi.io/:endpoint";
+// ============================================================
+// API - Comunicação com o Back-end
+// ============================================================
 
-// Função geral para fazer requisições
-async function requisicao(endpoint, opcoes = {}) {
+const API_BASE_URL = 'http://localhost:8080/api';
 
-    const resposta = await fetch(
-        `${API_URL}${endpoint}`,
-        {
-            ...opcoes,
+/**
+ * Função genérica para fazer requisições HTTP
+ * @param {string} endpoint - Endpoint da API (ex: '/usuarios')
+ * @param {string} method - Método HTTP (GET, POST, PUT, DELETE)
+ * @param {object} body - Dados para enviar no corpo (opcional)
+ * @returns {Promise} - Resposta da API já parseada
+ */
+async function apiRequest(endpoint, method = 'GET', body = null) {
+    const options = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        credentials: 'include' // Envia cookies de sessão
+    };
 
-            headers: {
-                "Content-Type": "application/json",
-                ...opcoes.headers
-            }
-        }
-    );
-
-    if (!resposta.ok) {
-        throw new Error(`Erro HTTP: ${resposta.status}`);
+    if (body) {
+        options.body = JSON.stringify(body);
     }
 
-    const texto = await resposta.text();
+    try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+        
+        // Tenta parsear a resposta como JSON
+        let data;
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            data = await response.text();
+        }
 
-    return texto ? JSON.parse(texto) : null;
+        // Se a resposta não for OK (2xx), lança erro
+        if (!response.ok) {
+            const errorMessage = data?.message || data || 'Erro na requisição';
+            const error = new Error(errorMessage);
+            error.status = response.status;
+            error.data = data;
+            throw error;
+        }
+
+        return data;
+
+    } catch (error) {
+        // Erro de rede ou parse
+        if (!error.status) {
+            error.message = 'Erro de conexão com o servidor. Verifique se o back-end está rodando.';
+        }
+        throw error;
+    }
 }
 
-
-// GET - listar quartos
-async function buscarQuartos() {
-    return requisicao("/quartos");
-}
-
-
-// POST - criar quarto
-async function criarQuarto(quarto) {
-
-    return requisicao("/quartos", {
-        method: "POST",
-        body: JSON.stringify(quarto)
-    });
-}
-
-
-// DELETE - excluir quarto
-async function excluirQuarto(id) {
-
-    return requisicao(`/quartos/${id}`, {
-        method: "DELETE"
-    });
-}
+// ============================================================
+// EXPORTA FUNÇÕES PARA USO GLOBAL
+// ============================================================
+window.apiRequest = apiRequest;
+window.API_BASE_URL = API_BASE_URL;
