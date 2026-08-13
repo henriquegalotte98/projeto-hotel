@@ -1,7 +1,5 @@
 package br.com.jprog.hotel.model;
 
-public class SolicitacaoManutencao {
-
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -24,9 +22,8 @@ public class SolicitacaoManutencao implements Serializable {
     @Column(nullable = false)
     private String descricao;
     
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatusManutencao status;
+    private String status;
     
     @Column(name = "data_abertura", nullable = false)
     private LocalDateTime dataAbertura;
@@ -35,7 +32,7 @@ public class SolicitacaoManutencao implements Serializable {
     private LocalDateTime dataConclusao;
     
     public SolicitacaoManutencao() {
-        this.status = StatusManutencao.ABERTA;
+        this.status = "ABERTA";
         this.dataAbertura = LocalDateTime.now();
     }
     
@@ -63,11 +60,11 @@ public class SolicitacaoManutencao implements Serializable {
         this.descricao = descricao;
     }
     
-    public StatusManutencao getStatus() {
+    public String getStatus() {
         return status;
     }
     
-    public void setStatus(StatusManutencao status) {
+    public void setStatus(String status) {
         this.status = status;
     }
     
@@ -99,5 +96,4 @@ public class SolicitacaoManutencao implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
-}
 }

@@ -20,10 +20,9 @@ public class Quarto implements Serializable {
     @Column(unique = true, nullable = false)
     private String numero;
     
-    @NotNull(message = "Tipo do quarto é obrigatório")
-    @Enumerated(EnumType.STRING)
+    @NotBlank(message = "Tipo do quarto é obrigatório")
     @Column(nullable = false)
-    private TipoQuarto tipo;
+    private String tipo;
     
     @NotNull(message = "Valor da diária é obrigatório")
     @DecimalMin(value = "0.01", message = "Valor da diária deve ser maior que zero")
@@ -33,23 +32,21 @@ public class Quarto implements Serializable {
     @Column(name = "inclui_cafe_da_manha")
     private boolean incluiCafeDaManha;
     
-    @NotNull(message = "Status de ocupação é obrigatório")
-    @Enumerated(EnumType.STRING)
+    @NotBlank(message = "Status de ocupação é obrigatório")
     @Column(name = "status_ocupacao", nullable = false)
-    private StatusOcupacao statusOcupacao;
+    private String statusOcupacao;
     
-    @NotNull(message = "Status de limpeza é obrigatório")
-    @Enumerated(EnumType.STRING)
+    @NotBlank(message = "Status de limpeza é obrigatório")
     @Column(name = "status_limpeza", nullable = false)
-    private StatusLimpeza statusLimpeza;
+    private String statusLimpeza;
     
     // Construtores
     public Quarto() {
-        this.statusOcupacao = StatusOcupacao.DISPONIVEL;
-        this.statusLimpeza = StatusLimpeza.LIMPO;
+        this.statusOcupacao = "DISPONIVEL";
+        this.statusLimpeza = "LIMPO";
     }
     
-    public Quarto(String numero, TipoQuarto tipo, BigDecimal valorDiaria, boolean incluiCafeDaManha) {
+    public Quarto(String numero, String tipo, BigDecimal valorDiaria, boolean incluiCafeDaManha) {
         this();
         this.numero = numero;
         this.tipo = tipo;
@@ -74,11 +71,11 @@ public class Quarto implements Serializable {
         this.numero = numero;
     }
     
-    public TipoQuarto getTipo() {
+    public String getTipo() {
         return tipo;
     }
     
-    public void setTipo(TipoQuarto tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
     
@@ -98,19 +95,19 @@ public class Quarto implements Serializable {
         this.incluiCafeDaManha = incluiCafeDaManha;
     }
     
-    public StatusOcupacao getStatusOcupacao() {
+    public String getStatusOcupacao() {
         return statusOcupacao;
     }
     
-    public void setStatusOcupacao(StatusOcupacao statusOcupacao) {
+    public void setStatusOcupacao(String statusOcupacao) {
         this.statusOcupacao = statusOcupacao;
     }
     
-    public StatusLimpeza getStatusLimpeza() {
+    public String getStatusLimpeza() {
         return statusLimpeza;
     }
     
-    public void setStatusLimpeza(StatusLimpeza statusLimpeza) {
+    public void setStatusLimpeza(String statusLimpeza) {
         this.statusLimpeza = statusLimpeza;
     }
     

@@ -1,6 +1,6 @@
 package br.com.jprog.hotel.repository;
 
-import model.Hospede;
+import br.com.jprog.hotel.model.Hospede;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
