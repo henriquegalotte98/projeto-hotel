@@ -1,4 +1,6 @@
-// js/dashboard.js
+// ============================================================
+// DASHBOARD - Página principal
+// ============================================================
 
 document.addEventListener("DOMContentLoaded", () => {
     verificarAutenticacao();
@@ -36,6 +38,7 @@ function carregarDadosUsuario() {
             avatarEl.textContent = iniciais;
         }
 
+        // ===== APLICA REGRAS DO MENU (NOVO) =====
         if (typeof aplicarRegrasMenu === "function") {
             aplicarRegrasMenu(usuario.papel);
         }

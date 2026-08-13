@@ -204,3 +204,8 @@ main .subtitle {
     background: #d1fae5;
     color: #065f46;
 }
+
+/* Ocultar menu de usuários por padrão (será mostrado via JS se for ADMIN) */
+#menu-usuarios {
+    display: none;
+}
