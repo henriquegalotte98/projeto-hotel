@@ -1,187 +1,243 @@
-/* Reset */
-/* Seleciona todos os elementos da página. */
-* {
-  /* Remove ou define o espaçamento externo do elemento. */
-  margin: 0;
-  /* Define o espaçamento interno do elemento. */
-  padding: 0;
-  /* Inclui bordas e preenchimentos no cálculo das dimensões. */
-  box-sizing: border-box;
-}
-
-/* Seleciona o elemento raiz para declarar variáveis CSS globais. */
 :root {
-  /* Declara a variável CSS --azul para reutilizar esse valor no projeto. */
-  --azul: #2c3e50;
-  /* Declara a variável CSS --dourado para reutilizar esse valor no projeto. */
-  --dourado: #c9a227;
-  /* Declara a variável CSS --branco para reutilizar esse valor no projeto. */
-  --branco: #ffffff;
-  /* Declara a variável CSS --fundo para reutilizar esse valor no projeto. */
-  --fundo: #f4f6f7;
-  /* Declara a variável CSS --texto para reutilizar esse valor no projeto. */
-  --texto: #333333;
-  /* Declara a variável CSS --borda para reutilizar esse valor no projeto. */
-  --borda: #e0e0e0;
+    --primary: #0f172a;
+    --primary-light: #1e293b;
+    --accent: #b45309;
+    --accent-hover: #d97706;
+    --bg-body: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --radius: 12px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Seleciona body para aplicar os estilos deste bloco. */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
 body {
-  /* Define a família de fontes usada no texto. */
-  font-family: Arial, sans-serif;
-  /* Define a cor do texto. */
-  color: var(--texto);
-  /* Define o fundo do elemento. */
-  background: var(--fundo);
-  /* Controla como o conteúdo excedente é exibido. */
-  overflow: hidden;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
 }
 
-/* Estrutura principal */
-/* Seleciona .layout-mold para aplicar os estilos deste bloco. */
-.layout-mold {
-  /* Define o modelo de exibição e organização do elemento. */
-  display: grid;
-  /* Define a quantidade e a largura das colunas da grade. */
-  grid-template-columns: 250px 1fr;
-  /* Define a quantidade e a altura das linhas da grade. */
-  grid-template-rows: 70px 1fr;
-  /* Define a altura do elemento. */
-  height: 100vh;
+/* Sidebar Estilizada */
+aside {
+    width: 280px;
+    background: var(--primary);
+    color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+    z-index: 10;
 }
 
-/* Menu lateral */
-/* Seleciona .sidebar para aplicar os estilos deste bloco. */
-.sidebar {
-  /* Posiciona o elemento entre colunas específicas da grade. */
-  grid-column: 1 / 2;
-  /* Posiciona o elemento entre linhas específicas da grade. */
-  grid-row: 1 / 3;
-  /* Define o fundo do elemento. */
-  background: var(--azul);
-  /* Define a cor do texto. */
-  color: var(--branco);
-  /* Define o espaçamento interno do elemento. */
-  padding: 20px;
+.brand {
+    padding: 28px 24px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* Seleciona .logo-img para aplicar os estilos deste bloco. */
-.logo-img {
-  /* Define o modelo de exibição e organização do elemento. */
-  display: block;
-  /* Define a largura do elemento. */
-  width: 180px;
-  /* Define a altura do elemento. */
-  height: auto;
-  /* Remove ou define o espaçamento externo do elemento. */
-  margin: 0 auto 25px;
+.brand i {
+    color: var(--accent);
 }
 
-/* Menu */
-/* Seleciona .sidebar nav para aplicar os estilos deste bloco. */
-.sidebar nav {
-  /* Define o modelo de exibição e organização do elemento. */
-  display: flex;
-  /* Define a direção em que os itens flexíveis são organizados. */
-  flex-direction: column;
-  /* Define o espaço entre os itens do contêiner. */
-  gap: 8px;
+.menu {
+    list-style: none;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    overflow-y: auto;
 }
 
-/* Seleciona .sidebar a para aplicar os estilos deste bloco. */
-.sidebar a {
-  /* Define a cor do texto. */
-  color: var(--branco);
-  /* Controla decorações do texto, como sublinhado. */
-  text-decoration: none;
-  /* Define o espaçamento interno do elemento. */
-  padding: 12px;
-  /* Arredonda os cantos do elemento. */
-  border-radius: 5px;
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: #94a3b8;
+    font-weight: 500;
+    border-radius: var(--radius);
+    transition: all 0.25s ease;
 }
 
-/* Seleciona .sidebar a:hover para aplicar os estilos deste bloco. */
-.sidebar a:hover,
-/* Seleciona .sidebar a.ativo para aplicar os estilos deste bloco. */
-.sidebar a.ativo {
-  /* Define o fundo do elemento. */
-  background: var(--dourado);
-  /* Define a cor do texto. */
-  color: var(--azul);
+.menu a:hover, .menu a.active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
 }
 
-/* Cabeçalho */
-/* Seleciona .topbar para aplicar os estilos deste bloco. */
-.topbar {
-  /* Posiciona o elemento entre colunas específicas da grade. */
-  grid-column: 2 / 3;
-  /* Posiciona o elemento entre linhas específicas da grade. */
-  grid-row: 1 / 2;
-  /* Define o fundo do elemento. */
-  background: var(--branco);
-  /* Define a borda inferior do elemento. */
-  border-bottom: 1px solid var(--borda);
-  /* Define o modelo de exibição e organização do elemento. */
-  display: flex;
-  /* Alinha os itens no eixo transversal do contêiner. */
-  align-items: center;
-  /* Distribui ou alinha os itens no eixo principal. */
-  justify-content: space-between;
-  /* Define o espaçamento interno do elemento. */
-  padding: 0 25px;
+.menu a.active {
+    border-left: 4px solid var(--accent);
 }
 
-/* Conteúdo */
-/* Seleciona .content para aplicar os estilos deste bloco. */
-.content {
-  /* Posiciona o elemento entre colunas específicas da grade. */
-  grid-column: 2 / 3;
-  /* Posiciona o elemento entre linhas específicas da grade. */
-  grid-row: 2 / 3;
-  /* Define o espaçamento interno do elemento. */
-  padding: 30px;
-  /* Controla a rolagem vertical do conteúdo excedente. */
-  overflow-y: auto;
+/* Layout Principal */
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
-/* Responsividade */
-/* Aplica os estilos internos somente quando essa condição de tela for atendida. */
-@media (max-width: 700px) {
-  /* Seleciona body para aplicar os estilos deste bloco. */
-  body {
-    /* Controla como o conteúdo excedente é exibido. */
-    overflow: auto;
-  }
-
-  /* Seleciona .layout-mold para aplicar os estilos deste bloco. */
-  .layout-mold {
-    /* Define o modelo de exibição e organização do elemento. */
-    display: block;
-    /* Define a altura do elemento. */
-    height: auto;
-  }
-
-  /* Seleciona .sidebar para aplicar os estilos deste bloco. */
-  .sidebar {
-    /* Define o espaçamento interno do elemento. */
-    padding: 15px;
-  }
-
-  /* Seleciona .logo-img para aplicar os estilos deste bloco. */
-  .logo-img {
-    /* Define a largura do elemento. */
-    width: 120px;
-  }
-
-  /* Seleciona .topbar para aplicar os estilos deste bloco. */
-  .topbar {
-    /* Define a altura do elemento. */
-    height: 70px;
-  }
-
-  /* Seleciona .content para aplicar os estilos deste bloco. */
-  .content {
-    /* Define o espaçamento interno do elemento. */
-    padding: 20px;
-  }
+header {
+    background: var(--bg-card);
+    padding: 20px 36px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
 }
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--primary);
+    border: 2px solid var(--border);
+}
+
+.user-details span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.user-details h4 {
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+main {
+    padding: 36px;
+    flex: 1;
+}
+
+h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+}
+
+/* Cards & Componentes */
+.card {
+    background: var(--bg-card);
+    padding: 28px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+}
+
+/* Botões Modernos */
+button, .btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+button:hover, .btn:hover {
+    background: var(--primary-light);
+    transform: translateY(-1px);
+}
+
+button.btn-accent, .btn-accent {
+    background: var(--accent);
+}
+button.btn-accent:hover, .btn-accent:hover {
+    background: var(--accent-hover);
+}
+
+button.btn-danger, .btn-danger {
+    background: var(--danger);
+}
+
+/* Tabelas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    text-align: left;
+}
+
+th, td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+}
+
+th {
+    background: #f1f5f9;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+/* Badges e Alertas */
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.badge.admin { background: #fee2e2; color: #991b1b; }
+.badge.recepcionista { background: #e0f2fe; color: #0369a1; }
+.badge.governanca { background: #fef3c7; color: #92400e; }
+.badge.manutencao { background: #d1fae5; color: #065f46; }
+
+.alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+.alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }

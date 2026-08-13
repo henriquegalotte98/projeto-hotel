@@ -2,9 +2,18 @@ package br.com.jprog.hotel.repository;
 
 import br.com.jprog.hotel.model.Hospede;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/** Contrato de persistência dos hóspedes. */
+import java.util.Optional;
+
+@Repository
 public interface HospedeRepository extends JpaRepository<Hospede, Long> {
+    
+    Optional<Hospede> findByCpf(String cpf);
+    
+    Optional<Hospede> findByEmail(String email);
+    
     boolean existsByCpf(String cpf);
-    boolean existsByEmailIgnoreCase(String email);
+    
+    boolean existsByEmail(String email);
 }
