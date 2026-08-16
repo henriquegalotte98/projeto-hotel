@@ -8,6 +8,7 @@
 function initLogin() {
     // Se já estiver logado, redireciona para o dashboard
     const usuarioLogado = localStorage.getItem('usuarioLogado');
+
     if (usuarioLogado) {
         window.location.href = 'dashboard.html';
         return;
@@ -15,25 +16,30 @@ function initLogin() {
 
     // Configura o formulário
     const form = document.getElementById('form-login');
+
     if (form) {
         form.addEventListener('submit', handleLogin);
     }
 
-    // Máscara para CPF (apenas números)
+    // Máscara para CPF - permite apenas números
     const cpfInput = document.getElementById('cpf');
+
     if (cpfInput) {
-        cpfInput.addEventListener('input', function() {
+        cpfInput.addEventListener('input', function () {
             this.value = this.value.replace(/\D/g, '');
         });
     }
 
-    // Login com Enter (tecla ENTER no campo senha)
+    // Login com Enter no campo de senha
     const senhaInput = document.getElementById('senha');
+
     if (senhaInput) {
-        senhaInput.addEventListener('keypress', function(e) {
+        senhaInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
+
                 const form = document.getElementById('form-login');
+
                 if (form) {
                     form.dispatchEvent(new Event('submit'));
                 }
@@ -44,149 +50,199 @@ function initLogin() {
 
 /**
  * Processa o login do usuário
- * @param {Event} e - Evento do formulário
+ *
+ * @param {Event} e Evento do formulário
  */
 async function handleLogin(e) {
     e.preventDefault();
 
     const cpf = document.getElementById('cpf').value.trim();
     const senha = document.getElementById('senha').value.trim();
+
     const btnLogin = document.getElementById('btnLogin');
     const btnTexto = document.getElementById('btnTexto');
     const btnLoader = document.getElementById('btnLoader');
     const mensagemErro = document.getElementById('mensagem-erro');
 
-    // Limpa erro anterior
-    mensagemErro.classList.remove('show');
-    mensagemErro.style.display = 'none';
+    // Limpa mensagem de erro anterior
+    if (mensagemErro) {
+        mensagemErro.classList.remove('show');
+        mensagemErro.style.display = 'none';
+    }
 
-    // Validações
+    // ============================================================
+    // VALIDAÇÕES
+    // ============================================================
+
     if (!cpf || cpf.length !== 11) {
-        mostrarErro('CPF deve ter 11 números');
+        mostrarErro('CPF deve ter 11 números.');
         return;
     }
 
     if (!senha || senha.length < 6) {
-        mostrarErro('Senha deve ter pelo menos 6 caracteres');
+        mostrarErro('Senha deve ter pelo menos 6 caracteres.');
         return;
     }
 
-    // Desabilita botão e mostra loader
-    btnLogin.disabled = true;
-    btnTexto.style.display = 'none';
-    btnLoader.style.display = 'inline-block';
+    // ============================================================
+    // DESABILITA O BOTÃO DURANTE O LOGIN
+    // ============================================================
+
+    if (btnLogin) {
+        btnLogin.disabled = true;
+    }
+
+    if (btnTexto) {
+        btnTexto.style.display = 'none';
+    }
+
+    if (btnLoader) {
+        btnLoader.style.display = 'inline-block';
+    }
 
     try {
-        // Tenta autenticar
+        // ========================================================
+        // AUTENTICAÇÃO REAL COM O BACKEND
+        // ========================================================
+
         const usuario = await autenticar(cpf, senha);
 
+        // Verifica se o backend retornou um usuário válido
         if (usuario && usuario.papel) {
-            // Salva no localStorage
-            localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-            
+
+            // Salva o usuário logado
+            localStorage.setItem(
+                'usuarioLogado',
+                JSON.stringify(usuario)
+            );
+
             // Redireciona para o dashboard
             window.location.href = 'dashboard.html';
+
         } else {
             mostrarErro('Credenciais inválidas. Tente novamente.');
         }
 
     } catch (error) {
+
         console.error('Erro no login:', error);
-        
+
         let mensagem = 'Erro ao fazer login. Tente novamente.';
-        if (error.status === 401) {
+
+        if (error.status === 400) {
+            mensagem = error.message || 'Dados de login inválidos.';
+        } else if (error.status === 401) {
             mensagem = 'CPF ou senha incorretos.';
-        } else if (error.status === 404) {
-            mensagem = 'Usuário não encontrado.';
         } else if (error.status === 403) {
             mensagem = 'Acesso negado. Contate o administrador.';
+        } else if (error.status === 404) {
+            mensagem = 'Usuário não encontrado.';
         } else if (error.message) {
             mensagem = error.message;
         }
-        
+
         mostrarErro(mensagem);
 
     } finally {
-        // Reabilita o botão
-        btnLogin.disabled = false;
-        btnTexto.style.display = 'inline';
-        btnLoader.style.display = 'none';
+
+        // ========================================================
+        // REABILITA O BOTÃO
+        // ========================================================
+
+        if (btnLogin) {
+            btnLogin.disabled = false;
+        }
+
+        if (btnTexto) {
+            btnTexto.style.display = 'inline';
+        }
+
+        if (btnLoader) {
+            btnLoader.style.display = 'none';
+        }
     }
 }
 
 /**
- * Função de autenticação - TEMPORÁRIA (mock)
- * Quando a API estiver pronta, substituir pela chamada real
+ * ============================================================
+ * AUTENTICAÇÃO REAL
+ * ============================================================
+ *
+ * Envia CPF e senha para o endpoint do backend.
+ *
+ * Endpoint:
+ * POST /api/auth/login
+ *
+ * O api.js já possui a função apiRequest().
  */
 async function autenticar(cpf, senha) {
-    // ============================================================
-    // QUANDO A API ESTIVER PRONTA, DESCOMENTE ESTA PARTE:
-    // ============================================================
-    // return await apiRequest('/auth/login', 'POST', { cpf, senha });
-    // ============================================================
 
-    // ============================================================
-    // MOCK PARA TESTE (REMOVER QUANDO A API ESTIVER PRONTA)
-    // ============================================================
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            // Usuários mockados para teste
-            const usuarios = [
-                { id: 1, nome: 'Administrador', cpf: '12345678901', papel: 'ADMIN' },
-                { id: 2, nome: 'João Silva', cpf: '98765432100', papel: 'RECEPCIONISTA' },
-                { id: 3, nome: 'Maria Oliveira', cpf: '45678912300', papel: 'GOVERNANCA' },
-                { id: 4, nome: 'Carlos Souza', cpf: '78912345600', papel: 'MANUTENCAO' }
-            ];
-
-            const usuario = usuarios.find(u => u.cpf === cpf);
-            
-            if (usuario && senha.length >= 6) {
-                resolve(usuario);
-            } else {
-                const error = new Error('Credenciais inválidas');
-                error.status = 401;
-                reject(error);
-            }
-        }, 500);
-    });
+    return await apiRequest(
+        '/auth/login',
+        'POST',
+        {
+            cpf: cpf,
+            senha: senha
+        }
+    );
 }
 
 /**
- * Mostra mensagem de erro
- * @param {string} mensagem - Texto do erro
+ * Mostra mensagem de erro na tela
+ *
+ * @param {string} mensagem Texto da mensagem
  */
 function mostrarErro(mensagem) {
+
     const mensagemErro = document.getElementById('mensagem-erro');
-    
-    if (mensagemErro) {
-        mensagemErro.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${mensagem}`;
-        mensagemErro.style.display = 'flex';
-        mensagemErro.classList.add('show');
-        
-        // Limpa o erro após 5 segundos
-        setTimeout(() => {
-            mensagemErro.classList.remove('show');
-            mensagemErro.style.display = 'none';
-        }, 5000);
+
+    if (!mensagemErro) {
+        return;
     }
+
+    mensagemErro.innerHTML = `
+        <i class="fa-solid fa-circle-exclamation"></i>
+        ${mensagem}
+    `;
+
+    mensagemErro.style.display = 'flex';
+    mensagemErro.classList.add('show');
+
+    // Remove a mensagem depois de 5 segundos
+    setTimeout(() => {
+
+        mensagemErro.classList.remove('show');
+        mensagemErro.style.display = 'none';
+
+    }, 5000);
 }
 
 /**
- * Função de logout (pode ser chamada de qualquer lugar)
+ * ============================================================
+ * LOGOUT
+ * ============================================================
  */
 function fazerLogout() {
+
+    // Remove usuário salvo no navegador
     localStorage.removeItem('usuarioLogado');
+
+    // Volta para a tela de login
     window.location.href = 'login.html';
 }
 
 // ============================================================
 // EXPORTA FUNÇÕES PARA USO GLOBAL
 // ============================================================
+
 window.initLogin = initLogin;
+window.handleLogin = handleLogin;
 window.fazerLogout = fazerLogout;
 window.mostrarErro = mostrarErro;
+window.autenticar = autenticar;
 
 // ============================================================
-// INICIALIZA
+// INICIALIZA A PÁGINA
 // ============================================================
+
 document.addEventListener('DOMContentLoaded', initLogin);
