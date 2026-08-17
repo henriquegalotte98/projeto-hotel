@@ -15,6 +15,7 @@ function initUsuarios() {
     try {
         const usuario = JSON.parse(usuarioLogado);
         
+        // Verifica se o usuário é ADMIN
         if (usuario.papel !== 'ADMIN') {
             alert('Acesso negado. Apenas administradores podem gerenciar usuários.');
             window.location.href = "dashboard.html";
@@ -85,14 +86,13 @@ async function carregarUsuarios() {
                 <td>${usuario.id || '-'}</td>
                 <td><strong>${usuario.nome || '-'}</strong></td>
                 <td>${formatarCPF(usuario.cpf) || '-'}</td>
-                <td>${usuario.email || '-'}</td>
                 <td><span class="badge badge-${(usuario.papel || '').toLowerCase()}">${usuario.papel || '-'}</span></td>
                 <td style="text-align: center;">
                     <div class="action-buttons" style="justify-content: center;">
-                        <button class="btn-edit" onclick="editarUsuario(${usuario.id})">
+                        <button class="btn-edit" onclick="editarUsuario(${usuario.id || ''})">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-                        <button class="btn-delete" onclick="desativarUsuario(${usuario.id})">
+                        <button class="btn-delete" onclick="desativarUsuario(${usuario.id || ''})">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>

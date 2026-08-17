@@ -79,6 +79,7 @@ async function handleLogin(e) {
         // ============================================================
         const usuario = await apiRequest('/auth/login', 'POST', { cpf, senha });
 
+        // Se o backend retornou o usuário com papel definido
         if (usuario && usuario.papel) {
             localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
             window.location.href = 'dashboard.html';
@@ -131,6 +132,7 @@ function mostrarErro(mensagem) {
  * Função de logout
  */
 function fazerLogout() {
+    // Limpa a sessão do front
     localStorage.removeItem('usuarioLogado');
     window.location.href = 'login.html';
 }
