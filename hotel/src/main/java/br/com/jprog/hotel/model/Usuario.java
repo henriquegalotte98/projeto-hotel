@@ -1,187 +1,105 @@
 package br.com.jprog.hotel.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-
+/**
+ * Representa um usuário que pode acessar o HOTELWEB.
+ *
+ * <p>A classe faz o mapeamento entre objetos Java e a tabela {@code usuario}.
+ * A senha armazenada no campo {@code senha} deve conter somente o hash BCrypt.</p>
+ */
+@Entity
+@Table(name = "usuario")
 public class Usuario {
-    
-    private static final long serialVersionUID = 1L;
-    
+
+    /** Identificador gerado automaticamente pelo banco de dados. */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /** Nome completo usado para identificar o usuário. */
+    @Column(nullable = false, length = 120)
     private String nome;
+
+    /** CPF sem pontuação; deve ser único entre os usuários. */
+    @Column(nullable = false, unique = true, length = 11)
     private String cpf;
-    private String senha;
+
+    /** Endereço de e-mail único utilizado pelo usuário. */
+    @Column(nullable = false, unique = true, length = 150)
     private String email;
-    private String papel; // ADMIN, GERENTE, USUARIO, etc.
-    private boolean ativo;
-    private LocalDateTime dataCriacao;
-    private LocalDateTime dataUltimoAcesso;
-    
-    public Usuario() {
-        this.ativo = true;
-        this.dataCriacao = LocalDateTime.now();
-        this.papel = "USUARIO"; // papel padrão
-    }
-    
-    public Usuario(String nome, String cpf, String senha, String email) {
-        this();
-        this.nome = nome;
-        this.cpf = cpf;
-        this.senha = senha;
-        this.email = email;
-    }
-    
-    public Usuario(String nome, String cpf, String senha, String email, String papel) {
-        this(nome, cpf, senha, email);
-        this.papel = papel;
-    }
-    
+
+    /** Hash BCrypt da senha; o valor original não deve ser persistido. */
+    @Column(name = "senha_hash", nullable = false)
+    private String senha;
+
+    /** Papel que identifica as responsabilidades do usuário no sistema. */
+    @Column(nullable = false, length = 30)
+    private String papel;
+
+    /** Indica se o usuário está autorizado a permanecer ativo no cadastro. */
+    @Column(nullable = false)
+    private boolean ativo = true;
+
+    // Os métodos abaixo permitem que o JPA e as demais camadas leiam e alterem os campos.
     public Long getId() {
         return id;
     }
-    
+
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public String getNome() {
         return nome;
     }
-    
+
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
     public String getCpf() {
         return cpf;
     }
-    
+
     public void setCpf(String cpf) {
-        this.cpf = cpf.replaceAll("[^0-9]", "");
+        this.cpf = cpf;
     }
-    
-    public String getSenha() {
-        return senha;
-    }
-    
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-    
+
     public String getEmail() {
         return email;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
     public String getPapel() {
         return papel;
     }
-    
+
     public void setPapel(String papel) {
         this.papel = papel;
     }
-    
+
     public boolean isAtivo() {
         return ativo;
     }
-    
+
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
-    }
-    
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-    
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-    
-    public LocalDateTime getDataUltimoAcesso() {
-        return dataUltimoAcesso;
-    }
-    
-    public void setDataUltimoAcesso(LocalDateTime dataUltimoAcesso) {
-        this.dataUltimoAcesso = dataUltimoAcesso;
-    }
-    
-    // Métodos de verificação de papel (função)
-    public boolean isAdmin() {
-        return "ADMIN".equalsIgnoreCase(papel);
-    }
-    
-    public boolean isGerente() {
-        return "GERENTE".equalsIgnoreCase(papel);
-    }
-    
-    public boolean isUser() {
-        return "USUARIO".equalsIgnoreCase(papel);
-    }
-    
-    public boolean hasPapel(String papelVerificar) {
-        return this.papel != null && this.papel.equalsIgnoreCase(papelVerificar);
-    }
-    
-    public void updateUltimoAcesso() {
-        this.dataUltimoAcesso = LocalDateTime.now();
-    }
-    
-    public boolean isValidCpf() {
-        if (cpf == null || cpf.isEmpty()) {
-            return false;
-        }
-        String cpfLimpo = cpf.replaceAll("[^0-9]", "");
-        return cpfLimpo.length() == 11;
-    }
-    
-    public boolean isValidEmail() {
-        if (email == null || email.isEmpty()) {
-            return false;
-        }
-        return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
-    }
-    
-    public boolean isAtivo() {
-        return ativo;
-    }
-    
-    public void ativar() {
-        this.ativo = true;
-    }
-    
-    public void desativar() {
-        this.ativo = false;
-    }
-    
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id) || 
-               Objects.equals(cpf, usuario.cpf);
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, cpf);
-    }
-    
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", email='" + email + '\'' +
-                ", papel='" + papel + '\'' +
-                ", ativo=" + ativo +
-                ", dataCriacao=" + dataCriacao +
-                ", dataUltimoAcesso=" + dataUltimoAcesso +
-                '}';
     }
 }

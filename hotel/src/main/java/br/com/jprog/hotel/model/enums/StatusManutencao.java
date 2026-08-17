@@ -1,18 +1,13 @@
 package br.com.jprog.hotel.model.enums;
 
-
-/**
- * Enumeração que representa os possíveis status
- * de uma solicitação de manutenção no hotel.
- */
+/** Representa a situação atual de uma solicitação de manutenção. */
 public enum StatusManutencao {
-
-    /** Manutenção foi aberta e ainda não foi iniciada. */
+    /** Chamado registrado e aguardando atendimento. */
     ABERTA,
-
-    /** Manutenção está sendo realizada pela equipe responsável. */
+    /** Chamado em atendimento pela equipe responsável. */
     EM_ANDAMENTO,
-
-    /** Manutenção foi finalizada com sucesso. */
-    CONCLUIDA
+    /** Serviço de manutenção finalizado. */
+    CONCLUIDA,
+    /** Chamado cancelado antes de sua conclusão. */
+    CANCELADA
 }
