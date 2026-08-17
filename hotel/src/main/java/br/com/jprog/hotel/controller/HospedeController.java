@@ -34,9 +34,9 @@ public class HospedeController {
     }
 
     /** Retorna o hóspede solicitado com HTTP 200. */
-    @GetMapping("/{id}")
-    public ResponseEntity<Hospede> buscar(@PathVariable Long id) {
-        return ResponseEntity.ok(service.buscar(id));
+    @GetMapping("/{cpf}")
+    public ResponseEntity<Hospede> buscar(@PathVariable String cpf) {
+        return ResponseEntity.ok(service.buscar(cpf));
     }
 
     /** Cadastra um hóspede e retorna HTTP 201. */
@@ -46,17 +46,17 @@ public class HospedeController {
     }
 
     /** Atualiza um hóspede existente e retorna HTTP 200. */
-    @PutMapping("/{id}")
+    @PutMapping("/{cpf}")
     public ResponseEntity<Hospede> atualizar(
-            @PathVariable Long id,
+            @PathVariable String cpf,
             @Valid @RequestBody Hospede hospede) {
-        return ResponseEntity.ok(service.atualizar(id, hospede));
+        return ResponseEntity.ok(service.atualizar(cpf, hospede));
     }
 
     /** Exclui um hóspede e retorna HTTP 204 sem corpo. */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        service.excluir(id);
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<Void> excluir(@PathVariable String cpf) {
+        service.excluir(cpf);
         return ResponseEntity.noContent().build();
     }
 }

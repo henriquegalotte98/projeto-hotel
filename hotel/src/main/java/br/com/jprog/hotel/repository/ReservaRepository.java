@@ -45,7 +45,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     //
     // Exemplo: findByHospedeId(5L)
     // Busca reservas cujo hospede.id seja 5.
-    List<Reserva> findByHospedeId(Long hospedeId);
+    List<Reserva> findByHospedeCpf(String hospedeCpf);
 
     // Cria automaticamente uma consulta para buscar
     // todas as reservas de um quarto pelo ID dele.
@@ -68,6 +68,8 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     // Exemplo: countByStatus(StatusReserva.RESERVADA)
     // Retorna a quantidade de reservas com status RESERVADA.
     long countByStatus(StatusReserva status);
+
+    boolean existsByQuartoIdAndStatus(Long quartoId, StatusReserva status);
 
     // Cria uma consulta JPQL personalizada.
     //

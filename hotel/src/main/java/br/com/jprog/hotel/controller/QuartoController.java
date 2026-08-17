@@ -134,7 +134,7 @@ public class QuartoController {
 
         // Chama o Service para buscar quartos
         // com o status de ocupação informado.
-        return service.porOcupacao(ocupacao);
+        return service.porOcupacao(StatusOcupacao.valueOf(ocupacao.toUpperCase()));
     }
 
 
@@ -161,7 +161,7 @@ public class QuartoController {
 
         // Chama o Service para buscar os quartos
         // com o status de limpeza informado.
-        return service.porLimpeza(limpeza);
+        return service.porLimpeza(StatusLimpeza.valueOf(limpeza.toUpperCase()));
     }
 
 

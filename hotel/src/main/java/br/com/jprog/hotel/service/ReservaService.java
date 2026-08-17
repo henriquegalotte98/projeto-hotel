@@ -12,6 +12,33 @@ import java.util.List;
 
 @Service
 public class ReservaService {
+    private final ReservaRepository repository;
+    private final HospedeRepository hospedes;
+    private final QuartoRepository quartos;
+
+    public ReservaService(ReservaRepository repository, HospedeRepository hospedes, QuartoRepository quartos) {
+        this.repository = repository;
+        this.hospedes = hospedes;
+        this.quartos = quartos;
+    }
+
+    public List<Reserva> listar() { return repository.findAll(); }
+    public List<Reserva> porHospede(String cpf) { return repository.findByHospedeCpf(cpf); }
+    public List<Reserva> porQuarto(Long id) { return repository.findByQuartoId(id); }
+    public List<Reserva> porPeriodo(LocalDate inicio, LocalDate fim) { return repository.findNoPeriodo(inicio, fim); }
+    public Reserva buscar(Long id) { return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Reserva nao encontrada: " + id)); }
+
+    @Transactional
+    public Reserva criar(ReservaRequest req) {
+        if (!req.dataCheckoutPrevista().isAfter(req.dataCheckinPrevista())) throw new IllegalArgumentException("Checkout deve ser posterior ao check-in");
+        if (repository.existeConflito(req.quartoId(), req.dataCheckinPrevista(), req.dataCheckoutPrevista(), null)) throw new IllegalStateException("Quarto indisponivel no periodo");
+        Reserva r = new Reserva();
+        r.setHospede(hospedes.findById(req.hospedeCpf()).orElseThrow(() -> new IllegalArgumentException("Hospede nao encontrado")));
+        r.setQuarto(quartos.findById(req.quartoId()).orElseThrow(() -> new IllegalArgumentException("Quarto nao encontrado")));
+        r.setDataCheckinPrevista(req.dataCheckinPrevista());
+        r.setDataCheckoutPrevista(req.dataCheckoutPrevista());
+        return repository.save(r);
+    }
 
     // Repositórios usados para acessar reservas, hóspedes e quartos.
     private final ReservaRepository repository;

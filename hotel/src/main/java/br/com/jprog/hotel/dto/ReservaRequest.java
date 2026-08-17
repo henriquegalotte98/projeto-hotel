@@ -32,7 +32,7 @@ public record ReservaRequest(
     //
     // @NotNull indica que o ID do hóspede
     // obrigatoriamente precisa ser informado.
-    @NotNull Long hospedeId,
+    @NotNull String hospedeCpf,
 
 
     // ID do quarto que será reservado.

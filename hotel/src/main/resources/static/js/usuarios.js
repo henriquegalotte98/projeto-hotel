@@ -6,7 +6,6 @@
  * Inicializa a página de usuários
  */
 function initUsuarios() {
-    // Verifica se o usuário está logado
     const usuarioLogado = localStorage.getItem("usuarioLogado");
     if (!usuarioLogado) {
         window.location.href = "login.html";
@@ -16,21 +15,24 @@ function initUsuarios() {
     try {
         const usuario = JSON.parse(usuarioLogado);
         
-        // Se não for ADMIN, redireciona para o dashboard
         if (usuario.papel !== 'ADMIN') {
             alert('Acesso negado. Apenas administradores podem gerenciar usuários.');
             window.location.href = "dashboard.html";
             return;
         }
 
-        // Exibe informações do usuário no topo
-        const nomeEl = document.getElementById("usuario-nome-topo");
-        const papelEl = document.getElementById("usuario-papel-topo");
+        const nomeEl = document.getElementById("usuario-nome");
+        const papelEl = document.getElementById("usuario-papel");
+        const avatarEl = document.getElementById("avatar-inicial");
         
         if (nomeEl) nomeEl.textContent = usuario.nome || "Colaborador";
         if (papelEl) {
             papelEl.textContent = usuario.papel || "FUNCIONARIO";
             papelEl.className = `badge badge-${(usuario.papel || '').toLowerCase()}`;
+        }
+        if (avatarEl && usuario.nome) {
+            const iniciais = usuario.nome.split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase();
+            avatarEl.textContent = iniciais;
         }
 
     } catch (e) {
@@ -39,16 +41,13 @@ function initUsuarios() {
         return;
     }
 
-    // Carrega a lista de usuários
     carregarUsuarios();
-
-    // Configura eventos do formulário
     configurarFormulario();
     configurarModal();
 }
 
 /**
- * Busca a lista de usuários da API e preenche a tabela
+ * Busca a lista de usuários da API
  */
 async function carregarUsuarios() {
     const tbody = document.getElementById('lista-usuarios');
@@ -57,33 +56,21 @@ async function carregarUsuarios() {
     try {
         tbody.innerHTML = `
             <tr>
-                <td colspan="5" class="loading-message">
+                <td colspan="4" class="loading-message">
                     <i class="fa-solid fa-spinner fa-spin"></i> Carregando usuários...
                 </td>
             </tr>
         `;
 
         // ============================================================
-        // MOCK - DADOS FALSOS PARA TESTE
-        // Quando a API estiver pronta, descomente a linha abaixo
-        // e remova os dados mockados
+        // CHAMADA REAL PARA A API
         // ============================================================
-        // const usuarios = await apiRequest('/usuarios', 'GET');
-        
-        const usuarios = [
-            { id: 1, nome: 'Administrador', cpf: '12345678901', papel: 'ADMIN' },
-            { id: 2, nome: 'João Silva', cpf: '98765432100', papel: 'RECEPCIONISTA' },
-            { id: 3, nome: 'Maria Oliveira', cpf: '45678912300', papel: 'GOVERNANCA' },
-            { id: 4, nome: 'Carlos Souza', cpf: '78912345600', papel: 'MANUTENCAO' },
-            { id: 5, nome: 'Ana Paula Santos', cpf: '11122233344', papel: 'RECEPCIONISTA' },
-            { id: 6, nome: 'Roberto Almeida', cpf: '55566677788', papel: 'ADMIN' }
-        ];
-        // ============================================================
+        const usuarios = await apiRequest('/usuarios', 'GET');
 
         if (!usuarios || usuarios.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="5" class="empty-message">
+                    <td colspan="4" class="empty-message">
                         <i class="fa-regular fa-user"></i> Nenhum usuário cadastrado
                     </td>
                 </tr>
@@ -95,16 +82,15 @@ async function carregarUsuarios() {
         usuarios.forEach(usuario => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${usuario.id || '-'}</td>
-                <td><strong>${usuario.nome || '-'}</strong></td>
                 <td>${formatarCPF(usuario.cpf) || '-'}</td>
+                <td><strong>${usuario.nome || '-'}</strong></td>
                 <td><span class="badge badge-${(usuario.papel || '').toLowerCase()}">${usuario.papel || '-'}</span></td>
                 <td style="text-align: center;">
                     <div class="action-buttons" style="justify-content: center;">
-                        <button class="btn-edit" onclick="editarUsuario(${usuario.id})">
+                        <button class="btn-edit" onclick="editarUsuario('${usuario.cpf}')">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-                        <button class="btn-delete" onclick="desativarUsuario(${usuario.id})">
+                        <button class="btn-delete" onclick="desativarUsuario('${usuario.cpf}')">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -117,7 +103,7 @@ async function carregarUsuarios() {
         console.error('Erro ao carregar usuários:', error);
         tbody.innerHTML = `
             <tr>
-                <td colspan="5" class="loading-message" style="color: var(--danger);">
+                <td colspan="4" class="loading-message" style="color: var(--danger);">
                     <i class="fa-solid fa-circle-exclamation"></i> Erro: ${error.message || 'Tente novamente'}
                 </td>
             </tr>
@@ -135,7 +121,7 @@ function abrirCadastro() {
     const senhaHelp = document.getElementById('senhaHelp');
 
     form.reset();
-    document.getElementById('usuarioId').value = '';
+    document.getElementById('usuarioCpfOriginal').value = '';
     document.getElementById('senha').required = true;
     document.getElementById('senha').placeholder = 'Mínimo 6 caracteres';
     senhaHelp.textContent = 'Digite uma senha para o novo usuário';
@@ -147,31 +133,14 @@ function abrirCadastro() {
 /**
  * Prepara o formulário para editar um usuário existente
  */
-async function editarUsuario(id) {
+async function editarUsuario(cpf) {
     try {
         // ============================================================
-        // MOCK - Busca usuário nos dados mockados
-        // Quando a API estiver pronta, descomente a linha abaixo
+        // CHAMADA REAL PARA A API
         // ============================================================
-        // const usuario = await apiRequest(`/usuarios/${id}`, 'GET');
-        
-        const usuarios = [
-            { id: 1, nome: 'Administrador', cpf: '12345678901', papel: 'ADMIN' },
-            { id: 2, nome: 'João Silva', cpf: '98765432100', papel: 'RECEPCIONISTA' },
-            { id: 3, nome: 'Maria Oliveira', cpf: '45678912300', papel: 'GOVERNANCA' },
-            { id: 4, nome: 'Carlos Souza', cpf: '78912345600', papel: 'MANUTENCAO' },
-            { id: 5, nome: 'Ana Paula Santos', cpf: '11122233344', papel: 'RECEPCIONISTA' },
-            { id: 6, nome: 'Roberto Almeida', cpf: '55566677788', papel: 'ADMIN' }
-        ];
-        const usuario = usuarios.find(u => u.id === id);
-        // ============================================================
+        const usuario = await apiRequest(`/usuarios/${cpf}`, 'GET');
 
-        if (!usuario) {
-            alert('Usuário não encontrado');
-            return;
-        }
-
-        document.getElementById('usuarioId').value = usuario.id;
+        document.getElementById('usuarioCpfOriginal').value = usuario.cpf;
         document.getElementById('nome').value = usuario.nome || '';
         document.getElementById('cpf').value = usuario.cpf || '';
         document.getElementById('papel').value = usuario.papel || '';
@@ -193,19 +162,18 @@ async function editarUsuario(id) {
 async function salvarUsuario(event) {
     event.preventDefault();
 
-    const id = document.getElementById('usuarioId').value;
+    const cpfOriginal = document.getElementById('usuarioCpfOriginal').value;
     const nome = document.getElementById('nome').value.trim();
     const cpf = document.getElementById('cpf').value.trim();
     const senha = document.getElementById('senha').value;
     const papel = document.getElementById('papel').value;
 
-    // Validações
     if (!nome || !cpf || !papel) {
         alert('Preencha todos os campos obrigatórios');
         return;
     }
 
-    if (!id && !senha) {
+    if (!cpfOriginal && !senha) {
         alert('A senha é obrigatória para novos usuários');
         return;
     }
@@ -215,29 +183,25 @@ async function salvarUsuario(event) {
         return;
     }
 
-    // Limpa CPF (remove caracteres não numéricos)
     const cpfLimpo = cpf.replace(/\D/g, '');
-
     const dados = { nome, cpf: cpfLimpo, papel };
     if (senha) {
         dados.senha = senha;
     }
 
     try {
-        if (id) {
+        if (cpfOriginal) {
             // ============================================================
-            // MOCK - Simula edição
-            // Quando a API estiver pronta, descomente a linha abaixo
+            // CHAMADA REAL PARA A API
             // ============================================================
-            // await apiRequest(`/usuarios/${id}`, 'PUT', dados);
-            alert('Usuário atualizado com sucesso! (MOCK)');
+            await apiRequest(`/usuarios/${cpfOriginal}`, 'PUT', dados);
+            alert('Usuário atualizado com sucesso!');
         } else {
             // ============================================================
-            // MOCK - Simula cadastro
-            // Quando a API estiver pronta, descomente a linha abaixo
+            // CHAMADA REAL PARA A API
             // ============================================================
-            // await apiRequest('/usuarios', 'POST', dados);
-            alert('Usuário cadastrado com sucesso! (MOCK)');
+            await apiRequest('/usuarios', 'POST', dados);
+            alert('Usuário cadastrado com sucesso!');
         }
 
         fecharModal();
@@ -251,18 +215,17 @@ async function salvarUsuario(event) {
 /**
  * Desativa um usuário
  */
-async function desativarUsuario(id) {
+async function desativarUsuario(cpf) {
     if (!confirm('Tem certeza que deseja desativar este usuário? Ele não poderá mais acessar o sistema.')) {
         return;
     }
 
     try {
         // ============================================================
-        // MOCK - Simula desativação
-        // Quando a API estiver pronta, descomente a linha abaixo
+        // CHAMADA REAL PARA A API
         // ============================================================
-        // await apiRequest(`/usuarios/${id}/desativar`, 'DELETE');
-        alert('Usuário desativado com sucesso! (MOCK)');
+        await apiRequest(`/usuarios/${cpf}`, 'DELETE');
+        alert('Usuário desativado com sucesso!');
         carregarUsuarios();
     } catch (error) {
         alert('Erro ao desativar usuário: ' + (error.message || 'Tente novamente'));
@@ -277,7 +240,7 @@ function fecharModal() {
     if (modal) {
         modal.classList.remove('active');
         document.getElementById('formUsuario').reset();
-        document.getElementById('usuarioId').value = '';
+        document.getElementById('usuarioCpfOriginal').value = '';
         document.getElementById('senha').required = true;
         document.getElementById('senha').placeholder = 'Mínimo 6 caracteres';
         document.getElementById('senhaHelp').textContent = 'Digite uma senha para novo usuário (opcional na edição)';
@@ -341,7 +304,7 @@ function configurarModal() {
 }
 
 // ============================================================
-// EXPORTA FUNÇÕES PARA USO GLOBAL
+// EXPORTA FUNÇÕES
 // ============================================================
 window.carregarUsuarios = carregarUsuarios;
 window.abrirCadastro = abrirCadastro;

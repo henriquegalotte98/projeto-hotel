@@ -1,7 +1,7 @@
 package br.com.jprog.hotel.config;
 
-import br.com.hotelweb.model.Usuario;
-import br.com.hotelweb.repository.UsuarioRepository;
+import br.com.jprog.hotel.model.Usuario;
+import br.com.jprog.hotel.repository.UsuarioRepository;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class AutenticacaoService implements UserDetailsService {
         // Retorna os dados usados pelo Spring Security.
         return User.withUsername(u.getCpf())
             .password(u.getSenha())
-            .roles(u.getPapel().name())
+            .roles(u.getPapel())
             .build();
     }
 }

@@ -1,8 +1,8 @@
 package br.com.jprog.hotel.controller;
 
-import br.com.hotelweb.dto.*;
-import br.com.hotelweb.model.Usuario;
-import br.com.hotelweb.repository.UsuarioRepository;
+import br.com.jprog.hotel.dto.*;
+import br.com.jprog.hotel.model.Usuario;
+import br.com.jprog.hotel.repository.UsuarioRepository;
 import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import org.springframework.http.*;
@@ -64,10 +64,9 @@ public class AuthController {
 
         // Retorna os dados básicos do usuário.
         return new LoginResponse(
-            u.getId(),
             u.getNome(),
             u.getCpf(),
-            u.getPapel().name()
+            u.getPapel()
         );
     }
 
@@ -82,10 +81,9 @@ public class AuthController {
 
         // Retorna os dados do usuário.
         return new LoginResponse(
-            u.getId(),
             u.getNome(),
             u.getCpf(),
-            u.getPapel().name()
+            u.getPapel()
         );
     }
 }

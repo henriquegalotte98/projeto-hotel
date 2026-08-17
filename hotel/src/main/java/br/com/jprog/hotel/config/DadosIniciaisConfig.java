@@ -106,6 +106,7 @@ public class DadosIniciaisConfig {
                 admin.setCpf("00000000000");
 
 
+
                 // Define a senha do administrador.
                 //
                 // IMPORTANTE:
@@ -128,7 +129,7 @@ public class DadosIniciaisConfig {
                 //
                 // Papel.ADMIN significa que esse usuário
                 // terá permissões de administrador.
-                admin.setPapel(Papel.ADMIN);
+                admin.setPapel(Papel.ADMIN.name());
 
 
                 // Define que o usuário está ativo.
