@@ -2,76 +2,119 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Quartos | HotelWeb</title>
 
-    <!-- CSS principal do sistema -->
+    <!--
+        Fonte utilizada na identidade visual
+        do sistema.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!--
+        CSS específico da página de quartos
+    -->
     <link rel="stylesheet" href="../css/quartos.css">
+
 </head>
+
 
 <body>
 
-    <!-- =========================
+
+    <!-- =====================================================
          SIDEBAR
-    ========================== -->
+    ====================================================== -->
+
     <aside class="sidebar">
 
+        <!-- LOGO -->
+
         <div class="logo">
-            <span>🏨</span>
-            <h2>HotelWeb</h2>
+
+            <div class="logo-icon">
+                🏨
+            </div>
+
+            <div class="logo-text">
+                HotelWeb
+            </div>
+
         </div>
+
+
+        <!-- MENU -->
 
         <nav class="menu">
 
             <a href="dashboard.html">
-                📊
+                <span class="menu-icon">📊</span>
                 <span>Dashboard</span>
             </a>
 
+
             <a href="quartos.html" class="active">
-                🛏️
+                <span class="menu-icon">🛏️</span>
                 <span>Quartos</span>
             </a>
 
+
             <a href="hospedes.html">
-                👤
+                <span class="menu-icon">👤</span>
                 <span>Hóspedes</span>
             </a>
 
+
             <a href="reservas.html">
-                📅
+                <span class="menu-icon">📅</span>
                 <span>Reservas</span>
             </a>
 
+
             <a href="governanca.html">
-                🧹
+                <span class="menu-icon">🧹</span>
                 <span>Governança</span>
             </a>
 
+
             <a href="manutencao.html">
-                🔧
+                <span class="menu-icon">🔧</span>
                 <span>Manutenção</span>
             </a>
 
+
             <a href="restaurante.html">
-                🍽️
+                <span class="menu-icon">🍽️</span>
                 <span>Restaurante</span>
             </a>
 
-            <a href="relatorios.html" data-papeis="ADMIN">
-                📈
+
+            <a href="relatorios.html">
+                <span class="menu-icon">📈</span>
                 <span>Relatórios</span>
             </a>
 
         </nav>
 
+
+        <!-- SAIR -->
+
         <div class="sidebar-footer">
 
-            <button id="btnLogout" class="btn-logout">
-                🚪 Sair
+            <button type="button" id="btnLogout" class="btn-logout">
+
+                <span>🚪</span>
+
+                <span>Sair</span>
+
             </button>
 
         </div>
@@ -79,104 +122,157 @@
     </aside>
 
 
-    <!-- =========================
+
+    <!-- =====================================================
          CONTEÚDO PRINCIPAL
-    ========================== -->
+    ====================================================== -->
 
     <main class="main-content">
 
-        <!-- HEADER -->
+
+        <!-- =================================================
+             CABEÇALHO
+        ================================================== -->
 
         <header class="topbar">
 
-            <div>
-                <h1>Quartos</h1>
+            <div class="page-title">
+
+                <span class="page-kicker">
+                    HOTELWEB
+                </span>
+
+                <h1>
+                    Gerenciamento de Quartos
+                </h1>
 
                 <p>
-                    Gerenciamento de quartos e tarifas
+                    Controle de disponibilidade, tarifas e limpeza.
                 </p>
+
             </div>
+
+
+            <!-- USUÁRIO -->
 
             <div class="usuario">
 
-                <span id="usuarioNome">
-                    Usuário
-                </span>
+                <div class="usuario-icon">
+                    👤
+                </div>
+
+                <div>
+
+                    <small>
+                        Usuário conectado
+                    </small>
+
+                    <strong id="usuarioNome">
+                        Usuário
+                    </strong>
+
+                </div>
 
             </div>
 
         </header>
 
 
-        <!-- =========================
-             CARDS DE RESUMO
-        ========================== -->
+
+        <!-- =================================================
+             RESUMO
+        ================================================== -->
 
         <section class="resumo">
 
+
+            <!-- TOTAL -->
+
             <div class="resumo-card">
 
-                <div class="resumo-icone">
+                <div class="resumo-icon total">
                     🛏️
                 </div>
 
-                <div>
-                    <span>Total de quartos</span>
+                <div class="resumo-info">
+
+                    <span>
+                        Total de quartos
+                    </span>
 
                     <strong id="totalQuartos">
                         0
                     </strong>
+
                 </div>
 
             </div>
 
 
+            <!-- DISPONÍVEIS -->
+
             <div class="resumo-card">
 
-                <div class="resumo-icone">
-                    🟢
+                <div class="resumo-icon disponivel">
+                    ✓
                 </div>
 
-                <div>
-                    <span>Disponíveis</span>
+                <div class="resumo-info">
+
+                    <span>
+                        Disponíveis
+                    </span>
 
                     <strong id="quartosDisponiveis">
                         0
                     </strong>
+
                 </div>
 
             </div>
 
 
+            <!-- OCUPADOS -->
+
             <div class="resumo-card">
 
-                <div class="resumo-icone">
-                    🔴
+                <div class="resumo-icon ocupado">
+                    ●
                 </div>
 
-                <div>
-                    <span>Ocupados</span>
+                <div class="resumo-info">
+
+                    <span>
+                        Ocupados
+                    </span>
 
                     <strong id="quartosOcupados">
                         0
                     </strong>
+
                 </div>
 
             </div>
 
 
+            <!-- MANUTENÇÃO -->
+
             <div class="resumo-card">
 
-                <div class="resumo-icone">
+                <div class="resumo-icon manutencao">
                     🔧
                 </div>
 
-                <div>
-                    <span>Manutenção</span>
+                <div class="resumo-info">
+
+                    <span>
+                        Manutenção
+                    </span>
 
                     <strong id="quartosManutencao">
                         0
                     </strong>
+
                 </div>
 
             </div>
@@ -184,15 +280,23 @@
         </section>
 
 
-        <!-- =========================
-             CADASTRO DE QUARTO
-        ========================== -->
 
-        <section class="card">
+        <!-- =================================================
+             FORMULÁRIO
+        ================================================== -->
+
+        <section class="content-card">
+
+
+            <!-- CABEÇALHO -->
 
             <div class="card-header">
 
                 <div>
+
+                    <span class="section-label">
+                        ADMINISTRAÇÃO
+                    </span>
 
                     <h2 id="tituloFormulario">
                         Cadastrar quarto
@@ -207,40 +311,43 @@
             </div>
 
 
+            <!-- FORM -->
+
             <form id="formQuarto">
 
-                <!-- ID escondido utilizado durante edição -->
+                <!-- ID utilizado na edição -->
 
                 <input type="hidden" id="quartoId">
 
 
                 <div class="form-grid">
 
-                    <!-- Número -->
+
+                    <!-- NÚMERO -->
 
                     <div class="form-group">
 
                         <label for="numero">
-                            Número do quarto *
+                            Número do quarto
                         </label>
 
-                        <input type="text" id="numero" placeholder="Ex: 101" maxlength="10" required>
+                        <input type="text" id="numero" placeholder="Ex.: 101" required>
 
                     </div>
 
 
-                    <!-- Tipo -->
+                    <!-- TIPO -->
 
                     <div class="form-group">
 
                         <label for="tipo">
-                            Tipo *
+                            Tipo
                         </label>
 
                         <select id="tipo" required>
 
                             <option value="">
-                                Selecione
+                                Selecione o tipo
                             </option>
 
                             <option value="SIMPLES">
@@ -260,20 +367,28 @@
                     </div>
 
 
-                    <!-- Valor -->
+                    <!-- VALOR -->
 
                     <div class="form-group">
 
                         <label for="valorDiaria">
-                            Valor da diária *
+                            Valor da diária
                         </label>
 
-                        <input type="number" id="valorDiaria" placeholder="0,00" min="0" step="0.01" required>
+                        <div class="input-money">
+
+                            <span>
+                                R$
+                            </span>
+
+                            <input type="number" id="valorDiaria" placeholder="0,00" step="0.01" min="0" required>
+
+                        </div>
 
                     </div>
 
 
-                    <!-- Café -->
+                    <!-- CAFÉ -->
 
                     <div class="form-group">
 
@@ -296,7 +411,7 @@
                     </div>
 
 
-                    <!-- Status ocupação -->
+                    <!-- OCUPAÇÃO -->
 
                     <div class="form-group">
 
@@ -323,7 +438,7 @@
                     </div>
 
 
-                    <!-- Status limpeza -->
+                    <!-- LIMPEZA -->
 
                     <div class="form-group">
 
@@ -356,16 +471,25 @@
                 </div>
 
 
-                <!-- Botões -->
+                <!-- BOTÕES -->
 
                 <div class="form-actions">
 
-                    <button type="submit" class="btn btn-primary" id="btnSalvar">
+                    <button type="submit" class="btn btn-primary">
+
+                        <span>
+                            ✓
+                        </span>
+
                         Salvar quarto
+
                     </button>
 
-                    <button type="button" class="btn btn-secondary hidden" id="btnCancelar">
+
+                    <button type="button" id="btnCancelar" class="btn btn-secondary hidden">
+
                         Cancelar edição
+
                     </button>
 
                 </div>
@@ -375,22 +499,30 @@
         </section>
 
 
-        <!-- =========================
+
+        <!-- =================================================
              LISTAGEM
-        ========================== -->
+        ================================================== -->
 
-        <section class="card">
+        <section class="content-card">
 
-            <div class="card-header">
+
+            <!-- CABEÇALHO -->
+
+            <div class="card-header list-header">
 
                 <div>
+
+                    <span class="section-label">
+                        INVENTÁRIO
+                    </span>
 
                     <h2>
                         Lista de quartos
                     </h2>
 
                     <p>
-                        Consulte, filtre e gerencie os quartos cadastrados.
+                        Consulte os quartos cadastrados no sistema.
                     </p>
 
                 </div>
@@ -398,9 +530,15 @@
             </div>
 
 
-            <!-- FILTROS -->
+
+            <!-- =================================================
+                 FILTROS
+            ================================================== -->
 
             <div class="filtros">
+
+
+                <!-- STATUS -->
 
                 <div class="form-group">
 
@@ -411,7 +549,7 @@
                     <select id="filtroStatus">
 
                         <option value="TODOS">
-                            Todos
+                            Todos os status
                         </option>
 
                         <option value="DISPONIVEL">
@@ -431,6 +569,8 @@
                 </div>
 
 
+                <!-- TIPO -->
+
                 <div class="form-group">
 
                     <label for="filtroTipo">
@@ -440,7 +580,7 @@
                     <select id="filtroTipo">
 
                         <option value="TODOS">
-                            Todos
+                            Todos os tipos
                         </option>
 
                         <option value="SIMPLES">
@@ -460,22 +600,35 @@
                 </div>
 
 
-                <div class="form-group">
+                <!-- PESQUISA -->
+
+                <div class="form-group pesquisa-group">
 
                     <label for="pesquisa">
-                        Pesquisar
+                        Pesquisar quarto
                     </label>
 
-                    <input type="text" id="pesquisa" placeholder="Número do quarto...">
+                    <div class="search-wrapper">
+
+                        <span class="search-icon">
+                            🔎
+                        </span>
+
+                        <input type="text" id="pesquisa" placeholder="Digite o número do quarto...">
+
+                    </div>
 
                 </div>
 
             </div>
 
 
-            <!-- TABELA -->
 
-            <div class="table-container">
+            <!-- =================================================
+                 TABELA
+            ================================================== -->
+
+            <div class="table-wrapper">
 
                 <table>
 
@@ -516,9 +669,22 @@
                     </thead>
 
 
+                    <!--
+                        O quartos.js vai preencher
+                        este tbody automaticamente.
+                    -->
+
                     <tbody id="tabelaQuartos">
 
-                        <!-- JavaScript preencherá aqui -->
+                        <tr>
+
+                            <td colspan="7" class="loading">
+
+                                Carregando quartos...
+
+                            </td>
+
+                        </tr>
 
                     </tbody>
 
@@ -528,16 +694,43 @@
 
         </section>
 
+
+
+        <!-- =================================================
+             RODAPÉ
+        ================================================== -->
+
+        <footer class="page-footer">
+
+            <span>
+                HotelWeb
+            </span>
+
+            <span>
+                Sistema de gerenciamento hoteleiro
+            </span>
+
+        </footer>
+
+
     </main>
 
 
-    <!-- =========================
+
+    <!-- =====================================================
          JAVASCRIPT
-    ========================== -->
+    ====================================================== -->
+
+    <!--
+        IMPORTANTE:
+        mantenha o caminho do api.js de acordo
+        com a estrutura do seu projeto.
+    -->
 
     <script src="js/api.js"></script>
 
     <script src="js/quartos.js"></script>
+
 
 </body>
 
