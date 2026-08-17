@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HotelWeb - Governança</title>
+
+    <!-- CSS global -->
+    <link rel="stylesheet" href="../css/app.css">
+
+    <!-- CSS da página -->
+    <link rel="stylesheet" href="../css/governanca.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+    <aside>
+
+        <div class="brand">
+            <i class="fa-solid fa-hotel"></i>
+            HOTELWEB
+        </div>
+
+        <ul class="menu" id="menu-lateral">
+
+            <li>
+                <a href="dashboard.html">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    Visão Geral
+                </a>
+            </li>
+
+            <li>
+                <a href="quartos.html">
+                    <i class="fa-solid fa-door-open"></i>
+                    Quartos
+                </a>
+            </li>
+
+            <li>
+                <a href="recepcao.html">
+                    <i class="fa-solid fa-bell-concierge"></i>
+                    Recepção
+                </a>
+            </li>
+
+            <li id="menu-governanca">
+                <a href="governanca.html" class="active">
+                    <i class="fa-solid fa-broom"></i>
+                    Governança
+                </a>
+            </li>
+
+            <li id="menu-manutencao">
+                <a href="manutencao.html">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    Manutenção
+                </a>
+            </li>
+
+            <li id="menu-usuarios">
+                <a href="usuarios.html">
+                    <i class="fa-solid fa-users-gear"></i>
+                    Usuários
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+         ===================================================== -->
+    <div class="main-container">
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+        <header>
+
+            <div class="user-info">
+
+                <div class="user-avatar" id="avatar-inicial">
+                    HW
+                </div>
+
+                <div class="user-details">
+
+                    <h4 id="usuario-nome">
+                        Carregando...
+                    </h4>
+
+                    <span id="usuario-papel" class="badge">
+                        --
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                onclick="fazerLogout()"
+                class="btn-danger"
+                style="padding: 8px 14px; font-size: 0.85rem; border-radius: 10px;">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Sair
+
+            </button>
+
+        </header>
+
+
+        <!-- =================================================
+             MAIN
+             ================================================= -->
+        <main>
+
+            <h1>
+                Governança
+            </h1>
+
+            <p class="subtitle">
+                Controle de limpeza, organização e disponibilidade dos quartos.
+            </p>
+
+
+            <!-- =================================================
+                 CARDS DE RESUMO
+                 ================================================= -->
+            <div class="stats-grid">
+
+
+                <!-- Quartos para limpar -->
+                <div class="stat-card">
+
+                    <div class="stat-icon warning">
+                        <i class="fa-solid fa-broom"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <h3 id="total-pendente">
+                            0
+                        </h3>
+
+                        <p>
+                            Pendentes de Limpeza
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Quartos em limpeza -->
+                <div class="stat-card">
+
+                    <div class="stat-icon primary">
+                        <i class="fa-solid fa-person-broom"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <h3 id="total-limpeza">
+                            0
+                        </h3>
+
+                        <p>
+                            Em Limpeza
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Quartos limpos -->
+                <div class="stat-card">
+
+                    <div class="stat-icon success">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <h3 id="total-limpo">
+                            0
+                        </h3>
+
+                        <p>
+                            Quartos Limpos
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Quartos bloqueados -->
+                <div class="stat-card">
+
+                    <div class="stat-icon danger">
+                        <i class="fa-solid fa-ban"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <h3 id="total-bloqueado">
+                            0
+                        </h3>
+
+                        <p>
+                            Bloqueados
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FILTROS
+                 ================================================= -->
+            <div class="card">
+
+                <div class="card-header-flex">
+
+                    <div>
+
+                        <h3>
+                            Controle de Quartos
+                        </h3>
+
+                        <p class="subtitle">
+                            Atualize o status de limpeza dos quartos.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="filtros">
+
+                    <div class="form-group">
+
+                        <label for="filtro-status">
+                            Status
+                        </label>
+
+                        <select id="filtro-status">
+
+                            <option value="">
+                                Todos
+                            </option>
+
+                            <option value="SUJO">
+                                Sujo
+                            </option>
+
+                            <option value="EM_LIMPEZA">
+                                Em limpeza
+                            </option>
+
+                            <option value="LIMPO">
+                                Limpo
+                            </option>
+
+                            <option value="BLOQUEADO">
+                                Bloqueado
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="filtro-quarto">
+                            Número do quarto
+                        </label>
+
+                        <input
+                            type="text"
+                            id="filtro-quarto"
+                            placeholder="Ex.: 101">
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="btn"
+                        id="btnFiltrar">
+
+                        <i class="fa-solid fa-filter"></i>
+                        Filtrar
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="btnLimparFiltro">
+
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Limpar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 LISTA DE QUARTOS
+                 ================================================= -->
+            <div class="card">
+
+                <div class="card-header-flex">
+
+                    <h3>
+                        Status dos Quartos
+                    </h3>
+
+                    <button
+                        type="button"
+                        class="btn-primary"
+                        id="btnAtualizar">
+
+                        <i class="fa-solid fa-rotate"></i>
+                        Atualizar
+
+                    </button>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Quarto
+                                </th>
+
+                                <th>
+                                    Tipo
+                                </th>
+
+                                <th>
+                                    Status Ocupação
+                                </th>
+
+                                <th>
+                                    Status Limpeza
+                                </th>
+
+                                <th style="text-align: center;">
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="lista-quartos">
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="loading-message">
+
+                                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                                    Carregando quartos...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL PARA ALTERAR STATUS
+         ===================================================== -->
+    <div
+        class="modal-overlay"
+        id="modalStatus">
+
+        <div class="modal-box">
+
+            <div class="modal-header">
+
+                <h2>
+                    Atualizar Status
+                </h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="modalFechar">
+
+                    &times;
+
+                </button>
+
+            </div>
+
+
+            <form id="formStatus">
+
+                <input
+                    type="hidden"
+                    id="quartoId">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Quarto
+                    </label>
+
+                    <input
+                        type="text"
+                        id="quartoNumero"
+                        readonly>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="novoStatus">
+                        Novo status
+                    </label>
+
+                    <select
+                        id="novoStatus"
+                        required>
+
+                        <option value="">
+                            Selecione...
+                        </option>
+
+                        <option value="SUJO">
+                            Sujo
+                        </option>
+
+                        <option value="EM_LIMPEZA">
+                            Em limpeza
+                        </option>
+
+                        <option value="LIMPO">
+                            Limpo
+                        </option>
+
+                        <option value="BLOQUEADO">
+                            Bloqueado
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="btnCancelar">
+
+                        Cancelar
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn-save">
+
+                        <i class="fa-solid fa-save"></i>
+
+                        Salvar
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCRIPTS
+         ===================================================== -->
+
+    <script src="../js/api.js"></script>
+
+    <script src="../js/menu.js"></script>
+
+    <script src="../js/dashboard.js"></script>
+
+    <script src="../js/governanca.js"></script>
+
+</body>
+
+</html>
