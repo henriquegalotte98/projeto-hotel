@@ -27,7 +27,7 @@ function initLogin() {
         });
     }
 
-    // Login com Enter (tecla ENTER no campo senha)
+    // Login com Enter
     const senhaInput = document.getElementById('senha');
     if (senhaInput) {
         senhaInput.addEventListener('keypress', function(e) {
@@ -44,7 +44,6 @@ function initLogin() {
 
 /**
  * Processa o login do usuário
- * @param {Event} e - Evento do formulário
  */
 async function handleLogin(e) {
     e.preventDefault();
@@ -56,7 +55,6 @@ async function handleLogin(e) {
     const btnLoader = document.getElementById('btnLoader');
     const mensagemErro = document.getElementById('mensagem-erro');
 
-    // Limpa erro anterior
     mensagemErro.classList.remove('show');
     mensagemErro.style.display = 'none';
 
@@ -71,20 +69,18 @@ async function handleLogin(e) {
         return;
     }
 
-    // Desabilita botão e mostra loader
     btnLogin.disabled = true;
     btnTexto.style.display = 'none';
     btnLoader.style.display = 'inline-block';
 
     try {
-        // Tenta autenticar
-        const usuario = await autenticar(cpf, senha);
+        // ============================================================
+        // CHAMADA REAL PARA A API - LOGIN
+        // ============================================================
+        const usuario = await apiRequest('/auth/login', 'POST', { cpf, senha });
 
         if (usuario && usuario.papel) {
-            // Salva no localStorage
             localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-            
-            // Redireciona para o dashboard
             window.location.href = 'dashboard.html';
         } else {
             mostrarErro('Credenciais inválidas. Tente novamente.');
@@ -107,7 +103,6 @@ async function handleLogin(e) {
         mostrarErro(mensagem);
 
     } finally {
-        // Reabilita o botão
         btnLogin.disabled = false;
         btnTexto.style.display = 'inline';
         btnLoader.style.display = 'none';
@@ -115,47 +110,7 @@ async function handleLogin(e) {
 }
 
 /**
- * Função de autenticação - TEMPORÁRIA (mock)
- * Quando a API estiver pronta, substituir pela chamada real
- */
-async function autenticar(cpf, senha) {
-    return apiRequest('/auth/login', 'POST', { cpf, senha });
-
-    // ============================================================
-    // QUANDO A API ESTIVER PRONTA, DESCOMENTE ESTA PARTE:
-    // ============================================================
-    // return await apiRequest('/auth/login', 'POST', { cpf, senha });
-    // ============================================================
-
-    // ============================================================
-    // MOCK PARA TESTE (REMOVER QUANDO A API ESTIVER PRONTA)
-    // ============================================================
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            // Usuários mockados para teste
-            const usuarios = [
-                { id: 1, nome: 'Administrador', cpf: '12345678901', papel: 'ADMIN' },
-                { id: 2, nome: 'João Silva', cpf: '98765432100', papel: 'RECEPCIONISTA' },
-                { id: 3, nome: 'Maria Oliveira', cpf: '45678912300', papel: 'GOVERNANCA' },
-                { id: 4, nome: 'Carlos Souza', cpf: '78912345600', papel: 'MANUTENCAO' }
-            ];
-
-            const usuario = usuarios.find(u => u.cpf === cpf);
-            
-            if (usuario && senha.length >= 6) {
-                resolve(usuario);
-            } else {
-                const error = new Error('Credenciais inválidas');
-                error.status = 401;
-                reject(error);
-            }
-        }, 500);
-    });
-}
-
-/**
  * Mostra mensagem de erro
- * @param {string} mensagem - Texto do erro
  */
 function mostrarErro(mensagem) {
     const mensagemErro = document.getElementById('mensagem-erro');
@@ -165,7 +120,6 @@ function mostrarErro(mensagem) {
         mensagemErro.style.display = 'flex';
         mensagemErro.classList.add('show');
         
-        // Limpa o erro após 5 segundos
         setTimeout(() => {
             mensagemErro.classList.remove('show');
             mensagemErro.style.display = 'none';
@@ -174,7 +128,7 @@ function mostrarErro(mensagem) {
 }
 
 /**
- * Função de logout (pode ser chamada de qualquer lugar)
+ * Função de logout
  */
 function fazerLogout() {
     localStorage.removeItem('usuarioLogado');
@@ -182,7 +136,7 @@ function fazerLogout() {
 }
 
 // ============================================================
-// EXPORTA FUNÇÕES PARA USO GLOBAL
+// EXPORTA FUNÇÕES
 // ============================================================
 window.initLogin = initLogin;
 window.fazerLogout = fazerLogout;

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/usuarios.css">
 </head>
 <body>
-    <!-- ===== SIDEBAR (MESMA DO DASHBOARD) ===== -->
+    <!-- ===== SIDEBAR ===== -->
     <aside>
         <div class="brand">
             <i class="fa-solid fa-hotel"></i> HOTELWEB
@@ -27,7 +27,6 @@
 
     <!-- ===== CONTEÚDO PRINCIPAL ===== -->
     <div class="main-container">
-        <!-- ===== HEADER (MESMO DO DASHBOARD) ===== -->
         <header>
             <div class="user-info">
                 <div class="user-avatar" id="avatar-inicial">HW</div>
@@ -41,12 +40,10 @@
             </button>
         </header>
 
-        <!-- ===== MAIN ===== -->
         <main>
             <h1>Gerenciar Usuários</h1>
             <p class="subtitle">Gerencie todos os colaboradores e suas permissões</p>
 
-            <!-- Cabeçalho da página -->
             <div class="page-header">
                 <div>
                     <h2>Usuários do Sistema</h2>
@@ -57,7 +54,6 @@
                 </button>
             </div>
 
-            <!-- Tabela de usuários -->
             <div class="card">
                 <div class="table-container">
                     <table>
@@ -65,14 +61,13 @@
                             <tr>
                                 <th>CPF</th>
                                 <th>Nome</th>
-                                <th>Nome</th>
                                 <th>Papel</th>
                                 <th style="text-align: center;">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="lista-usuarios">
                             <tr>
-                                <td colspan="5" class="loading-message">
+                                <td colspan="4" class="loading-message">
                                     <i class="fa-solid fa-spinner fa-spin"></i> Carregando usuários...
                                 </td>
                             </tr>
