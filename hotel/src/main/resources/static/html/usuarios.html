@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/usuarios.css">
 </head>
 <body>
-    <!-- ===== SIDEBAR (MESMA DO DASHBOARD) ===== -->
+    <!-- ===== SIDEBAR ===== -->
     <aside>
         <div class="brand">
             <i class="fa-solid fa-hotel"></i> HOTELWEB
@@ -27,7 +27,6 @@
 
     <!-- ===== CONTEÚDO PRINCIPAL ===== -->
     <div class="main-container">
-        <!-- ===== HEADER (MESMO DO DASHBOARD) ===== -->
         <header>
             <div class="user-info">
                 <div class="user-avatar" id="avatar-inicial">HW</div>
@@ -41,12 +40,10 @@
             </button>
         </header>
 
-        <!-- ===== MAIN ===== -->
         <main>
             <h1>Gerenciar Usuários</h1>
             <p class="subtitle">Gerencie todos os colaboradores e suas permissões</p>
 
-            <!-- Cabeçalho da página -->
             <div class="page-header">
                 <div>
                     <h2>Usuários do Sistema</h2>
@@ -57,7 +54,6 @@
                 </button>
             </div>
 
-            <!-- Tabela de usuários -->
             <div class="card">
                 <div class="table-container">
                     <table>
@@ -66,13 +62,14 @@
                                 <th>ID</th>
                                 <th>Nome</th>
                                 <th>CPF</th>
+                                <th>Email</th>
                                 <th>Papel</th>
                                 <th style="text-align: center;">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="lista-usuarios">
                             <tr>
-                                <td colspan="5" class="loading-message">
+                                <td colspan="6" class="loading-message">
                                     <i class="fa-solid fa-spinner fa-spin"></i> Carregando usuários...
                                 </td>
                             </tr>
@@ -103,6 +100,13 @@
                     <label for="cpf">CPF</label>
                     <input type="text" id="cpf" required placeholder="Apenas números" maxlength="11">
                     <small class="form-help">Apenas números, sem pontos ou traços</small>
+                </div>
+
+                <!-- ===== NOVO CAMPO: EMAIL ===== -->
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" required placeholder="colaborador@hotelweb.com">
+                    <small class="form-help">E-mail institucional do usuário</small>
                 </div>
 
                 <div class="form-group">
