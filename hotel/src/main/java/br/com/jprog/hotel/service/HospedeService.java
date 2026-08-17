@@ -5,68 +5,47 @@ import br.com.jprog.hotel.exception.RegraNegocioException;
 import br.com.jprog.hotel.model.Hospede;
 import br.com.jprog.hotel.repository.HospedeRepository;
 import br.com.jprog.hotel.repository.ReservaRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-/** Aplica as regras de cadastro e manutencao dos hospedes. */
 @Service
 public class HospedeService {
     private final HospedeRepository repository;
     private final ReservaRepository reservaRepository;
 
     public HospedeService(HospedeRepository repository, ReservaRepository reservaRepository) {
-        this.repository = repository;
-        this.reservaRepository = reservaRepository;
+        this.repository = repository; this.reservaRepository = reservaRepository;
     }
 
     @Transactional(readOnly = true)
-    public List<Hospede> listar() {
-        return repository.findAll();
-    }
+    public List<Hospede> listar() { return repository.findAll(); }
 
     @Transactional(readOnly = true)
-    public Hospede buscar(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Hospede nao encontrado: " + id));
+    public Hospede buscar(String cpf) {
+        return repository.findById(cpf)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Hóspede não encontrado: " + cpf));
     }
 
     @Transactional
     public Hospede criar(Hospede hospede) {
-        validarDuplicidade(hospede, null);
-        hospede.setId(null);
+        if (repository.existsById(hospede.getCpf()))
+            throw new RegraNegocioException("Já existe um hóspede com o CPF informado");
         return repository.save(hospede);
     }
 
     @Transactional
-    public Hospede atualizar(Long id, Hospede dados) {
-        Hospede hospede = buscar(id);
-        validarDuplicidade(dados, hospede);
+    public Hospede atualizar(String cpf, Hospede dados) {
+        Hospede hospede = buscar(cpf);
         hospede.setNome(dados.getNome());
-        hospede.setCpf(dados.getCpf());
-        hospede.setEmail(dados.getEmail());
         hospede.setTelefone(dados.getTelefone());
         return repository.save(hospede);
     }
 
     @Transactional
-    public void excluir(Long id) {
-        if (!reservaRepository.findByHospedeId(id).isEmpty()) {
-            throw new RegraNegocioException("Hospede possui reservas vinculadas");
-        }
-        repository.delete(buscar(id));
-    }
-
-    private void validarDuplicidade(Hospede dados, Hospede atual) {
-        boolean cpfAlterado = atual == null || !atual.getCpf().equals(dados.getCpf());
-        if (cpfAlterado && repository.existsByCpf(dados.getCpf())) {
-            throw new RegraNegocioException("Ja existe um hospede com o CPF informado");
-        }
-
-        boolean emailAlterado = atual == null || !atual.getEmail().equalsIgnoreCase(dados.getEmail());
-        if (emailAlterado && repository.existsByEmailIgnoreCase(dados.getEmail())) {
-            throw new RegraNegocioException("Ja existe um hospede com o e-mail informado");
-        }
+    public void excluir(String cpf) {
+        if (!reservaRepository.findByHospedeCpf(cpf).isEmpty())
+            throw new RegraNegocioException("Hóspede possui reservas vinculadas");
+        repository.delete(buscar(cpf));
     }
 }

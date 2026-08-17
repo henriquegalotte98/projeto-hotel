@@ -119,6 +119,8 @@ async function handleLogin(e) {
  * Quando a API estiver pronta, substituir pela chamada real
  */
 async function autenticar(cpf, senha) {
+    return apiRequest('/auth/login', 'POST', { cpf, senha });
+
     // ============================================================
     // QUANDO A API ESTIVER PRONTA, DESCOMENTE ESTA PARTE:
     // ============================================================

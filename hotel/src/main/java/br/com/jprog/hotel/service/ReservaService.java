@@ -27,7 +27,7 @@ public class ReservaService {
     }
 
     public List<Reserva> listar() { return repository.findAll(); }
-    public List<Reserva> porHospede(Long id) { return repository.findByHospedeId(id); }
+    public List<Reserva> porHospede(String cpf) { return repository.findByHospedeCpf(cpf); }
     public List<Reserva> porQuarto(Long id) { return repository.findByQuartoId(id); }
     public List<Reserva> porPeriodo(LocalDate inicio, LocalDate fim) { return repository.findNoPeriodo(inicio, fim); }
     public Reserva buscar(Long id) { return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Reserva nao encontrada: " + id)); }
@@ -37,7 +37,7 @@ public class ReservaService {
         if (!req.dataCheckoutPrevista().isAfter(req.dataCheckinPrevista())) throw new IllegalArgumentException("Checkout deve ser posterior ao check-in");
         if (repository.existeConflito(req.quartoId(), req.dataCheckinPrevista(), req.dataCheckoutPrevista(), null)) throw new IllegalStateException("Quarto indisponivel no periodo");
         Reserva r = new Reserva();
-        r.setHospede(hospedes.findById(req.hospedeId()).orElseThrow(() -> new IllegalArgumentException("Hospede nao encontrado")));
+        r.setHospede(hospedes.findById(req.hospedeCpf()).orElseThrow(() -> new IllegalArgumentException("Hospede nao encontrado")));
         r.setQuarto(quartos.findById(req.quartoId()).orElseThrow(() -> new IllegalArgumentException("Quarto nao encontrado")));
         r.setDataCheckinPrevista(req.dataCheckinPrevista());
         r.setDataCheckoutPrevista(req.dataCheckoutPrevista());

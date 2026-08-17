@@ -105,7 +105,6 @@ public class DadosIniciaisConfig {
                 // identificar o administrador inicial.
                 admin.setCpf("00000000000");
 
-                admin.setEmail("admin@hotel.local");
 
 
                 // Define a senha do administrador.

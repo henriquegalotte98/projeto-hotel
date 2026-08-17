@@ -95,16 +95,15 @@ async function carregarUsuarios() {
         usuarios.forEach(usuario => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${usuario.id || '-'}</td>
-                <td><strong>${usuario.nome || '-'}</strong></td>
                 <td>${formatarCPF(usuario.cpf) || '-'}</td>
+                <td><strong>${usuario.nome || '-'}</strong></td>
                 <td><span class="badge badge-${(usuario.papel || '').toLowerCase()}">${usuario.papel || '-'}</span></td>
                 <td style="text-align: center;">
                     <div class="action-buttons" style="justify-content: center;">
-                        <button class="btn-edit" onclick="editarUsuario(${usuario.id})">
+                        <button class="btn-edit" onclick="editarUsuario('${usuario.cpf}')">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-                        <button class="btn-delete" onclick="desativarUsuario(${usuario.id})">
+                        <button class="btn-delete" onclick="desativarUsuario('${usuario.cpf}')">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -135,7 +134,7 @@ function abrirCadastro() {
     const senhaHelp = document.getElementById('senhaHelp');
 
     form.reset();
-    document.getElementById('usuarioId').value = '';
+    document.getElementById('usuarioCpfOriginal').value = '';
     document.getElementById('senha').required = true;
     document.getElementById('senha').placeholder = 'Mínimo 6 caracteres';
     senhaHelp.textContent = 'Digite uma senha para o novo usuário';
@@ -147,7 +146,7 @@ function abrirCadastro() {
 /**
  * Prepara o formulário para editar um usuário existente
  */
-async function editarUsuario(id) {
+async function editarUsuario(cpf) {
     try {
         // ============================================================
         // MOCK - Busca usuário nos dados mockados
@@ -163,7 +162,7 @@ async function editarUsuario(id) {
             { id: 5, nome: 'Ana Paula Santos', cpf: '11122233344', papel: 'RECEPCIONISTA' },
             { id: 6, nome: 'Roberto Almeida', cpf: '55566677788', papel: 'ADMIN' }
         ];
-        const usuario = usuarios.find(u => u.id === id);
+        const usuario = usuarios.find(u => u.cpf === cpf);
         // ============================================================
 
         if (!usuario) {
@@ -171,7 +170,7 @@ async function editarUsuario(id) {
             return;
         }
 
-        document.getElementById('usuarioId').value = usuario.id;
+        document.getElementById('usuarioCpfOriginal').value = usuario.cpf;
         document.getElementById('nome').value = usuario.nome || '';
         document.getElementById('cpf').value = usuario.cpf || '';
         document.getElementById('papel').value = usuario.papel || '';
@@ -193,7 +192,7 @@ async function editarUsuario(id) {
 async function salvarUsuario(event) {
     event.preventDefault();
 
-    const id = document.getElementById('usuarioId').value;
+    const cpfOriginal = document.getElementById('usuarioCpfOriginal').value;
     const nome = document.getElementById('nome').value.trim();
     const cpf = document.getElementById('cpf').value.trim();
     const senha = document.getElementById('senha').value;
@@ -205,7 +204,7 @@ async function salvarUsuario(event) {
         return;
     }
 
-    if (!id && !senha) {
+    if (!cpfOriginal && !senha) {
         alert('A senha é obrigatória para novos usuários');
         return;
     }
@@ -224,12 +223,12 @@ async function salvarUsuario(event) {
     }
 
     try {
-        if (id) {
+        if (cpfOriginal) {
             // ============================================================
             // MOCK - Simula edição
             // Quando a API estiver pronta, descomente a linha abaixo
             // ============================================================
-            // await apiRequest(`/usuarios/${id}`, 'PUT', dados);
+            // await apiRequest(`/usuarios/${cpfOriginal}`, 'PUT', dados);
             alert('Usuário atualizado com sucesso! (MOCK)');
         } else {
             // ============================================================
@@ -251,7 +250,7 @@ async function salvarUsuario(event) {
 /**
  * Desativa um usuário
  */
-async function desativarUsuario(id) {
+async function desativarUsuario(cpf) {
     if (!confirm('Tem certeza que deseja desativar este usuário? Ele não poderá mais acessar o sistema.')) {
         return;
     }
@@ -261,7 +260,7 @@ async function desativarUsuario(id) {
         // MOCK - Simula desativação
         // Quando a API estiver pronta, descomente a linha abaixo
         // ============================================================
-        // await apiRequest(`/usuarios/${id}/desativar`, 'DELETE');
+        // await apiRequest(`/usuarios/${cpf}`, 'DELETE');
         alert('Usuário desativado com sucesso! (MOCK)');
         carregarUsuarios();
     } catch (error) {
@@ -277,7 +276,7 @@ function fecharModal() {
     if (modal) {
         modal.classList.remove('active');
         document.getElementById('formUsuario').reset();
-        document.getElementById('usuarioId').value = '';
+        document.getElementById('usuarioCpfOriginal').value = '';
         document.getElementById('senha').required = true;
         document.getElementById('senha').placeholder = 'Mínimo 6 caracteres';
         document.getElementById('senhaHelp').textContent = 'Digite uma senha para novo usuário (opcional na edição)';
