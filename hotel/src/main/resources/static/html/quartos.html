@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quartos | HotelWeb</title>
+
+    <!-- CSS principal do sistema -->
+    <link rel="stylesheet" href="../css/quartos.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>🏨</span>
+            <h2>HotelWeb</h2>
+        </div>
+
+        <nav class="menu">
+
+            <a href="dashboard.html">
+                📊
+                <span>Dashboard</span>
+            </a>
+
+            <a href="quartos.html" class="active">
+                🛏️
+                <span>Quartos</span>
+            </a>
+
+            <a href="hospedes.html">
+                👤
+                <span>Hóspedes</span>
+            </a>
+
+            <a href="reservas.html">
+                📅
+                <span>Reservas</span>
+            </a>
+
+            <a href="governanca.html">
+                🧹
+                <span>Governança</span>
+            </a>
+
+            <a href="manutencao.html">
+                🔧
+                <span>Manutenção</span>
+            </a>
+
+            <a href="restaurante.html">
+                🍽️
+                <span>Restaurante</span>
+            </a>
+
+            <a href="relatorios.html" data-papeis="ADMIN">
+                📈
+                <span>Relatórios</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <button id="btnLogout" class="btn-logout">
+                🚪 Sair
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         CONTEÚDO PRINCIPAL
+    ========================== -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div>
+                <h1>Quartos</h1>
+
+                <p>
+                    Gerenciamento de quartos e tarifas
+                </p>
+            </div>
+
+            <div class="usuario">
+
+                <span id="usuarioNome">
+                    Usuário
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             CARDS DE RESUMO
+        ========================== -->
+
+        <section class="resumo">
+
+            <div class="resumo-card">
+
+                <div class="resumo-icone">
+                    🛏️
+                </div>
+
+                <div>
+                    <span>Total de quartos</span>
+
+                    <strong id="totalQuartos">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="resumo-card">
+
+                <div class="resumo-icone">
+                    🟢
+                </div>
+
+                <div>
+                    <span>Disponíveis</span>
+
+                    <strong id="quartosDisponiveis">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="resumo-card">
+
+                <div class="resumo-icone">
+                    🔴
+                </div>
+
+                <div>
+                    <span>Ocupados</span>
+
+                    <strong id="quartosOcupados">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="resumo-card">
+
+                <div class="resumo-icone">
+                    🔧
+                </div>
+
+                <div>
+                    <span>Manutenção</span>
+
+                    <strong id="quartosManutencao">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CADASTRO DE QUARTO
+        ========================== -->
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2 id="tituloFormulario">
+                        Cadastrar quarto
+                    </h2>
+
+                    <p>
+                        Cadastre ou edite as informações do quarto.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form id="formQuarto">
+
+                <!-- ID escondido utilizado durante edição -->
+
+                <input type="hidden" id="quartoId">
+
+
+                <div class="form-grid">
+
+                    <!-- Número -->
+
+                    <div class="form-group">
+
+                        <label for="numero">
+                            Número do quarto *
+                        </label>
+
+                        <input type="text" id="numero" placeholder="Ex: 101" maxlength="10" required>
+
+                    </div>
+
+
+                    <!-- Tipo -->
+
+                    <div class="form-group">
+
+                        <label for="tipo">
+                            Tipo *
+                        </label>
+
+                        <select id="tipo" required>
+
+                            <option value="">
+                                Selecione
+                            </option>
+
+                            <option value="SIMPLES">
+                                Simples
+                            </option>
+
+                            <option value="DUPLO">
+                                Duplo
+                            </option>
+
+                            <option value="SUITE">
+                                Suíte
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Valor -->
+
+                    <div class="form-group">
+
+                        <label for="valorDiaria">
+                            Valor da diária *
+                        </label>
+
+                        <input type="number" id="valorDiaria" placeholder="0,00" min="0" step="0.01" required>
+
+                    </div>
+
+
+                    <!-- Café -->
+
+                    <div class="form-group">
+
+                        <label for="cafe">
+                            Café da manhã
+                        </label>
+
+                        <select id="cafe">
+
+                            <option value="true">
+                                Incluso
+                            </option>
+
+                            <option value="false">
+                                Não incluso
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Status ocupação -->
+
+                    <div class="form-group">
+
+                        <label for="statusOcupacao">
+                            Status de ocupação
+                        </label>
+
+                        <select id="statusOcupacao">
+
+                            <option value="DISPONIVEL">
+                                Disponível
+                            </option>
+
+                            <option value="OCUPADO">
+                                Ocupado
+                            </option>
+
+                            <option value="MANUTENCAO">
+                                Manutenção
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Status limpeza -->
+
+                    <div class="form-group">
+
+                        <label for="statusLimpeza">
+                            Status de limpeza
+                        </label>
+
+                        <select id="statusLimpeza">
+
+                            <option value="LIMPO">
+                                Limpo
+                            </option>
+
+                            <option value="SUJO">
+                                Sujo
+                            </option>
+
+                            <option value="EM_LIMPEZA">
+                                Em limpeza
+                            </option>
+
+                            <option value="INSPECIONADO">
+                                Inspecionado
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Botões -->
+
+                <div class="form-actions">
+
+                    <button type="submit" class="btn btn-primary" id="btnSalvar">
+                        Salvar quarto
+                    </button>
+
+                    <button type="button" class="btn btn-secondary hidden" id="btnCancelar">
+                        Cancelar edição
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- =========================
+             LISTAGEM
+        ========================== -->
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Lista de quartos
+                    </h2>
+
+                    <p>
+                        Consulte, filtre e gerencie os quartos cadastrados.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FILTROS -->
+
+            <div class="filtros">
+
+                <div class="form-group">
+
+                    <label for="filtroStatus">
+                        Status
+                    </label>
+
+                    <select id="filtroStatus">
+
+                        <option value="TODOS">
+                            Todos
+                        </option>
+
+                        <option value="DISPONIVEL">
+                            Disponível
+                        </option>
+
+                        <option value="OCUPADO">
+                            Ocupado
+                        </option>
+
+                        <option value="MANUTENCAO">
+                            Manutenção
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="filtroTipo">
+                        Tipo
+                    </label>
+
+                    <select id="filtroTipo">
+
+                        <option value="TODOS">
+                            Todos
+                        </option>
+
+                        <option value="SIMPLES">
+                            Simples
+                        </option>
+
+                        <option value="DUPLO">
+                            Duplo
+                        </option>
+
+                        <option value="SUITE">
+                            Suíte
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="pesquisa">
+                        Pesquisar
+                    </label>
+
+                    <input type="text" id="pesquisa" placeholder="Número do quarto...">
+
+                </div>
+
+            </div>
+
+
+            <!-- TABELA -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Quarto
+                            </th>
+
+                            <th>
+                                Tipo
+                            </th>
+
+                            <th>
+                                Diária
+                            </th>
+
+                            <th>
+                                Café
+                            </th>
+
+                            <th>
+                                Ocupação
+                            </th>
+
+                            <th>
+                                Limpeza
+                            </th>
+
+                            <th>
+                                Ações
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="tabelaQuartos">
+
+                        <!-- JavaScript preencherá aqui -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script src="js/api.js"></script>
+
+    <script src="js/quartos.js"></script>
+
+</body>
+
+</html>
