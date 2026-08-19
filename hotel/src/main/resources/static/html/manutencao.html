@@ -37,21 +37,71 @@
             </button>
         </header>
 
+        <!-- MAIN ATUALIZADO COM AS FUNCIONALIDADES DA SPRINT 5 -->
         <main>
             <h1>Manutenção</h1>
-            <p class="subtitle">Acompanhamento das solicitações de manutenção.</p>
+            <p class="subtitle">Acompanhamento e abertura das solicitações de manutenção.</p>
 
-            <section class="card maintenance-card" aria-labelledby="titulo-solicitacoes">
-                <h2 id="titulo-solicitacoes">Solicitações</h2>
-                <div class="maintenance-unavailable" role="status">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <div>
-                        <strong>Dados de manutenção indisponíveis</strong>
-                        <p>A API desta funcionalidade ainda não está exposta pelo servidor.</p>
+            <!-- 1. Form de Abertura de Chamado -->
+            <section class="card maintenance-card">
+                <h2><i class="fa-solid fa-plus"></i> Abrir Novo Chamado</h2>
+                <form id="form-chamado">
+                    <div class="form-group">
+                        <label for="quartoId">Número do Quarto / Local:</label>
+                        <input type="text" id="quartoId" required placeholder="Ex: Quarto 102 ou Recepção">
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao">Descrição do Problema:</label>
+                        <textarea id="descricao" required rows="3" placeholder="Descreva o problema em detalhes..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="prioridade">Prioridade:</label>
+                        <select id="prioridade">
+                            <option value="BAIXA">Baixa</option>
+                            <option value="MEDIA" selected>Média</option>
+                            <option value="ALTA">Alta</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> Criar Chamado
+                    </button>
+                </form>
+            </section>
+
+            <!-- 2. Painel por Status (Kanban) -->
+            <section class="card maintenance-card">
+                <h2><i class="fa-solid fa-list-check"></i> Painel de Chamados</h2>
+                <div class="kanban-board">
+                    <div class="column" id="coluna-PENDENTE">
+                        <h3>Pendente</h3>
+                        <div class="chamados-list" id="lista-PENDENTE"></div>
+                    </div>
+                    <div class="column" id="coluna-EM_ANDAMENTO">
+                        <h3>Em Andamento</h3>
+                        <div class="chamados-list" id="lista-EM_ANDAMENTO"></div>
+                    </div>
+                    <div class="column" id="coluna-CONCLUIDO">
+                        <h3>Concluído</h3>
+                        <div class="chamados-list" id="lista-CONCLUIDO"></div>
                     </div>
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- 3. Modal para Histórico do Chamado -->
+    <div id="modal-historico" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="btn-fechar-modal">&times;</span>
+            <h2>Histórico do Chamado <span id="historico-id"></span></h2>
+            <p><strong>Quarto/Local:</strong> <span id="historico-quarto"></span></p>
+            <p><strong>Descrição:</strong> <span id="historico-descricao"></span></p>
+            
+            <h3>Histórico de Status</h3>
+            <ul id="lista-historico-status" class="timeline">
+                <!-- Preenchido via JS -->
+            </ul>
+        </div>
     </div>
 
     <script src="../js/api.js"></script>
