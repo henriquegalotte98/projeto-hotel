@@ -1,0 +1,108 @@
+#menu-usuarios {
+    display: none;
+}
+
+.main-container {
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.restaurante-logout {
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+}
+
+.restaurante-main {
+    min-width: 0;
+}
+
+.restaurante-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.restaurante-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    border-color: #fde68a;
+    background: #fffbeb;
+}
+
+.restaurante-status-icon {
+    display: flex;
+    flex: 0 0 48px;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 1.25rem;
+}
+
+.restaurante-status h2 {
+    margin-bottom: 8px;
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+.restaurante-status p {
+    max-width: 720px;
+    color: #78350f;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.restaurante-logout:focus-visible,
+.menu a:focus-visible {
+    outline: 3px solid rgba(180, 83, 9, 0.3);
+    outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+    aside {
+        width: 220px;
+    }
+
+    .restaurante-main {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    aside {
+        display: none;
+    }
+
+    header {
+        padding: 16px 20px;
+    }
+
+    .user-details {
+        display: none;
+    }
+
+    .restaurante-main {
+        padding: 20px;
+    }
+
+    .restaurante-status {
+        flex-direction: column;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 420px) {
+    .restaurante-main {
+        padding: 16px;
+    }
+
+    .restaurante-logout {
+        padding: 8px 10px;
+    }
+}
