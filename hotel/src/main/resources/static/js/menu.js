@@ -1,70 +1,77 @@
 // ============================================================
-// MENU - Controle de navegação e permissões
+// MENU - Controle de navegação e permissões (Front-End)
 // ============================================================
 
-// ===== DESTACAR LINK ATIVO =====
+// ============================================================
+// DESTACAR LINK ATIVO - CORRIGIDO (NUNCA MARCA DOIS)
+// ============================================================
+
+// Pega o nome da página atual (ex: dashboard.html, quartos.html)
 const pagina = location.pathname.split("/").pop() || "dashboard.html";
-document.querySelectorAll(".menu a").forEach((link) => {
-    if (link.getAttribute("href") === pagina) link.classList.add("active");
-});
 
-// ===== CONFIRMAÇÃO DE AÇÕES =====
-document.querySelectorAll("[data-confirmar]").forEach((botao) =>
-    botao.addEventListener("click", () => {
-        if (confirm(botao.dataset.confirmar))
-            alert("Operação realizada com sucesso.");
-    })
-);
+// Seleciona todos os links do menu lateral
+const linksMenu = document.querySelectorAll(".menu a");
 
-// ===== DEMO FORM =====
-document.querySelectorAll("form[data-demo]").forEach((form) =>
-    form.addEventListener("submit", (evento) => {
-        evento.preventDefault();
-        const mensagem =
-            form.querySelector(".mensagem") || document.querySelector(".mensagem");
-        if (mensagem) {
-            mensagem.textContent = "Dados salvos com sucesso!";
-            mensagem.classList.add("visivel");
-        }
-        form.reset();
-    })
-);
+// PASSO 1: Remove a classe 'active' de TODOS os links (garante limpeza)
+linksMenu.forEach(link => link.classList.remove("active"));
 
-// ===== LOGOUT =====
-document.querySelector("[data-logout]")?.addEventListener("click", () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuarioLogado");
-    location.href = "login.html";
+// PASSO 2: Adiciona a classe 'active' apenas no link que corresponde à página atual
+linksMenu.forEach(link => {
+    if (link.getAttribute("href") === pagina || link.getAttribute("href") === "/html/" + pagina) {
+        link.classList.add("active");
+    }
 });
 
 // ============================================================
-// FUNÇÃO PARA CONTROLAR MENU POR PAPEL (NOVO)
+// CONTROLE DE MENU POR PAPEL
 // ============================================================
 
 /**
  * Aplica regras de visibilidade do menu baseado no papel do usuário
- * @param {string} papel - Papel do usuário (ADMIN, RECEPCIONISTA, etc.)
+ * @param {string} papel - Papel do usuário (ADMIN, RECEPCIONISTA, GOVERNANCA, MANUTENCAO)
  */
 function aplicarRegrasMenu(papel) {
-    // Menu de Usuários - só aparece para ADMIN
-    const menuUsuarios = document.getElementById('menu-usuarios');
-    if (menuUsuarios) {
-        if (papel === 'ADMIN') {
-            menuUsuarios.style.display = 'block';
-        } else {
-            menuUsuarios.style.display = 'none';
+    if (!papel) return;
+
+    // REGRA DE NEGÓCIO CLARA:
+    // ADMIN vê tudo. Os outros só veem o que é deles.
+    const permissoesMenu = {
+        // ADMIN vê TUDO
+        'menu-usuarios': ['ADMIN'],
+        'menu-relatorios': ['ADMIN'],
+        
+        // RECEPCIONISTA vê Recepção, Hóspedes, Reservas e Restaurante
+        'menu-recepcao': ['ADMIN', 'RECEPCIONISTA'],
+        'menu-hospedes': ['ADMIN', 'RECEPCIONISTA'],
+        'menu-reservas': ['ADMIN', 'RECEPCIONISTA'],
+        'menu-restaurante': ['ADMIN', 'RECEPCIONISTA'],
+        
+        // GOVERNANÇA vê Governança
+        'menu-governanca': ['ADMIN', 'GOVERNANCA'],
+        
+        // MANUTENÇÃO vê Manutenção
+        'menu-manutencao': ['ADMIN', 'MANUTENCAO'],
+        
+        // TODOS veem Dashboard e Quartos
+        'menu-dashboard': ['ADMIN', 'RECEPCIONISTA', 'GOVERNANCA', 'MANUTENCAO'],
+        'menu-quartos': ['ADMIN', 'RECEPCIONISTA', 'GOVERNANCA', 'MANUTENCAO']
+    };
+
+    // Aplica as regras: esconde ou mostra os itens do menu
+    for (const [id, papeisPermitidos] of Object.entries(permissoesMenu)) {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            if (papeisPermitidos.includes(papel)) {
+                elemento.style.display = 'block'; // ou 'flex' dependendo do CSS
+            } else {
+                elemento.style.display = 'none';
+            }
         }
     }
-
-    // Adicione outras regras aqui conforme necessário
-    // Exemplo:
-    // const menuGovernanca = document.getElementById('menu-governanca');
-    // if (menuGovernanca) {
-    //     menuGovernanca.style.display = (papel === 'ADMIN' || papel === 'GOVERNANCA') ? 'block' : 'none';
-    // }
 }
 
 // ============================================================
-// EXPORTA PARA USO GLOBAL
+// EXPORTA PARA USO GLOBAL (para ser chamado no dashboard.js)
 // ============================================================
+
 window.aplicarRegrasMenu = aplicarRegrasMenu;

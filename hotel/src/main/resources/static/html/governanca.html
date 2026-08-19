@@ -1,26 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HotelWeb - Governança</title>
-
-    <!-- CSS global -->
     <link rel="stylesheet" href="../css/app.css">
-
-    <!-- CSS da página -->
     <link rel="stylesheet" href="../css/governanca.css">
-
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
-
-    <!-- =====================================================
-         TOAST DE NOTIFICAÇÃO (será exibido no canto)
-         ===================================================== -->
     <div id="toast-notificacao" class="toast">
         <div class="toast-icon" id="toastIcon">
             <i class="fa-solid fa-check-circle"></i>
@@ -32,33 +20,23 @@
         <button class="toast-close" onclick="fecharToast()">&times;</button>
     </div>
 
-    <!-- =====================================================
-         SIDEBAR
-         ===================================================== -->
     <aside>
         <div class="brand">
-            <i class="fa-solid fa-hotel"></i>
-            HOTELWEB
+            <i class="fa-solid fa-hotel"></i> HOTELWEB
         </div>
-
         <ul class="menu" id="menu-lateral">
-            <li><a href="dashboard.html"><i class="fa-solid fa-chart-pie"></i> Visão Geral</a></li>
-            <li><a href="quartos.html"><i class="fa-solid fa-door-open"></i> Quartos</a></li>
-            <li><a href="recepcao.html"><i class="fa-solid fa-bell-concierge"></i> Recepção</a></li>
+            <li id="menu-dashboard"><a href="dashboard.html"><i class="fa-solid fa-chart-pie"></i> Visão Geral</a></li>
+            <li id="menu-quartos"><a href="quartos.html"><i class="fa-solid fa-door-open"></i> Quartos</a></li>
+            <li id="menu-recepcao"><a href="recepcao.html"><i class="fa-solid fa-bell-concierge"></i> Recepção</a></li>
             <li id="menu-governanca"><a href="governanca.html" class="active"><i class="fa-solid fa-broom"></i> Governança</a></li>
             <li id="menu-manutencao"><a href="manutencao.html"><i class="fa-solid fa-screwdriver-wrench"></i> Manutenção</a></li>
+            <li id="menu-restaurante"><a href="restaurante.html"><i class="fa-solid fa-utensils"></i> Restaurante</a></li>
+            <li id="menu-relatorios"><a href="relatorios.html"><i class="fa-solid fa-chart-line"></i> Relatórios</a></li>
             <li id="menu-usuarios"><a href="usuarios.html"><i class="fa-solid fa-users-gear"></i> Usuários</a></li>
         </ul>
     </aside>
 
-    <!-- =====================================================
-         CONTEÚDO PRINCIPAL
-         ===================================================== -->
     <div class="main-container">
-
-        <!-- =================================================
-             HEADER
-             ================================================= -->
         <header>
             <div class="user-info">
                 <div class="user-avatar" id="avatar-inicial">HW</div>
@@ -72,19 +50,11 @@
             </button>
         </header>
 
-        <!-- =================================================
-             MAIN
-             ================================================= -->
         <main>
             <h1>Governança</h1>
             <p class="subtitle">Controle de limpeza, organização e disponibilidade dos quartos.</p>
 
-            <!-- =================================================
-                 CARDS DE RESUMO (IDs CORRETOS)
-                 ================================================= -->
             <div class="stats-grid">
-
-                <!-- Total de quartos -->
                 <div class="stat-card">
                     <div class="stat-icon primary"><i class="fa-solid fa-hotel"></i></div>
                     <div class="stat-info">
@@ -92,8 +62,6 @@
                         <p>Total de Quartos</p>
                     </div>
                 </div>
-
-                <!-- Sujos (Pendentes) -->
                 <div class="stat-card">
                     <div class="stat-icon warning"><i class="fa-solid fa-broom"></i></div>
                     <div class="stat-info">
@@ -101,8 +69,6 @@
                         <p>Pendentes de Limpeza</p>
                     </div>
                 </div>
-
-                <!-- Em limpeza -->
                 <div class="stat-card">
                     <div class="stat-icon primary"><i class="fa-solid fa-person-broom"></i></div>
                     <div class="stat-info">
@@ -110,8 +76,6 @@
                         <p>Em Limpeza</p>
                     </div>
                 </div>
-
-                <!-- Limpos -->
                 <div class="stat-card">
                     <div class="stat-icon success"><i class="fa-solid fa-circle-check"></i></div>
                     <div class="stat-info">
@@ -119,8 +83,6 @@
                         <p>Quartos Limpos</p>
                     </div>
                 </div>
-
-                <!-- Inspecionados -->
                 <div class="stat-card">
                     <div class="stat-icon info"><i class="fa-solid fa-clipboard-check"></i></div>
                     <div class="stat-info">
@@ -128,12 +90,8 @@
                         <p>Inspecionados</p>
                     </div>
                 </div>
-
             </div>
 
-            <!-- =================================================
-                 FILTROS
-                 ================================================= -->
             <div class="card">
                 <div class="card-header-flex">
                     <div>
@@ -169,9 +127,6 @@
                 </div>
             </div>
 
-            <!-- =================================================
-                 LISTA DE QUARTOS
-                 ================================================= -->
             <div class="card">
                 <div class="card-header-flex">
                     <h3>Status dos Quartos</h3>
@@ -201,17 +156,12 @@
                     </table>
                 </div>
             </div>
-
         </main>
     </div>
 
-    <!-- =====================================================
-         SCRIPTS
-         ===================================================== -->
     <script src="../js/api.js"></script>
     <script src="../js/menu.js"></script>
     <script src="../js/dashboard.js"></script>
     <script src="../js/governanca.js"></script>
-
 </body>
 </html>

@@ -71,7 +71,6 @@ function carregarDadosUsuario() {
 // ============================================================
 
 function configurarEventos() {
-    // Botão de filtrar
     const btnFiltrar = document.getElementById("btnFiltrar");
     if (btnFiltrar) {
         btnFiltrar.addEventListener("click", () => {
@@ -79,7 +78,6 @@ function configurarEventos() {
         });
     }
 
-    // Botão de limpar filtros
     const btnLimpar = document.getElementById("btnLimparFiltro");
     if (btnLimpar) {
         btnLimpar.addEventListener("click", () => {
@@ -89,7 +87,6 @@ function configurarEventos() {
         });
     }
 
-    // Botão de atualizar
     const btnAtualizar = document.getElementById("btnAtualizar");
     if (btnAtualizar) {
         btnAtualizar.addEventListener("click", () => {
@@ -134,7 +131,7 @@ async function carregarQuartos() {
             return;
         }
 
-        window.quartosData = quartos; // Guarda globalmente para os filtros
+        window.quartosData = quartos;
         aplicarFiltros();
 
     } catch (erro) {
@@ -265,7 +262,6 @@ async function alterarLimpeza(id, botao) {
             "PATCH"
         );
 
-        // Mostra toast com a cor do status
         const cores = {
             "SUJO": { icon: "fa-solid fa-broom", cor: "warning", titulo: "Sujo" },
             "EM_LIMPEZA": { icon: "fa-solid fa-person-broom", cor: "primary", titulo: "Em Limpeza" },
@@ -276,7 +272,6 @@ async function alterarLimpeza(id, botao) {
         const info = cores[status] || cores["LIMPO"];
         mostrarToast(info.cor, `${info.titulo}!`, `Quarto #${id} está agora ${info.titulo.toLowerCase()}.`);
 
-        // Recarrega a lista
         await carregarQuartos();
 
     } catch (erro) {
@@ -307,10 +302,8 @@ function mostrarToast(tipo, titulo, mensagem) {
     const toastTitulo = document.getElementById("toastTitulo");
     const toastMensagem = document.getElementById("toastMensagem");
 
-    // Remove classes anteriores
     toast.className = "toast";
 
-    // Mapeia cores e ícones
     const config = {
         success: { icon: "fa-solid fa-circle-check", cor: "#059669" },
         warning: { icon: "fa-solid fa-triangle-exclamation", cor: "#d97706" },
@@ -321,7 +314,6 @@ function mostrarToast(tipo, titulo, mensagem) {
 
     const cfg = config[tipo] || config.info;
 
-    // Aplica a cor
     toastIcon.style.background = cfg.cor;
     toastIcon.innerHTML = `<i class="${cfg.icon}"></i>`;
 
@@ -330,7 +322,6 @@ function mostrarToast(tipo, titulo, mensagem) {
 
     toast.classList.add("show");
 
-    // Fecha automaticamente após 4 segundos
     clearTimeout(window.toastTimeout);
     window.toastTimeout = setTimeout(() => {
         fecharToast();
@@ -422,7 +413,7 @@ function obterStatusLimpeza(quarto) {
 }
 
 // ============================================================
-// TRATAMENTO DE ERROS DA API
+// TRATAMENTO DE ERROS DA API (ATUALIZADO)
 // ============================================================
 
 function tratarErroAPI(status) {

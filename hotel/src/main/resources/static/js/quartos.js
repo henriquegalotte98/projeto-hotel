@@ -3,6 +3,7 @@
 // ============================================================
 
 let quartos = [];
+let usuarioLogado = null;
 
 // ============================================================
 // INICIALIZAÇÃO
@@ -15,22 +16,39 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ============================================================
-// VERIFICA USUÁRIO LOGADO
+// VERIFICA USUÁRIO LOGADO E APLICA REGRAS
 // ============================================================
 
 function verificarUsuario() {
-    const usuario = localStorage.getItem("usuarioLogado");
-    if (!usuario) {
+    const usuarioStr = localStorage.getItem("usuarioLogado");
+    if (!usuarioStr) {
         window.location.href = "login.html";
         return;
     }
 
     try {
-        const dados = JSON.parse(usuario);
+        usuarioLogado = JSON.parse(usuarioStr);
         const nome = document.getElementById("usuarioNome");
         if (nome) {
-            nome.textContent = dados.nome || "Usuário";
+            nome.textContent = usuarioLogado.nome || "Usuário";
         }
+
+        // ============================================================
+        // REGRA DE NEGÓCIO: SÓ ADMIN PODE CRIAR/EDITAR/EXCLUIR
+        // ============================================================
+
+        // 1. Esconde o formulário de cadastro se NÃO for ADMIN
+        const formSection = document.querySelector(".content-card:first-of-type"); // Pega o card do formulário
+        if (formSection && usuarioLogado.papel !== 'ADMIN') {
+            formSection.style.display = 'none';
+        }
+
+        // 2. Esconde a coluna de "Ações" na tabela se NÃO for ADMIN
+        const thAcoes = document.querySelector("thead th:last-child");
+        if (thAcoes && usuarioLogado.papel !== 'ADMIN') {
+            thAcoes.style.display = 'none';
+        }
+
     } catch (erro) {
         console.error("Erro ao carregar usuário:", erro);
         localStorage.removeItem("usuarioLogado");
@@ -75,7 +93,7 @@ async function carregarQuartos() {
                 </tr>
             `;
         }
-        mostrarMensagem("Não foi possível carregar os quartos.", "erro");
+        console.error("Não foi possível carregar os quartos.", "erro");
     }
 }
 
@@ -115,8 +133,28 @@ function renderizarQuartos() {
     }
 
     tabela.innerHTML = "";
+    
     quartosFiltrados.forEach(quarto => {
         const tr = document.createElement("tr");
+        
+        // Só mostra a coluna de ações se for ADMIN
+        let colunaAcoes = '';
+        if (usuarioLogado && usuarioLogado.papel === 'ADMIN') {
+            colunaAcoes = `
+                <td>
+                    <button type="button" class="btn btn-secondary" onclick="editarQuarto(${quarto.id})">
+                        <i class="fa-solid fa-pen"></i> Editar
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="excluirQuarto(${quarto.id})">
+                        <i class="fa-solid fa-trash"></i> Excluir
+                    </button>
+                </td>
+            `;
+        } else {
+            // Se não for ADMIN, coloca um espaço vazio ou "---"
+            colunaAcoes = `<td style="text-align:center; color:#94a3b8;">---</td>`;
+        }
+
         tr.innerHTML = `
             <td><strong>${quarto.numero ?? "-"}</strong></td>
             <td>${formatarTipo(quarto.tipo)}</td>
@@ -124,14 +162,7 @@ function renderizarQuartos() {
             <td>${quarto.incluiCafeDaManha ? "✅ Incluso" : "❌ Não incluso"}</td>
             <td><span class="status-badge status-${(quarto.statusOcupacao || '').toLowerCase()}">${formatarStatus(quarto.statusOcupacao)}</span></td>
             <td><span class="status-badge status-${(quarto.statusLimpeza || '').toLowerCase()}">${formatarStatus(quarto.statusLimpeza)}</span></td>
-            <td>
-                <button type="button" class="btn btn-secondary" onclick="editarQuarto(${quarto.id})">
-                    <i class="fa-solid fa-pen"></i> Editar
-                </button>
-                <button type="button" class="btn btn-danger" onclick="excluirQuarto(${quarto.id})">
-                    <i class="fa-solid fa-trash"></i> Excluir
-                </button>
-            </td>
+            ${colunaAcoes}
         `;
         tabela.appendChild(tr);
     });
@@ -159,6 +190,12 @@ function atualizarResumo() {
 
 async function salvarQuarto(evento) {
     evento.preventDefault();
+
+    // Segurança extra: se não for ADMIN, bloqueia
+    if (!usuarioLogado || usuarioLogado.papel !== 'ADMIN') {
+        alert("Apenas administradores podem cadastrar ou editar quartos.");
+        return;
+    }
 
     const id = document.getElementById("quartoId").value;
     const numero = parseInt(document.getElementById("numero").value);
@@ -213,6 +250,12 @@ async function salvarQuarto(evento) {
 // ============================================================
 
 async function editarQuarto(id) {
+    // Segurança extra: se não for ADMIN, bloqueia
+    if (!usuarioLogado || usuarioLogado.papel !== 'ADMIN') {
+        alert("Apenas administradores podem editar quartos.");
+        return;
+    }
+
     try {
         const quarto = await apiRequest(`/quartos/${id}`, "GET");
 
@@ -240,6 +283,12 @@ async function editarQuarto(id) {
 // ============================================================
 
 async function excluirQuarto(id) {
+    // Segurança extra: se não for ADMIN, bloqueia
+    if (!usuarioLogado || usuarioLogado.papel !== 'ADMIN') {
+        alert("Apenas administradores podem excluir quartos.");
+        return;
+    }
+
     if (!confirm("Tem certeza que deseja excluir este quarto?")) {
         return;
     }
@@ -321,10 +370,6 @@ function formatarValor(valor) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
-}
-
-function mostrarMensagem(mensagem, tipo = "info") {
-    console.log(`[${tipo}] ${mensagem}`);
 }
 
 // ============================================================
