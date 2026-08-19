@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelWeb - Manutenção</title>
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/manutencao.css">
+</head>
+<body>
+    <aside>
+        <div class="brand">
+            <i class="fa-solid fa-hotel"></i> HOTELWEB
+        </div>
+        <ul class="menu" id="menu-lateral">
+            <li><a href="dashboard.html"><i class="fa-solid fa-chart-pie"></i> Visão Geral</a></li>
+            <li><a href="quartos.html"><i class="fa-solid fa-door-open"></i> Quartos</a></li>
+            <li><a href="recepcao.html"><i class="fa-solid fa-bell-concierge"></i> Recepção</a></li>
+            <li><a href="governanca.html"><i class="fa-solid fa-broom"></i> Governança</a></li>
+            <li><a href="manutencao.html" class="active"><i class="fa-solid fa-screwdriver-wrench"></i> Manutenção</a></li>
+            <li id="menu-usuarios"><a href="usuarios.html"><i class="fa-solid fa-users-gear"></i> Usuários</a></li>
+        </ul>
+    </aside>
+
+    <div class="main-container">
+        <header>
+            <div class="user-info">
+                <div class="user-avatar" id="avatar-inicial">HW</div>
+                <div class="user-details">
+                    <h4 id="usuario-nome">Carregando...</h4>
+                    <span id="usuario-papel" class="badge">--</span>
+                </div>
+            </div>
+            <button onclick="fazerLogout()" class="btn-danger maintenance-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Sair
+            </button>
+        </header>
+
+        <main>
+            <h1>Manutenção</h1>
+            <p class="subtitle">Acompanhamento das solicitações de manutenção.</p>
+
+            <section class="card maintenance-card" aria-labelledby="titulo-solicitacoes">
+                <h2 id="titulo-solicitacoes">Solicitações</h2>
+                <div class="maintenance-unavailable" role="status">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <strong>Dados de manutenção indisponíveis</strong>
+                        <p>A API desta funcionalidade ainda não está exposta pelo servidor.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/menu.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/manutencao.js"></script>
+</body>
+</html>

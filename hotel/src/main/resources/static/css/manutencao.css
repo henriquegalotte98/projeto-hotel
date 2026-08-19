@@ -1,0 +1,35 @@
+#menu-usuarios {
+    display: none;
+}
+
+.maintenance-logout {
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+}
+
+.maintenance-card h2 {
+    margin-bottom: 20px;
+    font-size: 1.15rem;
+}
+
+.maintenance-unavailable {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+    background: #fffbeb;
+    color: #92400e;
+}
+
+.maintenance-unavailable i {
+    margin-top: 2px;
+    font-size: 1.2rem;
+}
+
+.maintenance-unavailable p {
+    margin-top: 4px;
+    color: #78350f;
+}
