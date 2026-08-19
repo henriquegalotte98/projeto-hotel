@@ -1,77 +1,62 @@
-// ============================================================
-// MENU - Controle de navegação e permissões (Front-End)
-// ============================================================
+// Menu lateral unico e controle de acesso visual por cargo.
+(function () {
+    "use strict";
 
-// ============================================================
-// DESTACAR LINK ATIVO - CORRIGIDO (NUNCA MARCA DOIS)
-// ============================================================
+    const ITENS_MENU = [
+        { id: "menu-dashboard", pagina: "dashboard.html", icone: "fa-chart-pie", texto: "Visão Geral", papeis: ["ADMIN", "RECEPCIONISTA", "GOVERNANCA", "MANUTENCAO"] },
+        { id: "menu-quartos", pagina: "quartos.html", icone: "fa-door-open", texto: "Quartos", papeis: ["ADMIN", "RECEPCIONISTA", "GOVERNANCA", "MANUTENCAO"] },
+        { id: "menu-recepcao", pagina: "recepcao.html", icone: "fa-bell-concierge", texto: "Recepção", papeis: ["ADMIN", "RECEPCIONISTA"] },
+        { id: "menu-hospedes", pagina: "hospedes.html", icone: "fa-users", texto: "Hóspedes", papeis: ["ADMIN", "RECEPCIONISTA"] },
+        { id: "menu-reservas", pagina: "reservas.html", icone: "fa-calendar-check", texto: "Reservas", papeis: ["ADMIN", "RECEPCIONISTA"] },
+        { id: "menu-restaurante", pagina: "restaurante.html", icone: "fa-utensils", texto: "Restaurante", papeis: ["ADMIN", "RECEPCIONISTA"] },
+        { id: "menu-governanca", pagina: "governanca.html", icone: "fa-broom", texto: "Governança", papeis: ["ADMIN", "GOVERNANCA"] },
+        { id: "menu-manutencao", pagina: "manutencao.html", icone: "fa-screwdriver-wrench", texto: "Manutenção", papeis: ["ADMIN", "MANUTENCAO"] },
+        { id: "menu-relatorios", pagina: "relatorios.html", icone: "fa-chart-line", texto: "Relatórios", papeis: ["ADMIN"] },
+        { id: "menu-usuarios", pagina: "usuarios.html", icone: "fa-users-gear", texto: "Usuários", papeis: ["ADMIN"] }
+    ];
 
-// Pega o nome da página atual (ex: dashboard.html, quartos.html)
-const pagina = location.pathname.split("/").pop() || "dashboard.html";
-
-// Seleciona todos os links do menu lateral
-const linksMenu = document.querySelectorAll(".menu a");
-
-// PASSO 1: Remove a classe 'active' de TODOS os links (garante limpeza)
-linksMenu.forEach(link => link.classList.remove("active"));
-
-// PASSO 2: Adiciona a classe 'active' apenas no link que corresponde à página atual
-linksMenu.forEach(link => {
-    if (link.getAttribute("href") === pagina || link.getAttribute("href") === "/html/" + pagina) {
-        link.classList.add("active");
+    function normalizarPapel(papel) {
+        return String(papel || "").replace(/^ROLE_/, "").trim().toUpperCase();
     }
-});
 
-// ============================================================
-// CONTROLE DE MENU POR PAPEL
-// ============================================================
-
-/**
- * Aplica regras de visibilidade do menu baseado no papel do usuário
- * @param {string} papel - Papel do usuário (ADMIN, RECEPCIONISTA, GOVERNANCA, MANUTENCAO)
- */
-function aplicarRegrasMenu(papel) {
-    if (!papel) return;
-
-    // REGRA DE NEGÓCIO CLARA:
-    // ADMIN vê tudo. Os outros só veem o que é deles.
-    const permissoesMenu = {
-        // ADMIN vê TUDO
-        'menu-usuarios': ['ADMIN'],
-        'menu-relatorios': ['ADMIN'],
-        
-        // RECEPCIONISTA vê Recepção, Hóspedes, Reservas e Restaurante
-        'menu-recepcao': ['ADMIN', 'RECEPCIONISTA'],
-        'menu-hospedes': ['ADMIN', 'RECEPCIONISTA'],
-        'menu-reservas': ['ADMIN', 'RECEPCIONISTA'],
-        'menu-restaurante': ['ADMIN', 'RECEPCIONISTA'],
-        
-        // GOVERNANÇA vê Governança
-        'menu-governanca': ['ADMIN', 'GOVERNANCA'],
-        
-        // MANUTENÇÃO vê Manutenção
-        'menu-manutencao': ['ADMIN', 'MANUTENCAO'],
-        
-        // TODOS veem Dashboard e Quartos
-        'menu-dashboard': ['ADMIN', 'RECEPCIONISTA', 'GOVERNANCA', 'MANUTENCAO'],
-        'menu-quartos': ['ADMIN', 'RECEPCIONISTA', 'GOVERNANCA', 'MANUTENCAO']
-    };
-
-    // Aplica as regras: esconde ou mostra os itens do menu
-    for (const [id, papeisPermitidos] of Object.entries(permissoesMenu)) {
-        const elemento = document.getElementById(id);
-        if (elemento) {
-            if (papeisPermitidos.includes(papel)) {
-                elemento.style.display = 'block'; // ou 'flex' dependendo do CSS
-            } else {
-                elemento.style.display = 'none';
-            }
+    function obterUsuarioLocal() {
+        try {
+            return JSON.parse(localStorage.getItem("usuarioLogado") || "null");
+        } catch (erro) {
+            localStorage.removeItem("usuarioLogado");
+            return null;
         }
     }
-}
 
-// ============================================================
-// EXPORTA PARA USO GLOBAL (para ser chamado no dashboard.js)
-// ============================================================
+    function aplicarRegrasMenu(papel) {
+        const menu = document.getElementById("menu-lateral");
+        if (!menu) return;
 
-window.aplicarRegrasMenu = aplicarRegrasMenu;
+        const papelNormalizado = normalizarPapel(papel);
+        const paginaAtual = location.pathname.split("/").pop() || "dashboard.html";
+
+        menu.innerHTML = ITENS_MENU
+            .filter(item => item.papeis.includes(papelNormalizado))
+            .map(item => `
+                <li id="${item.id}">
+                    <a href="${item.pagina}"${item.pagina === paginaAtual ? ' class="active"' : ""}>
+                        <i class="fa-solid ${item.icone}"></i> ${item.texto}
+                    </a>
+                </li>
+            `).join("");
+    }
+
+    function inicializarMenu() {
+        const usuario = obterUsuarioLocal();
+        if (usuario?.papel) aplicarRegrasMenu(usuario.papel);
+    }
+
+    window.aplicarRegrasMenu = aplicarRegrasMenu;
+    window.inicializarMenu = inicializarMenu;
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", inicializarMenu);
+    } else {
+        inicializarMenu();
+    }
+})();

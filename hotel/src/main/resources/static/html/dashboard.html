@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/app.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/navigation.css">
 </head>
 <body>
     <aside>
@@ -115,13 +116,13 @@
                         <h3>Atalhos de Gestão</h3>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <a href="recepcao.html" class="btn-gold" style="justify-content: center;">
+                        <a href="recepcao.html" class="btn-gold dashboard-shortcut" data-papeis="ADMIN,RECEPCIONISTA" style="justify-content: center;">
                             <i class="fa-solid fa-key"></i> Painel de Recepção
                         </a>
-                        <a href="quartos.html" class="btn" style="width: 100%; justify-content: center; background: #0f172a;">
-                            <i class="fa-solid fa-door-closed"></i> Gerenciar Quartos
+                        <a href="quartos.html" id="atalho-quartos" class="btn dashboard-shortcut" data-papeis="ADMIN,RECEPCIONISTA,GOVERNANCA,MANUTENCAO" style="width: 100%; justify-content: center; background: #0f172a;">
+                            <i class="fa-solid fa-door-closed"></i> <span>Visualizar Quartos</span>
                         </a>
-                        <a href="governanca.html" class="btn" style="width: 100%; justify-content: center; background: #334155;">
+                        <a href="governanca.html" class="btn dashboard-shortcut" data-papeis="ADMIN,GOVERNANCA" style="width: 100%; justify-content: center; background: #334155;">
                             <i class="fa-solid fa-broom"></i> Controle de Limpeza
                         </a>
                     </div>

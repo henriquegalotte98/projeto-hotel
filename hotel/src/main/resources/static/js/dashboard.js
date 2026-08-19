@@ -1,9 +1,8 @@
-// ============================================================
-// QUARTOS - Gerenciamento dos quartos
-// ============================================================
+// Painel executivo: usuario, indicadores e reservas recentes.
+(function () {
+    "use strict";
 
-let quartos = [];
-let usuarioLogado = null;
+    let usuarioLogado = null;
 
 // ============================================================
 // INICIALIZAÇÃO
@@ -26,281 +25,121 @@ function verificarUsuario() {
         return;
     }
 
-    try {
-        usuarioLogado = JSON.parse(usuarioStr);
-        const nome = document.getElementById("usuarioNome");
-        if (nome) {
-            nome.textContent = usuarioLogado.nome || "Usuário";
+            try {
+                return JSON.parse(localStorage.getItem("usuarioLogado") || "null");
+            } catch (_) {
+                location.href = "login.html";
+                return null;
+            }
         }
-
-        // ============================================================
-        // REGRA DE NEGÓCIO: SÓ ADMIN PODE CRIAR/EDITAR/EXCLUIR
-        // ============================================================
-
-        // 1. Esconde o formulário de cadastro se NÃO for ADMIN
-        const formSection = document.querySelector(".content-card:first-of-type"); // Pega o card do formulário
-        if (formSection && usuarioLogado.papel !== 'ADMIN') {
-            formSection.style.display = 'none';
-        }
-
-        // 2. Esconde a coluna de "Ações" na tabela se NÃO for ADMIN
-        const thAcoes = document.querySelector("thead th:last-child");
-        if (thAcoes && usuarioLogado.papel !== 'ADMIN') {
-            thAcoes.style.display = 'none';
-        }
-
-    } catch (erro) {
-        console.error("Erro ao carregar usuário:", erro);
-        localStorage.removeItem("usuarioLogado");
-        window.location.href = "login.html";
     }
-}
 
-// ============================================================
-// CARREGAR QUARTOS (GET /api/quartos)
-// ============================================================
+    function preencherUsuario(usuario) {
+        const nome = usuario.nome || "Usuário";
+        const papel = String(usuario.papel || "").replace(/^ROLE_/, "");
+        const nomeEl = document.getElementById("usuario-nome");
+        const papelEl = document.getElementById("usuario-papel");
+        const avatarEl = document.getElementById("avatar-inicial");
 
-async function carregarQuartos() {
-    const tabela = document.getElementById("tabelaQuartos");
-    if (tabela) {
-        tabela.innerHTML = `
+        if (nomeEl) nomeEl.textContent = nome;
+        if (papelEl) {
+            papelEl.textContent = formatarPapel(papel);
+            papelEl.className = `badge ${papel.toLowerCase()}`;
+        }
+        if (avatarEl) avatarEl.textContent = iniciais(nome);
+    }
+
+    function aplicarRegrasAtalhos(papelInformado) {
+        const papel = String(papelInformado || "").replace(/^ROLE_/, "");
+        document.querySelectorAll(".dashboard-shortcut").forEach(atalho => {
+            const permitidos = (atalho.dataset.papeis || "").split(",");
+            atalho.hidden = !permitidos.includes(papel);
+        });
+
+        const textoQuartos = document.querySelector("#atalho-quartos span");
+        if (textoQuartos) {
+            textoQuartos.textContent = papel === "ADMIN" ? "Gerenciar Quartos" : "Visualizar Quartos";
+        }
+    }
+
+    async function carregarIndicadores() {
+        const papel = String(usuarioLogado.papel || "").replace(/^ROLE_/, "");
+
+        const quartosPromise = requisicaoSegura("/quartos", []);
+        const reservasPromise = ["ADMIN", "RECEPCIONISTA"].includes(papel)
+            ? requisicaoSegura("/reservas", []) : Promise.resolve([]);
+        const manutencoesPromise = ["ADMIN", "MANUTENCAO"].includes(papel)
+            ? requisicaoSegura("/manutencao", []) : Promise.resolve([]);
+
+        const [quartos, reservas, manutencoes] = await Promise.all([
+            quartosPromise, reservasPromise, manutencoesPromise
+        ]);
+
+        definirTexto("quartos-ocupados", quartos.filter(q => q.statusOcupacao === "OCUPADO").length);
+        definirTexto("quartos-disponiveis", quartos.filter(q => q.statusOcupacao === "DISPONIVEL").length);
+        definirTexto("checkins-pendentes", reservas.filter(r => r.status === "RESERVADA").length);
+        definirTexto("manutencoes", manutencoes.filter(m => !["CONCLUIDA", "CANCELADA"].includes(m.status)).length);
+        renderizarReservas(reservas);
+    }
+
+    async function requisicaoSegura(endpoint, valorPadrao) {
+        try {
+            const dados = await apiRequest(endpoint);
+            return Array.isArray(dados) ? dados : valorPadrao;
+        } catch (erro) {
+            console.error(`Erro ao carregar ${endpoint}:`, erro);
+            return valorPadrao;
+        }
+    }
+
+    function renderizarReservas(reservas) {
+        const tabela = document.getElementById("ultimas-reservas");
+        if (!tabela) return;
+
+        const recentes = [...reservas]
+            .sort((a, b) => Number(b.id || 0) - Number(a.id || 0))
+            .slice(0, 5);
+
+        if (!recentes.length) {
+            tabela.innerHTML = '<tr><td colspan="4" class="dashboard-empty">Nenhuma reserva encontrada.</td></tr>';
+            return;
+        }
+
+        tabela.innerHTML = recentes.map(reserva => `
             <tr>
-                <td colspan="7" style="text-align:center;">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Carregando quartos...
-                </td>
+                <td>${escapar(reserva.hospede?.nome || "-")}</td>
+                <td>Quarto ${escapar(reserva.quarto?.numero ?? "-")}</td>
+                <td>${formatarData(reserva.dataCheckinPrevista)}</td>
+                <td><span class="badge-status status-${String(reserva.status || "").toLowerCase()}">${escapar(reserva.status || "-")}</span></td>
             </tr>
-        `;
+        `).join("");
     }
 
-    try {
-        quartos = await apiRequest("/quartos", "GET");
-
-        if (!Array.isArray(quartos)) {
-            quartos = [];
-        }
-
-        atualizarResumo();
-        renderizarQuartos();
-
-    } catch (erro) {
-        console.error("Erro ao carregar quartos:", erro);
-        if (tabela) {
-            tabela.innerHTML = `
-                <tr>
-                    <td colspan="7" style="text-align:center; color: var(--danger);">
-                        <i class="fa-solid fa-circle-exclamation"></i> Erro: ${erro.message || 'Tente novamente'}
-                    </td>
-                </tr>
-            `;
-        }
-        console.error("Não foi possível carregar os quartos.", "erro");
-    }
-}
-
-// ============================================================
-// RENDERIZAR TABELA
-// ============================================================
-
-function renderizarQuartos() {
-    const tabela = document.getElementById("tabelaQuartos");
-    if (!tabela) return;
-
-    const statusFiltro = document.getElementById("filtroStatus")?.value || "TODOS";
-    const tipoFiltro = document.getElementById("filtroTipo")?.value || "TODOS";
-    const pesquisa = document.getElementById("pesquisa")?.value.trim().toLowerCase() || "";
-
-    const quartosFiltrados = quartos.filter(quarto => {
-        const status = quarto.statusOcupacao || "";
-        const tipo = quarto.tipo || "";
-        const numero = String(quarto.numero || "").toLowerCase();
-
-        const correspondeStatus = statusFiltro === "TODOS" || status === statusFiltro;
-        const correspondeTipo = tipoFiltro === "TODOS" || tipo === tipoFiltro;
-        const correspondePesquisa = numero.includes(pesquisa);
-
-        return correspondeStatus && correspondeTipo && correspondePesquisa;
-    });
-
-    if (quartosFiltrados.length === 0) {
-        tabela.innerHTML = `
-            <tr>
-                <td colspan="7" style="text-align:center;">
-                    Nenhum quarto encontrado.
-                </td>
-            </tr>
-        `;
-        return;
+    function fazerLogout() {
+        apiRequest("/auth/logout", "POST").catch(() => {}).finally(() => {
+            localStorage.removeItem("usuarioLogado");
+            localStorage.removeItem("token");
+            location.href = "login.html";
+        });
     }
 
-    tabela.innerHTML = "";
-    
-    quartosFiltrados.forEach(quarto => {
-        const tr = document.createElement("tr");
-        
-        // Só mostra a coluna de ações se for ADMIN
-        let colunaAcoes = '';
-        if (usuarioLogado && usuarioLogado.papel === 'ADMIN') {
-            colunaAcoes = `
-                <td>
-                    <button type="button" class="btn btn-secondary" onclick="editarQuarto(${quarto.id})">
-                        <i class="fa-solid fa-pen"></i> Editar
-                    </button>
-                    <button type="button" class="btn btn-danger" onclick="excluirQuarto(${quarto.id})">
-                        <i class="fa-solid fa-trash"></i> Excluir
-                    </button>
-                </td>
-            `;
-        } else {
-            // Se não for ADMIN, coloca um espaço vazio ou "---"
-            colunaAcoes = `<td style="text-align:center; color:#94a3b8;">---</td>`;
-        }
-
-        tr.innerHTML = `
-            <td><strong>${quarto.numero ?? "-"}</strong></td>
-            <td>${formatarTipo(quarto.tipo)}</td>
-            <td>R$ ${formatarValor(quarto.valorDiaria)}</td>
-            <td>${quarto.incluiCafeDaManha ? "✅ Incluso" : "❌ Não incluso"}</td>
-            <td><span class="status-badge status-${(quarto.statusOcupacao || '').toLowerCase()}">${formatarStatus(quarto.statusOcupacao)}</span></td>
-            <td><span class="status-badge status-${(quarto.statusLimpeza || '').toLowerCase()}">${formatarStatus(quarto.statusLimpeza)}</span></td>
-            ${colunaAcoes}
-        `;
-        tabela.appendChild(tr);
-    });
-}
-
-// ============================================================
-// RESUMO
-// ============================================================
-
-function atualizarResumo() {
-    const total = quartos.length;
-    const disponiveis = quartos.filter(q => q.statusOcupacao === "DISPONIVEL").length;
-    const ocupados = quartos.filter(q => q.statusOcupacao === "OCUPADO").length;
-    const manutencao = quartos.filter(q => q.statusOcupacao === "MANUTENCAO").length;
-
-    document.getElementById("totalQuartos").textContent = total;
-    document.getElementById("quartosDisponiveis").textContent = disponiveis;
-    document.getElementById("quartosOcupados").textContent = ocupados;
-    document.getElementById("quartosManutencao").textContent = manutencao;
-}
-
-// ============================================================
-// SALVAR QUARTO (POST /api/quartos ou PUT /api/quartos/{id})
-// ============================================================
-
-async function salvarQuarto(evento) {
-    evento.preventDefault();
-
-    // Segurança extra: se não for ADMIN, bloqueia
-    if (!usuarioLogado || usuarioLogado.papel !== 'ADMIN') {
-        alert("Apenas administradores podem cadastrar ou editar quartos.");
-        return;
+    function definirTexto(id, valor) {
+        const elemento = document.getElementById(id);
+        if (elemento) elemento.textContent = String(valor);
     }
 
-    const id = document.getElementById("quartoId").value;
-    const numero = parseInt(document.getElementById("numero").value);
-    const tipo = document.getElementById("tipo").value;
-    const valorDiaria = parseFloat(document.getElementById("valorDiaria").value);
-    const incluiCafeDaManha = document.getElementById("cafe").value === "true";
-    const statusOcupacao = document.getElementById("statusOcupacao").value;
-    const statusLimpeza = document.getElementById("statusLimpeza").value;
-
-    // Validações
-    if (!numero || !tipo || !valorDiaria) {
-        alert("Preencha todos os campos obrigatórios.");
-        return;
+    function iniciais(nome) {
+        return nome.trim().split(/\s+/).slice(0, 2).map(parte => parte[0]).join("").toUpperCase() || "HW";
     }
 
-    if (isNaN(valorDiaria) || valorDiaria <= 0) {
-        alert("O valor da diária deve ser maior que zero.");
-        return;
+    function formatarPapel(papel) {
+        return ({ ADMIN: "Administrador", RECEPCIONISTA: "Recepcionista", GOVERNANCA: "Governança", MANUTENCAO: "Manutenção" })[papel] || papel;
     }
 
-    const dados = {
-        numero,
-        tipo,
-        valorDiaria,
-        incluiCafeDaManha,
-        statusOcupacao,
-        statusLimpeza
-    };
-
-    try {
-        if (id) {
-            // PUT /api/quartos/{id}
-            await apiRequest(`/quartos/${id}`, "PUT", dados);
-            alert("Quarto atualizado com sucesso!");
-        } else {
-            // POST /api/quartos
-            await apiRequest("/quartos", "POST", dados);
-            alert("Quarto cadastrado com sucesso!");
-        }
-
-        cancelarEdicao();
-        carregarQuartos();
-
-    } catch (error) {
-        console.error("Erro ao salvar quarto:", error);
-        alert("Erro ao salvar quarto: " + (error.message || "Tente novamente"));
-    }
-}
-
-// ============================================================
-// EDITAR QUARTO (GET /api/quartos/{id})
-// ============================================================
-
-async function editarQuarto(id) {
-    // Segurança extra: se não for ADMIN, bloqueia
-    if (!usuarioLogado || usuarioLogado.papel !== 'ADMIN') {
-        alert("Apenas administradores podem editar quartos.");
-        return;
-    }
-
-    try {
-        const quarto = await apiRequest(`/quartos/${id}`, "GET");
-
-        document.getElementById("quartoId").value = quarto.id;
-        document.getElementById("numero").value = quarto.numero || "";
-        document.getElementById("tipo").value = quarto.tipo || "";
-        document.getElementById("valorDiaria").value = quarto.valorDiaria || "";
-        document.getElementById("cafe").value = quarto.incluiCafeDaManha ? "true" : "false";
-        document.getElementById("statusOcupacao").value = quarto.statusOcupacao || "DISPONIVEL";
-        document.getElementById("statusLimpeza").value = quarto.statusLimpeza || "LIMPO";
-
-        document.getElementById("tituloFormulario").textContent = "Editar quarto";
-        document.getElementById("btnCancelar").classList.remove("hidden");
-
-        window.scrollTo({ top: 0, behavior: "smooth" });
-
-    } catch (error) {
-        console.error("Erro ao carregar quarto:", error);
-        alert("Erro ao carregar quarto: " + (error.message || "Tente novamente"));
-    }
-}
-
-// ============================================================
-// EXCLUIR QUARTO (DELETE /api/quartos/{id})
-// ============================================================
-
-async function excluirQuarto(id) {
-    // Segurança extra: se não for ADMIN, bloqueia
-    if (!usuarioLogado || usuarioLogado.papel !== 'ADMIN') {
-        alert("Apenas administradores podem excluir quartos.");
-        return;
-    }
-
-    if (!confirm("Tem certeza que deseja excluir este quarto?")) {
-        return;
-    }
-
-    try {
-        await apiRequest(`/quartos/${id}`, "DELETE");
-        alert("Quarto excluído com sucesso!");
-        carregarQuartos();
-
-    } catch (error) {
-        console.error("Erro ao excluir quarto:", error);
-        alert("Erro ao excluir quarto: " + (error.message || "Tente novamente"));
+    function formatarData(data) {
+        if (!data) return "-";
+        const [ano, mes, dia] = data.split("-");
+        return dia && mes && ano ? `${dia}/${mes}/${ano}` : escapar(data);
     }
 }
 
