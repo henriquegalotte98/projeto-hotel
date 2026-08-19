@@ -3,6 +3,7 @@ package br.com.jprog.hotel.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -51,7 +52,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/manutencao/**").hasAnyRole("ADMIN", "MANUTENCAO")
                 .requestMatchers("/api/hospedes/**", "/api/reservas/**", "/api/consumos/**")
                         .hasAnyRole("ADMIN", "RECEPCIONISTA")
-                .requestMatchers("/api/quartos/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/quartos/**").authenticated()
+                .requestMatchers("/api/quartos/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex
