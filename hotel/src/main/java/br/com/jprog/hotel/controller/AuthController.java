@@ -64,6 +64,7 @@ public class AuthController {
 
         // Retorna os dados básicos do usuário.
         return new LoginResponse(
+            u.getId(),
             u.getNome(),
             u.getCpf(),
             u.getPapel()
@@ -81,6 +82,7 @@ public class AuthController {
 
         // Retorna os dados do usuário.
         return new LoginResponse(
+            u.getId(),
             u.getNome(),
             u.getCpf(),
             u.getPapel()

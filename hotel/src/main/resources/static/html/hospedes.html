@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HotelWeb - Hóspedes</title>
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/hospedes.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ============================================================
+         SIDEBAR
+    ============================================================ -->
+    <aside>
+
+        <div class="brand">
+            <i class="fa-solid fa-hotel"></i>
+            HOTELWEB
+        </div>
+
+        <ul class="menu" id="menu-lateral">
+
+            <li>
+                <a href="dashboard.html">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    Visão Geral
+                </a>
+            </li>
+
+            <li>
+                <a href="quartos.html">
+                    <i class="fa-solid fa-door-open"></i>
+                    Quartos
+                </a>
+            </li>
+
+            <li>
+                <a href="recepcao.html">
+                    <i class="fa-solid fa-bell-concierge"></i>
+                    Recepção
+                </a>
+            </li>
+
+            <li>
+                <a href="hospedes.html" class="active">
+                    <i class="fa-solid fa-user"></i>
+                    Hóspedes
+                </a>
+            </li>
+
+            <li>
+                <a href="reservas.html">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Reservas
+                </a>
+            </li>
+
+            <li>
+                <a href="governanca.html">
+                    <i class="fa-solid fa-broom"></i>
+                    Governança
+                </a>
+            </li>
+
+            <li>
+                <a href="manutencao.html">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    Manutenção
+                </a>
+            </li>
+
+            <li id="menu-usuarios">
+                <a href="usuarios.html">
+                    <i class="fa-solid fa-users-gear"></i>
+                    Usuários
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- ============================================================
+         CONTEÚDO PRINCIPAL
+    ============================================================ -->
+    <div class="main-container">
+
+        <!-- HEADER -->
+        <header>
+
+            <div class="user-info">
+
+                <div class="user-avatar" id="avatar-inicial">
+                    HW
+                </div>
+
+                <div class="user-details">
+
+                    <h4 id="usuario-nome">
+                        Carregando...
+                    </h4>
+
+                    <span id="usuario-papel" class="badge">
+                        --
+                    </span>
+
+                </div>
+
+            </div>
+
+            <button
+                onclick="fazerLogout()"
+                class="btn-danger">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Sair
+
+            </button>
+
+        </header>
+
+
+        <!-- ========================================================
+             CONTEÚDO
+        ======================================================== -->
+        <main>
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Hóspedes</h1>
+
+                    <p class="subtitle">
+                        Cadastre e gerencie os hóspedes do hotel
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn-primary"
+                    id="btnNovoHospede">
+
+                    <i class="fa-solid fa-plus"></i>
+                    Novo Hóspede
+
+                </button>
+
+            </div>
+
+
+            <!-- ====================================================
+                 BUSCA
+            ==================================================== -->
+            <div class="card filtro-card">
+
+                <div class="search-box">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="campoBusca"
+                        placeholder="Buscar por nome ou CPF..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ====================================================
+                 TABELA
+            ==================================================== -->
+            <div class="card">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Telefone</th>
+                                <th>E-mail</th>
+                                <th style="text-align: center;">
+                                    Ações
+                                </th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="lista-hospedes">
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="loading-message">
+
+                                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                                    Carregando hóspedes...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- ============================================================
+         MODAL DE HÓSPEDE
+    ============================================================ -->
+    <div
+        class="modal-overlay"
+        id="modalHospede">
+
+        <div class="modal-box">
+
+            <div class="modal-header">
+
+                <h2 id="modalTitulo">
+                    Novo Hóspede
+                </h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="modalFechar">
+
+                    &times;
+
+                </button>
+
+            </div>
+
+
+            <form id="formHospede">
+
+                <input
+                    type="hidden"
+                    id="hospedeId">
+
+
+                <!-- NOME -->
+                <div class="form-group">
+
+                    <label for="nome">
+                        Nome Completo
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nome"
+                        required
+                        placeholder="Digite o nome completo">
+
+                </div>
+
+
+                <!-- CPF -->
+                <div class="form-group">
+
+                    <label for="cpf">
+                        CPF
+                    </label>
+
+                    <input
+                        type="text"
+                        id="cpf"
+                        required
+                        maxlength="11"
+                        inputmode="numeric"
+                        placeholder="Apenas números">
+
+                    <small class="form-help">
+                        Digite apenas os números do CPF.
+                    </small>
+
+                </div>
+
+
+                <!-- TELEFONE -->
+                <div class="form-group">
+
+                    <label for="telefone">
+                        Telefone
+                    </label>
+
+                    <input
+                        type="text"
+                        id="telefone"
+                        required
+                        placeholder="Digite o telefone">
+
+                </div>
+
+
+                <!-- EMAIL -->
+                <div class="form-group">
+
+                    <label for="email">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        placeholder="Digite o e-mail">
+
+                </div>
+
+
+                <!-- BOTÕES -->
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="btnCancelar">
+
+                        Cancelar
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn-save">
+
+                        <i class="fa-solid fa-save"></i>
+                        Salvar
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================================
+         SCRIPTS
+    ============================================================ -->
+
+    <script src="../js/api.js"></script>
+    <script src="../js/menu.js"></script>
+    <script src="../js/hospedes.js"></script>
+
+</body>
+
+</html>

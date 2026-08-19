@@ -187,6 +187,9 @@ main .subtitle {
     background: var(--accent-gold-hover);
 }
 
+/* ============================================================
+   BADGES DE STATUS - RESERVAS
+   ============================================================ */
 .badge-status {
     padding: 5px 12px;
     border-radius: 20px;
@@ -205,59 +208,40 @@ main .subtitle {
     color: #065f46;
 }
 
-/* Ocultar menu de usuários por padrão (será mostrado via JS se for ADMIN) */
-#menu-usuarios {
-    display: none;
+.badge-status.status-reservado {
+    background: #fef3c7;
+    color: #92400e;
 }
 
-.operation-message {
-    display: none;
-    margin-bottom: 20px;
-    padding: 14px 18px;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    font-weight: 600;
+.badge-status.status-ocupado {
+    background: #dbeafe;
+    color: #1e40af;
 }
 
-.operation-message.visible {
-    display: block;
-}
-
-.operation-message.success {
+.badge-status.status-disponivel {
     background: #d1fae5;
-    border-color: #a7f3d0;
     color: #065f46;
 }
 
-.operation-message.error {
+.badge-status.status-cancelado {
     background: #fee2e2;
-    border-color: #fecaca;
     color: #991b1b;
 }
 
-.reservation-state {
-    padding: 32px 16px;
-    text-align: center;
-    color: #64748b;
+/* ============================================================
+   MENU USUÁRIOS
+   ============================================================ */
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.reservation-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.reservation-action {
-    padding: 7px 12px;
-    border-radius: 8px;
-    font-size: 0.78rem;
-}
-
-.reservation-action.checkout {
-    background: #0369a1;
-}
-
-.reservation-action:disabled {
-    cursor: wait;
-    opacity: 0.65;
-    transform: none;
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
 }

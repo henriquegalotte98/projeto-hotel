@@ -7,20 +7,27 @@
     <link rel="stylesheet" href="../css/app.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/dashboard.css">
-        
+    <link rel="stylesheet" href="../css/navigation.css">
 </head>
 <body>
     <aside>
         <div class="brand">
             <i class="fa-solid fa-hotel"></i> HOTELWEB
         </div>
+        
+        <!-- ============================================================
+             MENU COM IDs CORRETOS PARA O CONTROLE DE ACESSO
+             ============================================================ -->
         <ul class="menu" id="menu-lateral">
-            <li><a href="dashboard.html" class="active"><i class="fa-solid fa-chart-pie"></i> Visão Geral</a></li>
-            <li><a href="quartos.html"><i class="fa-solid fa-door-open"></i> Quartos</a></li>
-            <li><a href="recepcao.html"><i class="fa-solid fa-bell-concierge"></i> Recepção</a></li>
-            <li><a href="governanca.html"><i class="fa-solid fa-broom"></i> Governança</a></li>
-            <li><a href="manutencao.html"><i class="fa-solid fa-screwdriver-wrench"></i> Manutenção</a></li>
-            <!-- MENU USUÁRIOS - Só aparece para ADMIN -->
+            <li id="menu-dashboard"><a href="dashboard.html" class="active"><i class="fa-solid fa-chart-pie"></i> Visão Geral</a></li>
+            <li id="menu-quartos"><a href="quartos.html"><i class="fa-solid fa-door-open"></i> Quartos</a></li>
+            <li id="menu-recepcao"><a href="recepcao.html"><i class="fa-solid fa-bell-concierge"></i> Recepção</a></li>
+            <li id="menu-hospedes"><a href="hospedes.html"><i class="fa-solid fa-users"></i> Hóspedes</a></li>
+            <li id="menu-reservas"><a href="reservas.html"><i class="fa-solid fa-calendar-check"></i> Reservas</a></li>
+            <li id="menu-governanca"><a href="governanca.html"><i class="fa-solid fa-broom"></i> Governança</a></li>
+            <li id="menu-manutencao"><a href="manutencao.html"><i class="fa-solid fa-screwdriver-wrench"></i> Manutenção</a></li>
+            <li id="menu-restaurante"><a href="restaurante.html"><i class="fa-solid fa-utensils"></i> Restaurante</a></li>
+            <li id="menu-relatorios"><a href="relatorios.html"><i class="fa-solid fa-chart-line"></i> Relatórios</a></li>
             <li id="menu-usuarios"><a href="usuarios.html"><i class="fa-solid fa-users-gear"></i> Usuários</a></li>
         </ul>
     </aside>
@@ -50,28 +57,28 @@
                 <div class="stat-card">
                     <div class="stat-icon primary"><i class="fa-solid fa-bed"></i></div>
                     <div class="stat-info">
-                        <h3>48</h3>
+                        <h3 id="quartos-ocupados">--</h3>
                         <p>Quartos Ocupados</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon success"><i class="fa-solid fa-door-open"></i></div>
                     <div class="stat-info">
-                        <h3>12</h3>
+                        <h3 id="quartos-disponiveis">--</h3>
                         <p>Quartos Disponíveis</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon warning"><i class="fa-solid fa-clipboard-user"></i></div>
                     <div class="stat-info">
-                        <h3>8</h3>
+                        <h3 id="checkins-pendentes">--</h3>
                         <p>Check-ins Pendentes</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
                     <div class="stat-info">
-                        <h3>3</h3>
+                        <h3 id="manutencoes">--</h3>
                         <p>Manutenções</p>
                     </div>
                 </div>
@@ -81,8 +88,7 @@
             <div class="dashboard-grid">
                 <div class="card">
                     <div class="card-header-flex">
-                        <h3>Reservas</h3>
-                        <button class="btn-gold" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fa-solid fa-plus"></i> Nova Reserva</button>
+                        <h3>Últimas Reservas</h3>
                     </div>
                     <table>
                         <thead>
@@ -94,9 +100,9 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="lista-reservas">
+                        <tbody id="ultimas-reservas">
                             <tr>
-                                <td colspan="5" class="reservation-state">
+                                <td colspan="4" style="text-align: center; color: #94a3b8; padding: 20px;">
                                     <i class="fa-solid fa-spinner fa-spin"></i> Carregando reservas...
                                 </td>
                             </tr>
@@ -109,17 +115,26 @@
                         <h3>Atalhos de Gestão</h3>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <a href="recepcao.html" class="btn-gold" style="justify-content: center;"><i class="fa-solid fa-key"></i> Painel de Recepção</a>
-                        <a href="quartos.html" class="btn" style="width: 100%; justify-content: center; background: #0f172a;"><i class="fa-solid fa-door-closed"></i> Gerenciar Quartos</a>
-                        <a href="governanca.html" class="btn" style="width: 100%; justify-content: center; background: #334155;"><i class="fa-solid fa-broom"></i> Controle de Limpeza</a>
+                        <a href="recepcao.html" class="btn-gold dashboard-shortcut" data-papeis="ADMIN,RECEPCIONISTA" style="justify-content: center;">
+                            <i class="fa-solid fa-key"></i> Painel de Recepção
+                        </a>
+                        <a href="quartos.html" id="atalho-quartos" class="btn dashboard-shortcut" data-papeis="ADMIN,RECEPCIONISTA,GOVERNANCA,MANUTENCAO" style="width: 100%; justify-content: center; background: #0f172a;">
+                            <i class="fa-solid fa-door-closed"></i> <span>Visualizar Quartos</span>
+                        </a>
+                        <a href="governanca.html" class="btn dashboard-shortcut" data-papeis="ADMIN,GOVERNANCA" style="width: 100%; justify-content: center; background: #334155;">
+                            <i class="fa-solid fa-broom"></i> Controle de Limpeza
+                        </a>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
+    <!-- ============================================================
+         ORDEM CORRETA DOS SCRIPTS (menu.js PRIMEIRO)
+         ============================================================ -->
     <script src="../js/api.js"></script>
-    <script src="../js/menu.js"></script>
+    <script src="../js/menu.js"></script> <!-- Obrigatório carregar antes do dashboard -->
     <script src="../js/dashboard.js"></script>
 </body>
 </html>

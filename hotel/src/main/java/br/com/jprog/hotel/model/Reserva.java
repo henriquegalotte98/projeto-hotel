@@ -76,7 +76,7 @@ public class Reserva {
     // hospede_id
     //
     // nullable = false significa que ela não pode ser nula.
-    @JoinColumn(name = "hospede_cpf", nullable = false)
+    @JoinColumn(name = "hospede_id", nullable = false)
 
     // Armazena o hóspede relacionado à reserva.
     private Hospede hospede;

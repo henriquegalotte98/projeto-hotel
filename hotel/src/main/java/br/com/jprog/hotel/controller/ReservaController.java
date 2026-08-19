@@ -15,11 +15,11 @@ public class ReservaController {
     public ReservaController(ReservaService service) { this.service = service; }
 
     @GetMapping
-    public List<Reserva> listar(@RequestParam(required=false) String hospedeCpf,
+    public List<Reserva> listar(@RequestParam(required=false) Long hospedeId,
                                 @RequestParam(required=false) Long quartoId,
                                 @RequestParam(required=false) LocalDate inicio,
                                 @RequestParam(required=false) LocalDate fim) {
-        if (hospedeCpf != null) return service.porHospede(hospedeCpf);
+        if (hospedeId != null) return service.porHospede(hospedeId);
         if (quartoId != null) return service.porQuarto(quartoId);
         if (inicio != null && fim != null) return service.porPeriodo(inicio, fim);
         return service.listar();
