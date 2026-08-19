@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HotelWeb - Reservas</title>
+
+    <!-- CSS principal do projeto -->
+    <link rel="stylesheet" href="../css/app.css">
+
+    <!-- CSS específico da página -->
+    <link rel="stylesheet" href="css/reservas.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">🏨</div>
+
+            <div>
+                <h2>HotelWeb</h2>
+                <span>Sistema Hoteleiro</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="dashboard.html" class="menu-item">
+                <span>📊</span>
+                Dashboard
+            </a>
+
+            <a href="hospedes.html" class="menu-item">
+                <span>👤</span>
+                Hóspedes
+            </a>
+
+            <a href="quartos.html" class="menu-item">
+                <span>🛏️</span>
+                Quartos
+            </a>
+
+            <a href="reservas.html" class="menu-item active">
+                <span>📅</span>
+                Reservas
+            </a>
+
+            <a href="governanca.html" class="menu-item" data-papeis="ADMIN,GOVERNANCA">
+
+                <span>🧹</span>
+                Governança
+            </a>
+
+            <a href="manutencao.html" class="menu-item" data-papeis="ADMIN,MANUTENCAO">
+
+                <span>🔧</span>
+                Manutenção
+            </a>
+
+            <a href="restaurante.html" class="menu-item" data-papeis="ADMIN,RECEPCIONISTA">
+
+                <span>🍽️</span>
+                Restaurante
+            </a>
+
+            <a href="faturamento.html" class="menu-item" data-papeis="ADMIN,RECEPCIONISTA">
+
+                <span>💳</span>
+                Faturamento
+            </a>
+
+            <a href="caixa.html" class="menu-item" data-papeis="ADMIN,RECEPCIONISTA">
+
+                <span>💰</span>
+                Caixa
+            </a>
+
+            <a href="relatorios.html" class="menu-item" data-papeis="ADMIN">
+
+                <span>📈</span>
+                Relatórios
+            </a>
+
+            <a href="usuarios.html" class="menu-item" data-papeis="ADMIN">
+
+                <span>👥</span>
+                Usuários
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <button id="btnLogout" class="logout-button">
+                🚪 Sair
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+    ====================================================== -->
+    <main class="main-content">
+
+        <!-- CABEÇALHO -->
+        <header class="page-header">
+
+            <div>
+                <span class="page-kicker">RECEPÇÃO</span>
+
+                <h1>Reservas</h1>
+
+                <p>
+                    Crie, consulte e gerencie as reservas do hotel.
+                </p>
+            </div>
+
+            <div class="user-info">
+
+                <div class="user-avatar">
+                    👤
+                </div>
+
+                <div>
+                    <strong id="usuarioNome">
+                        Usuário
+                    </strong>
+
+                    <span id="usuarioPapel">
+                        Recepcionista
+                    </span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             ALERTA
+        ================================================== -->
+        <div id="alertBox" class="alert hidden"></div>
+
+
+        <!-- =================================================
+             CARDS DE RESUMO
+        ================================================== -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    📅
+                </div>
+
+                <div>
+                    <span>Total de reservas</span>
+                    <strong id="totalReservas">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    ✓
+                </div>
+
+                <div>
+                    <span>Reservadas</span>
+                    <strong id="reservasAtivas">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon yellow">
+                    🛎️
+                </div>
+
+                <div>
+                    <span>Check-in</span>
+                    <strong id="reservasCheckin">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon red">
+                    ✕
+                </div>
+
+                <div>
+                    <span>Canceladas</span>
+                    <strong id="reservasCanceladas">0</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             NOVA RESERVA
+        ================================================== -->
+        <section class="content-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>Nova reserva</h2>
+
+                    <p>
+                        Informe o hóspede, período e quarto desejado.
+                    </p>
+                </div>
+
+                <span class="required-info">
+                    * Campos obrigatórios
+                </span>
+
+            </div>
+
+
+            <form id="reservaForm">
+
+                <div class="form-grid">
+
+
+                    <!-- HÓSPEDE -->
+                    <div class="form-group form-group-large">
+
+                        <label for="hospede">
+                            Hóspede *
+                        </label>
+
+                        <select id="hospede" required>
+
+                            <option value="">
+                                Selecione o hóspede
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- QUARTO -->
+                    <div class="form-group">
+
+                        <label for="quarto">
+                            Quarto *
+                        </label>
+
+                        <select id="quarto" required>
+
+                            <option value="">
+                                Selecione o quarto
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CHECK-IN -->
+                    <div class="form-group">
+
+                        <label for="checkin">
+                            Check-in previsto *
+                        </label>
+
+                        <input type="date" id="checkin" required>
+
+                    </div>
+
+
+                    <!-- CHECK-OUT -->
+                    <div class="form-group">
+
+                        <label for="checkout">
+                            Check-out previsto *
+                        </label>
+
+                        <input type="date" id="checkout" required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMAÇÕES DO QUARTO -->
+                <div id="quartoInfo" class="room-preview hidden">
+
+                    <div class="room-preview-icon">
+                        🛏️
+                    </div>
+
+                    <div>
+
+                        <strong id="quartoNumero">
+                            Quarto
+                        </strong>
+
+                        <span id="quartoTipo">
+                            Tipo
+                        </span>
+
+                    </div>
+
+                    <div class="room-price">
+
+                        <span>Diária</span>
+
+                        <strong id="quartoValor">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+                    <div class="breakfast">
+                        ☕ Café da manhã incluso
+                    </div>
+
+                </div>
+
+
+                <!-- RESUMO DA RESERVA -->
+                <div class="reservation-summary">
+
+                    <div>
+
+                        <span>Período</span>
+
+                        <strong id="resumoPeriodo">
+                            Selecione as datas
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Diárias</span>
+
+                        <strong id="resumoDiarias">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Valor estimado</span>
+
+                        <strong id="resumoValor">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button type="button" class="btn btn-secondary" id="btnLimpar">
+
+                        Limpar
+
+                    </button>
+
+                    <button type="button" class="btn btn-outline" id="btnVerificar">
+
+                        🔎 Verificar disponibilidade
+
+                    </button>
+
+                    <button type="submit" class="btn btn-primary">
+
+                        📅 Criar reserva
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- =================================================
+             FILTROS
+        ================================================== -->
+        <section class="content-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>Consultar reservas</h2>
+
+                    <p>
+                        Pesquise por hóspede, quarto, período ou status.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="filters-grid">
+
+                <div class="form-group">
+
+                    <label for="filtroBusca">
+                        Hóspede / quarto
+                    </label>
+
+                    <input type="text" id="filtroBusca" placeholder="Nome ou número do quarto">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="filtroCheckin">
+                        A partir de
+                    </label>
+
+                    <input type="date" id="filtroCheckin">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="filtroCheckout">
+                        Até
+                    </label>
+
+                    <input type="date" id="filtroCheckout">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="filtroStatus">
+                        Status
+                    </label>
+
+                    <select id="filtroStatus">
+
+                        <option value="">
+                            Todos
+                        </option>
+
+                        <option value="RESERVADA">
+                            Reservada
+                        </option>
+
+                        <option value="CHECKIN">
+                            Check-in
+                        </option>
+
+                        <option value="FINALIZADA">
+                            Finalizada
+                        </option>
+
+                        <option value="CANCELADA">
+                            Cancelada
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-actions">
+
+                <button class="btn btn-primary" id="btnFiltrar">
+
+                    🔎 Filtrar
+
+                </button>
+
+                <button class="btn btn-secondary" id="btnLimparFiltros">
+
+                    Limpar filtros
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             TABELA DE RESERVAS
+        ================================================== -->
+        <section class="content-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>Lista de reservas</h2>
+
+                    <p id="resultadoTexto">
+                        Carregando reservas...
+                    </p>
+
+                </div>
+
+                <button class="btn btn-secondary" id="btnAtualizar">
+
+                    ↻ Atualizar
+
+                </button>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Hóspede</th>
+
+                            <th>Quarto</th>
+
+                            <th>Check-in</th>
+
+                            <th>Check-out</th>
+
+                            <th>Diárias</th>
+
+                            <th>Status</th>
+
+                            <th>Ações</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="reservasTable">
+
+                        <tr>
+
+                            <td colspan="8" class="loading">
+
+                                Carregando...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         MODAL DETALHES
+    ====================================================== -->
+    <div id="modalDetalhes" class="modal hidden">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="page-kicker">
+                        RESERVA
+                    </span>
+
+                    <h2>
+                        Detalhes da reserva
+                    </h2>
+
+                </div>
+
+                <button class="modal-close" id="fecharModal">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <div id="detalhesReserva">
+
+                <!-- preenchido pelo JavaScript -->
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button class="btn btn-secondary" id="fecharModalBtn">
+
+                    Fechar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/reservas.js"></script>
+
+</body>
+
+</html>
