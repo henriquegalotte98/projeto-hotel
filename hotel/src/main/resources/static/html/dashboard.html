@@ -9,21 +9,23 @@
 
     <title>HotelWeb - Painel Executivo</title>
 
-    <!-- CSS PRINCIPAL DO PROJETO -->
-    <link rel="stylesheet" href="../css/app.css">
-
     <!-- FONT AWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
 
     <!-- CSS DO DASHBOARD -->
     <link rel="stylesheet" href="../css/dashboard.css">
 
-    <!-- CHART.JS PARA OS GRÁFICOS -->
+    <!-- CHART.JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
+
 <body>
+
 
     <!-- =====================================================
          SIDEBAR
@@ -33,14 +35,23 @@
 
         <div class="brand">
 
-            <i class="fa-solid fa-hotel"></i>
+            <div class="brand-icon">
 
-            HOTELWEB
+                <i class="fa-solid fa-hotel"></i>
+
+            </div>
+
+            <span>HOTEL<span class="brand-gold">WEB</span></span>
 
         </div>
 
 
-        <ul class="menu" id="menu-lateral">
+        <div class="menu-title">
+            MENU PRINCIPAL
+        </div>
+
+
+        <ul class="menu">
 
             <li>
 
@@ -48,7 +59,7 @@
 
                     <i class="fa-solid fa-chart-pie"></i>
 
-                    Visão Geral
+                    <span>Visão Geral</span>
 
                 </a>
 
@@ -61,7 +72,7 @@
 
                     <i class="fa-solid fa-door-open"></i>
 
-                    Quartos
+                    <span>Quartos</span>
 
                 </a>
 
@@ -74,7 +85,7 @@
 
                     <i class="fa-solid fa-bell-concierge"></i>
 
-                    Recepção
+                    <span>Recepção</span>
 
                 </a>
 
@@ -87,7 +98,7 @@
 
                     <i class="fa-solid fa-broom"></i>
 
-                    Governança
+                    <span>Governança</span>
 
                 </a>
 
@@ -100,14 +111,12 @@
 
                     <i class="fa-solid fa-screwdriver-wrench"></i>
 
-                    Manutenção
+                    <span>Manutenção</span>
 
                 </a>
 
             </li>
 
-
-            <!-- NOVO: RELATÓRIOS -->
 
             <li>
 
@@ -115,22 +124,20 @@
 
                     <i class="fa-solid fa-chart-column"></i>
 
-                    Relatórios
+                    <span>Relatórios</span>
 
                 </a>
 
             </li>
 
 
-            <!-- USUÁRIOS -->
-
-            <li id="menu-usuarios">
+            <li>
 
                 <a href="usuarios.html">
 
                     <i class="fa-solid fa-users-gear"></i>
 
-                    Usuários
+                    <span>Usuários</span>
 
                 </a>
 
@@ -138,12 +145,31 @@
 
         </ul>
 
+
+        <!-- RODAPÉ SIDEBAR -->
+
+        <div class="sidebar-footer">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                Sistema online
+
+            </div>
+
+            <small>
+                HotelWeb • 2026
+            </small>
+
+        </div>
+
     </aside>
 
 
 
     <!-- =====================================================
-         CONTAINER PRINCIPAL
+         CONTEÚDO PRINCIPAL
     ====================================================== -->
 
     <div class="main-container">
@@ -155,79 +181,99 @@
 
         <header>
 
-            <div class="user-info">
+            <div class="header-left">
 
-                <div class="user-avatar" id="avatar-inicial">
+                <div class="page-label">
 
-                    HW
+                    <span class="gold-line"></span>
 
-                </div>
-
-
-                <div class="user-details">
-
-                    <h4 id="usuario-nome">
-
-                        Carregando...
-
-                    </h4>
-
-
-                    <span id="usuario-papel" class="badge">
-
-                        --
-
-                    </span>
+                    PAINEL ADMINISTRATIVO
 
                 </div>
 
             </div>
 
 
-            <button onclick="fazerLogout()" class="btn-danger" style="padding: 8px 14px;
-                       font-size: 0.85rem;
-                       border-radius: 10px;">
+            <div class="header-right">
 
-                <i class="fa-solid fa-right-from-bracket"></i>
+                <button class="notification-btn">
 
-                Sair
+                    <i class="fa-regular fa-bell"></i>
 
-            </button>
+                    <span class="notification-dot"></span>
+
+                </button>
+
+
+                <div class="user-info">
+
+                    <div
+                        class="user-avatar"
+                        id="avatar-inicial"
+                    >
+                        HW
+                    </div>
+
+
+                    <div class="user-details">
+
+                        <h4 id="usuario-nome">
+                            Carregando...
+                        </h4>
+
+                        <span
+                            id="usuario-papel"
+                            class="badge"
+                        >
+                            --
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    onclick="fazerLogout()"
+                    class="logout-btn"
+                >
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    <span>Sair</span>
+
+                </button>
+
+            </div>
 
         </header>
 
 
 
         <!-- =================================================
-             CONTEÚDO
+             MAIN
         ================================================== -->
 
         <main>
 
 
-            <!-- TÍTULO -->
+            <!-- CABEÇALHO -->
 
-            <div class="dashboard-page-header">
+            <section class="dashboard-page-header">
 
                 <div>
 
                     <span class="dashboard-kicker">
-
                         HOTELWEB
-
                     </span>
 
                     <h1>
-
                         Painel Executivo
-
                     </h1>
 
                     <p class="subtitle">
-
-                        Bem-vindo ao sistema de controle
-                        e gestão hoteleira.
-
+                        Visão geral da operação e desempenho
+                        do seu hotel.
                     </p>
 
                 </div>
@@ -235,7 +281,10 @@
 
                 <div class="dashboard-actions">
 
-                    <button class="btn-gold" onclick="atualizarDashboard()">
+                    <button
+                        class="btn-gold"
+                        onclick="atualizarDashboard()"
+                    >
 
                         <i class="fa-solid fa-rotate"></i>
 
@@ -244,43 +293,47 @@
                     </button>
 
 
-                    <a href="relatorios.html" class="btn-report">
+                    <a
+                        href="relatorios.html"
+                        class="btn-report"
+                    >
 
                         <i class="fa-solid fa-chart-column"></i>
 
-                        Ver relatórios
+                        Relatórios
 
                     </a>
 
                 </div>
 
-            </div>
+            </section>
 
 
 
             <!-- =================================================
-                 FILTRO POR PERÍODO
+                 FILTRO
             ================================================== -->
 
-            <section class="dashboard-filter card">
+            <section class="dashboard-filter">
 
-                <div class="filter-title">
+                <div class="filter-heading">
+
+                    <div class="filter-icon">
+
+                        <i class="fa-regular fa-calendar"></i>
+
+                    </div>
+
 
                     <div>
 
                         <h3>
-
-                            <i class="fa-solid fa-calendar-days"></i>
-
                             Período de análise
-
                         </h3>
 
                         <p>
-
-                            Filtre os indicadores e relatórios
-                            por período.
-
+                            Selecione o período para visualizar
+                            os indicadores.
                         </p>
 
                     </div>
@@ -293,12 +346,13 @@
                     <div class="form-group">
 
                         <label for="data-inicio">
-
                             Data inicial
-
                         </label>
 
-                        <input type="date" id="data-inicio">
+                        <input
+                            type="date"
+                            id="data-inicio"
+                        >
 
                     </div>
 
@@ -306,12 +360,13 @@
                     <div class="form-group">
 
                         <label for="data-fim">
-
                             Data final
-
                         </label>
 
-                        <input type="date" id="data-fim">
+                        <input
+                            type="date"
+                            id="data-fim"
+                        >
 
                     </div>
 
@@ -319,35 +374,25 @@
                     <div class="form-group">
 
                         <label for="periodo-rapido">
-
                             Período rápido
-
                         </label>
 
                         <select id="periodo-rapido">
 
                             <option value="7">
-
                                 Últimos 7 dias
-
                             </option>
 
                             <option value="30" selected>
-
                                 Últimos 30 dias
-
                             </option>
 
                             <option value="90">
-
                                 Últimos 90 dias
-
                             </option>
 
                             <option value="365">
-
                                 Último ano
-
                             </option>
 
                         </select>
@@ -355,16 +400,22 @@
                     </div>
 
 
-                    <button class="btn-gold" onclick="aplicarFiltroPeriodo()">
+                    <button
+                        class="btn-gold filter-button"
+                        onclick="aplicarFiltroPeriodo()"
+                    >
 
                         <i class="fa-solid fa-filter"></i>
 
-                        Aplicar filtro
+                        Aplicar
 
                     </button>
 
 
-                    <button class="btn-clear-dashboard" onclick="limparFiltroPeriodo()">
+                    <button
+                        class="btn-clear-dashboard"
+                        onclick="limparFiltroPeriodo()"
+                    >
 
                         <i class="fa-solid fa-xmark"></i>
 
@@ -379,10 +430,10 @@
 
 
             <!-- =================================================
-                 CARDS DE INDICADORES
+                 INDICADORES
             ================================================== -->
 
-            <div class="stats-grid">
+            <section class="stats-grid">
 
 
                 <!-- OCUPADOS -->
@@ -395,25 +446,23 @@
 
                     </div>
 
-
                     <div class="stat-info">
 
+                        <span class="stat-label">
+                            Ocupação
+                        </span>
+
                         <h3 id="total-ocupados">
-
                             48
-
                         </h3>
 
                         <p>
-
-                            Quartos Ocupados
-
+                            Quartos ocupados
                         </p>
 
                     </div>
 
                 </div>
-
 
 
                 <!-- DISPONÍVEIS -->
@@ -426,25 +475,23 @@
 
                     </div>
 
-
                     <div class="stat-info">
 
+                        <span class="stat-label">
+                            Disponibilidade
+                        </span>
+
                         <h3 id="total-disponiveis">
-
                             12
-
                         </h3>
 
                         <p>
-
-                            Quartos Disponíveis
-
+                            Quartos disponíveis
                         </p>
 
                     </div>
 
                 </div>
-
 
 
                 <!-- CHECK-IN -->
@@ -457,19 +504,18 @@
 
                     </div>
 
-
                     <div class="stat-info">
 
+                        <span class="stat-label">
+                            Recepção
+                        </span>
+
                         <h3 id="total-checkins">
-
                             8
-
                         </h3>
 
                         <p>
-
-                            Check-ins Pendentes
-
+                            Check-ins pendentes
                         </p>
 
                     </div>
@@ -477,8 +523,7 @@
                 </div>
 
 
-
-                <!-- MANUTENÇÕES -->
+                <!-- MANUTENÇÃO -->
 
                 <div class="stat-card">
 
@@ -488,34 +533,33 @@
 
                     </div>
 
-
                     <div class="stat-info">
 
+                        <span class="stat-label">
+                            Atenção
+                        </span>
+
                         <h3 id="total-manutencoes">
-
                             3
-
                         </h3>
 
                         <p>
-
                             Manutenções
-
                         </p>
 
                     </div>
 
                 </div>
 
-            </div>
+            </section>
 
 
 
             <!-- =================================================
-                 INDICADORES EXTRAS
+                 MINI INDICADORES
             ================================================== -->
 
-            <div class="extra-stats-grid">
+            <section class="extra-stats-grid">
 
 
                 <div class="mini-stat">
@@ -528,12 +572,12 @@
 
                     <div>
 
-                        <span>Reservas</span>
+                        <span>
+                            Reservas
+                        </span>
 
                         <strong id="total-reservas">
-
                             0
-
                         </strong>
 
                     </div>
@@ -551,12 +595,12 @@
 
                     <div>
 
-                        <span>Taxa de ocupação</span>
+                        <span>
+                            Taxa de ocupação
+                        </span>
 
                         <strong id="taxa-ocupacao">
-
                             0%
-
                         </strong>
 
                     </div>
@@ -574,19 +618,19 @@
 
                     <div>
 
-                        <span>Receita do período</span>
+                        <span>
+                            Receita do período
+                        </span>
 
                         <strong id="receita-periodo">
-
                             R$ 0,00
-
                         </strong>
 
                     </div>
 
                 </div>
 
-            </div>
+            </section>
 
 
 
@@ -594,10 +638,8 @@
                  GRÁFICOS
             ================================================== -->
 
-            <div class="charts-grid">
+            <section class="charts-grid">
 
-
-                <!-- OCUPAÇÃO -->
 
                 <div class="card chart-card">
 
@@ -605,17 +647,17 @@
 
                         <div>
 
+                            <span class="section-kicker">
+                                DESEMPENHO
+                            </span>
+
                             <h3>
-
                                 Ocupação por período
-
                             </h3>
 
                             <p class="chart-description">
-
                                 Acompanhamento da ocupação
                                 dos quartos.
-
                             </p>
 
                         </div>
@@ -633,24 +675,22 @@
 
 
 
-                <!-- RECEITA -->
-
                 <div class="card chart-card">
 
                     <div class="card-header-flex">
 
                         <div>
 
+                            <span class="section-kicker">
+                                FINANCEIRO
+                            </span>
+
                             <h3>
-
                                 Receita por período
-
                             </h3>
 
                             <p class="chart-description">
-
                                 Evolução da receita.
-
                             </p>
 
                         </div>
@@ -666,15 +706,15 @@
 
                 </div>
 
-            </div>
+            </section>
 
 
 
             <!-- =================================================
-                 GRID PRINCIPAL
+                 RESERVAS + ATALHOS
             ================================================== -->
 
-            <div class="dashboard-grid">
+            <section class="dashboard-grid">
 
 
                 <!-- RESERVAS -->
@@ -683,19 +723,27 @@
 
                     <div class="card-header-flex">
 
-                        <h3>
+                        <div>
 
-                            Últimas Reservas
+                            <span class="section-kicker">
+                                RESERVAS
+                            </span>
 
-                        </h3>
+                            <h3>
+                                Últimas reservas
+                            </h3>
+
+                        </div>
 
 
-                        <a href="reservas.html" class="btn-gold" style="padding: 6px 12px;
-                                  font-size: 0.8rem;">
+                        <a
+                            href="reservas.html"
+                            class="btn-gold"
+                        >
 
                             <i class="fa-solid fa-plus"></i>
 
-                            Nova Reserva
+                            Nova reserva
 
                         </a>
 
@@ -710,13 +758,21 @@
 
                                 <tr>
 
-                                    <th>Hóspede</th>
+                                    <th>
+                                        Hóspede
+                                    </th>
 
-                                    <th>Acomodação</th>
+                                    <th>
+                                        Acomodação
+                                    </th>
 
-                                    <th>Entrada</th>
+                                    <th>
+                                        Entrada
+                                    </th>
 
-                                    <th>Status</th>
+                                    <th>
+                                        Status
+                                    </th>
 
                                 </tr>
 
@@ -728,30 +784,24 @@
                                 <tr>
 
                                     <td>
-
                                         Carlos Eduardo Silva
-
                                     </td>
 
                                     <td>
-
                                         <strong>
-
                                             Suite Presidencial 204
-
                                         </strong>
-
                                     </td>
 
                                     <td>
-
                                         12/08/2026
-
                                     </td>
 
                                     <td>
 
                                         <span class="badge-status ocupado">
+
+                                            <i class="fa-solid fa-check"></i>
 
                                             Confirmado
 
@@ -765,30 +815,24 @@
                                 <tr>
 
                                     <td>
-
                                         Mariana Costa Souza
-
                                     </td>
 
                                     <td>
-
                                         <strong>
-
                                             Standard 105
-
                                         </strong>
-
                                     </td>
 
                                     <td>
-
                                         13/08/2026
-
                                     </td>
 
                                     <td>
 
                                         <span class="badge-status disponivel">
+
+                                            <i class="fa-solid fa-clock"></i>
 
                                             Aguardando
 
@@ -802,30 +846,24 @@
                                 <tr>
 
                                     <td>
-
                                         Roberto Almeida
-
                                     </td>
 
                                     <td>
-
                                         <strong>
-
                                             Luxo 301
-
                                         </strong>
-
                                     </td>
 
                                     <td>
-
                                         15/08/2026
-
                                     </td>
 
                                     <td>
 
                                         <span class="badge-status ocupado">
+
+                                            <i class="fa-solid fa-check"></i>
 
                                             Confirmado
 
@@ -847,53 +885,87 @@
 
                 <!-- ATALHOS -->
 
-                <div class="card">
+                <div class="card shortcuts-card">
 
                     <div class="card-header-flex">
 
-                        <h3>
+                        <div>
 
-                            Atalhos de Gestão
+                            <span class="section-kicker">
+                                ACESSO RÁPIDO
+                            </span>
 
-                        </h3>
+                            <h3>
+                                Atalhos de gestão
+                            </h3>
+
+                        </div>
 
                     </div>
 
 
                     <div class="dashboard-shortcuts">
 
-                        <a href="recepcao.html" class="btn-gold">
+                        <a
+                            href="recepcao.html"
+                            class="shortcut gold"
+                        >
 
                             <i class="fa-solid fa-key"></i>
 
-                            Painel de Recepção
+                            <span>
+                                Painel de Recepção
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right arrow"></i>
 
                         </a>
 
 
-                        <a href="quartos.html" class="btn-dashboard-dark">
+                        <a
+                            href="quartos.html"
+                            class="shortcut dark"
+                        >
 
                             <i class="fa-solid fa-door-closed"></i>
 
-                            Gerenciar Quartos
+                            <span>
+                                Gerenciar Quartos
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right arrow"></i>
 
                         </a>
 
 
-                        <a href="governanca.html" class="btn-dashboard-gray">
+                        <a
+                            href="governanca.html"
+                            class="shortcut light"
+                        >
 
                             <i class="fa-solid fa-broom"></i>
 
-                            Controle de Limpeza
+                            <span>
+                                Controle de Limpeza
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right arrow"></i>
 
                         </a>
 
 
-                        <a href="relatorios.html" class="btn-dashboard-outline">
+                        <a
+                            href="relatorios.html"
+                            class="shortcut outline"
+                        >
 
                             <i class="fa-solid fa-chart-column"></i>
 
-                            Relatórios
+                            <span>
+                                Relatórios
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right arrow"></i>
 
                         </a>
 
@@ -901,32 +973,34 @@
 
                 </div>
 
-            </div>
+            </section>
 
 
 
             <!-- =================================================
-                 RANKING DE QUARTOS
+                 RANKING
             ================================================== -->
 
-            <div class="card ranking-card">
+            <section class="card ranking-card">
 
                 <div class="card-header-flex">
 
                     <div>
 
+                        <span class="section-kicker">
+                            PERFORMANCE
+                        </span>
+
                         <h3>
 
                             <i class="fa-solid fa-ranking-star"></i>
 
-                            Ranking de Quartos
+                            Ranking de quartos
 
                         </h3>
 
                         <p class="chart-description">
-
                             Quartos com maior número de reservas.
-
                         </p>
 
                     </div>
@@ -934,28 +1008,26 @@
                 </div>
 
 
-                <div class="ranking-list" id="ranking-quartos">
+                <div
+                    class="ranking-list"
+                    id="ranking-quartos"
+                >
+
 
                     <div class="ranking-item">
 
-                        <span class="ranking-position">
-
+                        <span class="ranking-position first">
                             1
-
                         </span>
 
                         <div class="ranking-info">
 
                             <strong>
-
                                 Suite Presidencial 204
-
                             </strong>
 
                             <span>
-
                                 24 reservas
-
                             </span>
 
                         </div>
@@ -967,24 +1039,18 @@
 
                     <div class="ranking-item">
 
-                        <span class="ranking-position">
-
+                        <span class="ranking-position second">
                             2
-
                         </span>
 
                         <div class="ranking-info">
 
                             <strong>
-
                                 Luxo 301
-
                             </strong>
 
                             <span>
-
                                 19 reservas
-
                             </span>
 
                         </div>
@@ -996,24 +1062,18 @@
 
                     <div class="ranking-item">
 
-                        <span class="ranking-position">
-
+                        <span class="ranking-position third">
                             3
-
                         </span>
 
                         <div class="ranking-info">
 
                             <strong>
-
                                 Standard 105
-
                             </strong>
 
                             <span>
-
                                 15 reservas
-
                             </span>
 
                         </div>
@@ -1024,15 +1084,18 @@
 
                 </div>
 
-            </div>
+            </section>
 
 
 
             <!-- =================================================
-                 MENSAGEM DE STATUS
+                 STATUS
             ================================================== -->
 
-            <div id="dashboard-status" class="dashboard-status">
+            <div
+                id="dashboard-status"
+                class="dashboard-status"
+            >
 
                 <i class="fa-solid fa-circle-check"></i>
 
@@ -1047,7 +1110,7 @@
 
 
     <!-- =====================================================
-         SCRIPTS EXISTENTES
+         SCRIPTS
     ====================================================== -->
 
     <script src="../js/api.js"></script>
@@ -1055,6 +1118,7 @@
     <script src="../js/menu.js"></script>
 
     <script src="../js/dashboard.js"></script>
+
 
 </body>
 
