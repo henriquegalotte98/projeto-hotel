@@ -1,5 +1,5 @@
 // ============================================================
-// USUÁRIOS - CRUD completo (Dev 02)
+// USUÁRIOS - CRUD completo (Dev 02) - CORRIGIDO
 // ============================================================
 
 /**
@@ -15,7 +15,6 @@ function initUsuarios() {
     try {
         const usuario = JSON.parse(usuarioLogado);
         
-        // Verifica se o usuário é ADMIN
         if (usuario.papel !== 'ADMIN') {
             alert('Acesso negado. Apenas administradores podem gerenciar usuários.');
             window.location.href = "dashboard.html";
@@ -57,21 +56,18 @@ async function carregarUsuarios() {
     try {
         tbody.innerHTML = `
             <tr>
-                <td colspan="4" class="loading-message">
+                <td colspan="6" class="loading-message">
                     <i class="fa-solid fa-spinner fa-spin"></i> Carregando usuários...
                 </td>
             </tr>
         `;
 
-        // ============================================================
-        // CHAMADA REAL PARA A API
-        // ============================================================
         const usuarios = await apiRequest('/usuarios', 'GET');
 
         if (!usuarios || usuarios.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="4" class="empty-message">
+                    <td colspan="6" class="empty-message">
                         <i class="fa-regular fa-user"></i> Nenhum usuário cadastrado
                     </td>
                 </tr>
@@ -83,15 +79,17 @@ async function carregarUsuarios() {
         usuarios.forEach(usuario => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
+                <td>${usuario.id || '-'}</td>
                 <td>${formatarCPF(usuario.cpf) || '-'}</td>
                 <td><strong>${usuario.nome || '-'}</strong></td>
+                <td>${usuario.email || '-'}</td>
                 <td><span class="badge badge-${(usuario.papel || '').toLowerCase()}">${usuario.papel || '-'}</span></td>
                 <td style="text-align: center;">
                     <div class="action-buttons" style="justify-content: center;">
-                        <button class="btn-edit" onclick="editarUsuario('${usuario.cpf}')">
+                        <button class="btn-edit" onclick="editarUsuario(${usuario.id})">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-                        <button class="btn-delete" onclick="desativarUsuario('${usuario.cpf}')">
+                        <button class="btn-delete" onclick="desativarUsuario(${usuario.id})">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -104,7 +102,7 @@ async function carregarUsuarios() {
         console.error('Erro ao carregar usuários:', error);
         tbody.innerHTML = `
             <tr>
-                <td colspan="4" class="loading-message" style="color: var(--danger);">
+                <td colspan="6" class="loading-message" style="color: var(--danger);">
                     <i class="fa-solid fa-circle-exclamation"></i> Erro: ${error.message || 'Tente novamente'}
                 </td>
             </tr>
@@ -122,9 +120,10 @@ function abrirCadastro() {
     const senhaHelp = document.getElementById('senhaHelp');
 
     form.reset();
-    document.getElementById('usuarioCpfOriginal').value = '';
+    document.getElementById('usuarioId').value = '';
     document.getElementById('senha').required = true;
     document.getElementById('senha').placeholder = 'Mínimo 6 caracteres';
+    document.getElementById('email').required = true;
     senhaHelp.textContent = 'Digite uma senha para o novo usuário';
 
     titulo.textContent = 'Novo Usuário';
@@ -134,16 +133,14 @@ function abrirCadastro() {
 /**
  * Prepara o formulário para editar um usuário existente
  */
-async function editarUsuario(cpf) {
+async function editarUsuario(id) {
     try {
-        // ============================================================
-        // CHAMADA REAL PARA A API
-        // ============================================================
-        const usuario = await apiRequest(`/usuarios/${cpf}`, 'GET');
+        const usuario = await apiRequest(`/usuarios/${id}`, 'GET');
 
-        document.getElementById('usuarioCpfOriginal').value = usuario.cpf;
+        document.getElementById('usuarioId').value = usuario.id;
         document.getElementById('nome').value = usuario.nome || '';
         document.getElementById('cpf').value = usuario.cpf || '';
+        document.getElementById('email').value = usuario.email || '';
         document.getElementById('papel').value = usuario.papel || '';
         document.getElementById('senha').required = false;
         document.getElementById('senha').placeholder = 'Deixe em branco para manter a atual';
@@ -163,18 +160,19 @@ async function editarUsuario(cpf) {
 async function salvarUsuario(event) {
     event.preventDefault();
 
-    const cpfOriginal = document.getElementById('usuarioCpfOriginal').value;
+    const id = document.getElementById('usuarioId').value;
     const nome = document.getElementById('nome').value.trim();
     const cpf = document.getElementById('cpf').value.trim();
+    const email = document.getElementById('email').value.trim();
     const senha = document.getElementById('senha').value;
     const papel = document.getElementById('papel').value;
 
-    if (!nome || !cpf || !papel) {
+    if (!nome || !cpf || !email || !papel) {
         alert('Preencha todos os campos obrigatórios');
         return;
     }
 
-    if (!cpfOriginal && !senha) {
+    if (!id && !senha) {
         alert('A senha é obrigatória para novos usuários');
         return;
     }
@@ -185,22 +183,16 @@ async function salvarUsuario(event) {
     }
 
     const cpfLimpo = cpf.replace(/\D/g, '');
-    const dados = { nome, cpf: cpfLimpo, papel };
+    const dados = { nome, cpf: cpfLimpo, email, papel };
     if (senha) {
         dados.senha = senha;
     }
 
     try {
-        if (cpfOriginal) {
-            // ============================================================
-            // CHAMADA REAL PARA A API
-            // ============================================================
-            await apiRequest(`/usuarios/${cpfOriginal}`, 'PUT', dados);
+        if (id) {
+            await apiRequest(`/usuarios/${id}`, 'PUT', dados);
             alert('Usuário atualizado com sucesso!');
         } else {
-            // ============================================================
-            // CHAMADA REAL PARA A API
-            // ============================================================
             await apiRequest('/usuarios', 'POST', dados);
             alert('Usuário cadastrado com sucesso!');
         }
@@ -216,16 +208,13 @@ async function salvarUsuario(event) {
 /**
  * Desativa um usuário
  */
-async function desativarUsuario(cpf) {
+async function desativarUsuario(id) {
     if (!confirm('Tem certeza que deseja desativar este usuário? Ele não poderá mais acessar o sistema.')) {
         return;
     }
 
     try {
-        // ============================================================
-        // CHAMADA REAL PARA A API
-        // ============================================================
-        await apiRequest(`/usuarios/${cpf}`, 'DELETE');
+        await apiRequest(`/usuarios/${id}`, 'DELETE');
         alert('Usuário desativado com sucesso!');
         carregarUsuarios();
     } catch (error) {
@@ -241,9 +230,10 @@ function fecharModal() {
     if (modal) {
         modal.classList.remove('active');
         document.getElementById('formUsuario').reset();
-        document.getElementById('usuarioCpfOriginal').value = '';
+        document.getElementById('usuarioId').value = '';
         document.getElementById('senha').required = true;
         document.getElementById('senha').placeholder = 'Mínimo 6 caracteres';
+        document.getElementById('email').required = true;
         document.getElementById('senhaHelp').textContent = 'Digite uma senha para novo usuário (opcional na edição)';
     }
 }

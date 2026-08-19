@@ -2,15 +2,8 @@
 // API - Comunicação com o Back-end
 // ============================================================
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'http://localhost:8080/api';
 
-/**
- * Função genérica para fazer requisições HTTP
- * @param {string} endpoint - Endpoint da API (ex: '/usuarios')
- * @param {string} method - Método HTTP (GET, POST, PUT, DELETE)
- * @param {object} body - Dados para enviar no corpo (opcional)
- * @returns {Promise} - Resposta da API já parseada
- */
 async function apiRequest(endpoint, method = 'GET', body = null) {
     const options = {
         method: method,
@@ -18,7 +11,7 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        credentials: 'include' // Envia cookies de sessão
+        credentials: 'include'
     };
 
     if (body) {
@@ -28,7 +21,6 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
     try {
         const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
         
-        // Tenta parsear a resposta como JSON
         let data;
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
@@ -37,7 +29,6 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
             data = await response.text();
         }
 
-        // Se a resposta não for OK (2xx), lança erro
         if (!response.ok) {
             const errorMessage = data?.message || data || 'Erro na requisição';
             const error = new Error(errorMessage);
@@ -49,7 +40,6 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
         return data;
 
     } catch (error) {
-        // Erro de rede ou parse
         if (!error.status) {
             error.message = 'Erro de conexão com o servidor. Verifique se o back-end está rodando.';
         }
@@ -57,8 +47,5 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
     }
 }
 
-// ============================================================
-// EXPORTA FUNÇÕES PARA USO GLOBAL
-// ============================================================
 window.apiRequest = apiRequest;
 window.API_BASE_URL = API_BASE_URL;
