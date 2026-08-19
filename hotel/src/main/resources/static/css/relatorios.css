@@ -1,0 +1,283 @@
+/* Complementos locais de Relatórios sobre o layout autenticado de app.css. */
+
+#menu-usuarios { display: none; }
+
+.main-container {
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.relatorios-logout {
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+}
+
+.relatorios-main { min-width: 0; }
+
+.pagina-relatorios {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.cabecalho-relatorios {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.cabecalho-relatorios .subtitle { margin-bottom: 0; }
+
+.btn-atualizar,
+.btn-filtrar {
+    min-height: 44px;
+    padding: 11px 18px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.btn-atualizar:hover,
+.btn-filtrar:hover { background: var(--accent-hover); }
+
+.btn-atualizar:focus-visible,
+.btn-filtrar:focus-visible,
+.campo input:focus-visible,
+.relatorios-logout:focus-visible,
+.menu a:focus-visible {
+    outline: 3px solid rgba(180, 83, 9, 0.3);
+    outline-offset: 2px;
+}
+
+.btn-atualizar:disabled,
+.btn-filtrar:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    transform: none;
+}
+
+.card-filtro,
+.card-indicador,
+.card-grafico,
+.card-tabela {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.card-filtro {
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.filtro-titulo h2,
+.cabecalho-card h2 {
+    color: var(--primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.filtro-titulo p,
+.cabecalho-card p {
+    margin-top: 5px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.filtro-titulo p { margin-bottom: 20px; }
+
+.filtro-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.campo {
+    display: flex;
+    flex: 1 1 210px;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.campo label {
+    color: var(--text-main);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.campo input {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--text-main);
+    font: inherit;
+}
+
+.campo input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.12);
+    outline: none;
+}
+
+.cards-indicadores {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.card-indicador {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+    padding: 24px;
+}
+
+.icone-indicador {
+    display: flex;
+    flex: 0 0 52px;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.icone-indicador.faturamento { background: #d1fae5; color: #065f46; }
+.icone-indicador.diarias { background: #e0f2fe; color: #0369a1; }
+.icone-indicador.ocupacao { background: #fef3c7; color: #92400e; }
+
+.titulo-indicador {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.card-indicador strong {
+    display: block;
+    overflow-wrap: anywhere;
+    color: var(--primary);
+    font-size: 1.55rem;
+    line-height: 1.2;
+}
+
+.card-indicador small {
+    display: block;
+    margin-top: 5px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+}
+
+.graficos-grid,
+.tabelas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.graficos-grid { margin-bottom: 24px; }
+
+.card-grafico,
+.card-tabela {
+    min-width: 0;
+    padding: 24px;
+}
+
+.cabecalho-card { margin-bottom: 20px; }
+
+.grafico-container {
+    position: relative;
+    height: 300px;
+    min-height: 240px;
+}
+
+.tabela-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.relatorios-table {
+    width: 100%;
+    min-width: 420px;
+    margin-top: 0;
+    border-collapse: collapse;
+}
+
+.relatorios-table th,
+.relatorios-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.relatorios-table th {
+    background: #f1f5f9;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.relatorios-table td {
+    color: var(--text-main);
+    font-size: 0.88rem;
+}
+
+.relatorios-table tbody tr:hover { background: #f8fafc; }
+.relatorios-table tbody tr:last-child td { border-bottom: 0; }
+
+.estado-vazio {
+    padding: 32px 16px !important;
+    color: var(--text-muted) !important;
+    text-align: center !important;
+}
+
+@media (max-width: 1100px) {
+    .cards-indicadores { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .graficos-grid, .tabelas-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    aside { width: 220px; }
+    .relatorios-main { padding: 24px; }
+    .filtro-form { flex-wrap: wrap; }
+    .btn-filtrar { flex: 1 1 100%; justify-content: center; }
+}
+
+@media (max-width: 600px) {
+    aside { display: none; }
+    header { padding: 16px 20px; }
+    .user-details { display: none; }
+    .relatorios-main { padding: 20px; }
+    .cabecalho-relatorios { flex-direction: column; align-items: stretch; gap: 16px; }
+    .btn-atualizar { justify-content: center; width: 100%; }
+    .cards-indicadores { grid-template-columns: 1fr; }
+    .filtro-form { flex-direction: column; align-items: stretch; }
+    .campo, .btn-filtrar { flex-basis: auto; width: 100%; }
+    .card-filtro, .card-indicador, .card-grafico, .card-tabela { padding: 20px; }
+    .grafico-container { height: 260px; }
+}
+
+@media (max-width: 420px) {
+    .relatorios-main { padding: 16px; }
+    .relatorios-logout { padding: 8px 10px; }
+    .card-filtro, .card-indicador, .card-grafico, .card-tabela { padding: 16px; }
+    .grafico-container { height: 230px; }
+}
