@@ -9,192 +9,101 @@ let quartos = [];
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", () => {
-
     verificarUsuario();
-
     carregarQuartos();
-
     configurarEventos();
-
 });
-
 
 // ============================================================
 // VERIFICA USUÁRIO LOGADO
 // ============================================================
 
 function verificarUsuario() {
-
     const usuario = localStorage.getItem("usuarioLogado");
-
     if (!usuario) {
-
         window.location.href = "login.html";
-
         return;
     }
 
     try {
-
         const dados = JSON.parse(usuario);
-
         const nome = document.getElementById("usuarioNome");
-
         if (nome) {
-
-            nome.textContent =
-                dados.nome || "Usuário";
-
+            nome.textContent = dados.nome || "Usuário";
         }
-
     } catch (erro) {
-
-        console.error(
-            "Erro ao carregar usuário:",
-            erro
-        );
-
+        console.error("Erro ao carregar usuário:", erro);
         localStorage.removeItem("usuarioLogado");
-
         window.location.href = "login.html";
     }
 }
 
-
 // ============================================================
-// CARREGAR QUARTOS
+// CARREGAR QUARTOS (GET /api/quartos)
 // ============================================================
 
 async function carregarQuartos() {
-
-    const tabela =
-        document.getElementById("tabelaQuartos");
-
+    const tabela = document.getElementById("tabelaQuartos");
     if (tabela) {
-
         tabela.innerHTML = `
             <tr>
                 <td colspan="7" style="text-align:center;">
-                    Carregando quartos...
+                    <i class="fa-solid fa-spinner fa-spin"></i> Carregando quartos...
                 </td>
             </tr>
         `;
     }
 
     try {
-
-        /*
-         * O Back-end já possui este endpoint:
-         *
-         * GET /api/governanca/quartos
-         *
-         * Ele retorna a lista de quartos.
-         */
-
-        quartos =
-            await apiRequest(
-                "/governanca/quartos",
-                "GET"
-            );
+        quartos = await apiRequest("/quartos", "GET");
 
         if (!Array.isArray(quartos)) {
-
             quartos = [];
-
         }
 
         atualizarResumo();
-
         renderizarQuartos();
 
     } catch (erro) {
-
-        console.error(
-            "Erro ao carregar quartos:",
-            erro
-        );
-
+        console.error("Erro ao carregar quartos:", erro);
         if (tabela) {
-
             tabela.innerHTML = `
                 <tr>
-                    <td colspan="7" style="text-align:center;">
-                        Erro ao carregar os quartos.
+                    <td colspan="7" style="text-align:center; color: var(--danger);">
+                        <i class="fa-solid fa-circle-exclamation"></i> Erro: ${erro.message || 'Tente novamente'}
                     </td>
                 </tr>
             `;
         }
-
-        mostrarMensagem(
-            "Não foi possível carregar os quartos.",
-            "erro"
-        );
+        mostrarMensagem("Não foi possível carregar os quartos.", "erro");
     }
 }
 
-
 // ============================================================
-// RENDERIZAÇÃO DA TABELA
+// RENDERIZAR TABELA
 // ============================================================
 
 function renderizarQuartos() {
-
-    const tabela =
-        document.getElementById("tabelaQuartos");
-
+    const tabela = document.getElementById("tabelaQuartos");
     if (!tabela) return;
 
-    tabela.innerHTML = "";
+    const statusFiltro = document.getElementById("filtroStatus")?.value || "TODOS";
+    const tipoFiltro = document.getElementById("filtroTipo")?.value || "TODOS";
+    const pesquisa = document.getElementById("pesquisa")?.value.trim().toLowerCase() || "";
 
-    const statusFiltro =
-        document.getElementById("filtroStatus")?.value || "TODOS";
+    const quartosFiltrados = quartos.filter(quarto => {
+        const status = quarto.statusOcupacao || "";
+        const tipo = quarto.tipo || "";
+        const numero = String(quarto.numero || "").toLowerCase();
 
-    const tipoFiltro =
-        document.getElementById("filtroTipo")?.value || "TODOS";
+        const correspondeStatus = statusFiltro === "TODOS" || status === statusFiltro;
+        const correspondeTipo = tipoFiltro === "TODOS" || tipo === tipoFiltro;
+        const correspondePesquisa = numero.includes(pesquisa);
 
-    const pesquisa =
-        document.getElementById("pesquisa")?.value
-            .trim()
-            .toLowerCase() || "";
-
-
-    const quartosFiltrados =
-        quartos.filter(quarto => {
-
-            const status =
-                quarto.statusOcupacao || "";
-
-            const tipo =
-                quarto.tipo || "";
-
-            const numero =
-                String(quarto.numero || "")
-                    .toLowerCase();
-
-
-            const correspondeStatus =
-                statusFiltro === "TODOS" ||
-                status === statusFiltro;
-
-            const correspondeTipo =
-                tipoFiltro === "TODOS" ||
-                tipo === tipoFiltro;
-
-            const correspondePesquisa =
-                numero.includes(pesquisa);
-
-
-            return (
-                correspondeStatus &&
-                correspondeTipo &&
-                correspondePesquisa
-            );
-
-        });
-
+        return correspondeStatus && correspondeTipo && correspondePesquisa;
+    });
 
     if (quartosFiltrados.length === 0) {
-
         tabela.innerHTML = `
             <tr>
                 <td colspan="7" style="text-align:center;">
@@ -202,483 +111,229 @@ function renderizarQuartos() {
                 </td>
             </tr>
         `;
-
         return;
     }
 
-
+    tabela.innerHTML = "";
     quartosFiltrados.forEach(quarto => {
-
-        const linha =
-            document.createElement("tr");
-
-
-        linha.innerHTML = `
-
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><strong>${quarto.numero ?? "-"}</strong></td>
+            <td>${formatarTipo(quarto.tipo)}</td>
+            <td>R$ ${formatarValor(quarto.valorDiaria)}</td>
+            <td>${quarto.incluiCafeDaManha ? "✅ Incluso" : "❌ Não incluso"}</td>
+            <td><span class="status-badge status-${(quarto.statusOcupacao || '').toLowerCase()}">${formatarStatus(quarto.statusOcupacao)}</span></td>
+            <td><span class="status-badge status-${(quarto.statusLimpeza || '').toLowerCase()}">${formatarStatus(quarto.statusLimpeza)}</span></td>
             <td>
-                <strong>
-                    ${quarto.numero ?? "-"}
-                </strong>
-            </td>
-
-            <td>
-                ${formatarTipo(quarto.tipo)}
-            </td>
-
-            <td>
-                R$ ${formatarValor(quarto.valorDiaria)}
-            </td>
-
-            <td>
-                ${formatarCafe(quarto.cafe)}
-            </td>
-
-            <td>
-                <span class="status-badge">
-                    ${formatarStatus(
-                        quarto.statusOcupacao
-                    )}
-                </span>
-            </td>
-
-            <td>
-                <span class="status-badge">
-                    ${formatarStatus(
-                        quarto.statusLimpeza
-                    )}
-                </span>
-            </td>
-
-            <td>
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    onclick="editarQuarto(${quarto.id})"
-                >
-                    Editar
+                <button type="button" class="btn btn-secondary" onclick="editarQuarto(${quarto.id})">
+                    <i class="fa-solid fa-pen"></i> Editar
+                </button>
+                <button type="button" class="btn btn-danger" onclick="excluirQuarto(${quarto.id})">
+                    <i class="fa-solid fa-trash"></i> Excluir
                 </button>
             </td>
-
         `;
-
-        tabela.appendChild(linha);
-
+        tabela.appendChild(tr);
     });
-
 }
-
 
 // ============================================================
 // RESUMO
 // ============================================================
 
 function atualizarResumo() {
+    const total = quartos.length;
+    const disponiveis = quartos.filter(q => q.statusOcupacao === "DISPONIVEL").length;
+    const ocupados = quartos.filter(q => q.statusOcupacao === "OCUPADO").length;
+    const manutencao = quartos.filter(q => q.statusOcupacao === "MANUTENCAO").length;
 
-    const total =
-        quartos.length;
-
-    const disponiveis =
-        quartos.filter(
-            quarto =>
-                quarto.statusOcupacao === "DISPONIVEL"
-        ).length;
-
-    const ocupados =
-        quartos.filter(
-            quarto =>
-                quarto.statusOcupacao === "OCUPADO"
-        ).length;
-
-    const manutencao =
-        quartos.filter(
-            quarto =>
-                quarto.statusOcupacao === "MANUTENCAO"
-        ).length;
-
-
-    const totalEl =
-        document.getElementById("totalQuartos");
-
-    const disponiveisEl =
-        document.getElementById(
-            "quartosDisponiveis"
-        );
-
-    const ocupadosEl =
-        document.getElementById(
-            "quartosOcupados"
-        );
-
-    const manutencaoEl =
-        document.getElementById(
-            "quartosManutencao"
-        );
-
-
-    if (totalEl)
-        totalEl.textContent = total;
-
-    if (disponiveisEl)
-        disponiveisEl.textContent = disponiveis;
-
-    if (ocupadosEl)
-        ocupadosEl.textContent = ocupados;
-
-    if (manutencaoEl)
-        manutencaoEl.textContent = manutencao;
-
+    document.getElementById("totalQuartos").textContent = total;
+    document.getElementById("quartosDisponiveis").textContent = disponiveis;
+    document.getElementById("quartosOcupados").textContent = ocupados;
+    document.getElementById("quartosManutencao").textContent = manutencao;
 }
 
-
 // ============================================================
-// EVENTOS
-// ============================================================
-
-function configurarEventos() {
-
-    const filtroStatus =
-        document.getElementById("filtroStatus");
-
-    const filtroTipo =
-        document.getElementById("filtroTipo");
-
-    const pesquisa =
-        document.getElementById("pesquisa");
-
-    const btnLogout =
-        document.getElementById("btnLogout");
-
-
-    filtroStatus?.addEventListener(
-        "change",
-        renderizarQuartos
-    );
-
-    filtroTipo?.addEventListener(
-        "change",
-        renderizarQuartos
-    );
-
-    pesquisa?.addEventListener(
-        "input",
-        renderizarQuartos
-    );
-
-
-    btnLogout?.addEventListener(
-        "click",
-        fazerLogout
-    );
-
-
-    const form =
-        document.getElementById("formQuarto");
-
-    form?.addEventListener(
-        "submit",
-        salvarQuarto
-    );
-
-
-    const btnCancelar =
-        document.getElementById("btnCancelar");
-
-    btnCancelar?.addEventListener(
-        "click",
-        cancelarEdicao
-    );
-
-}
-
-
-// ============================================================
-// EDITAR QUARTO
-// ============================================================
-
-function editarQuarto(id) {
-
-    const quarto =
-        quartos.find(
-            item => item.id === id
-        );
-
-    if (!quarto) {
-
-        mostrarMensagem(
-            "Quarto não encontrado.",
-            "erro"
-        );
-
-        return;
-    }
-
-
-    document.getElementById("quartoId").value =
-        quarto.id ?? "";
-
-    document.getElementById("numero").value =
-        quarto.numero ?? "";
-
-    document.getElementById("tipo").value =
-        quarto.tipo ?? "";
-
-    document.getElementById("valorDiaria").value =
-        quarto.valorDiaria ?? "";
-
-    document.getElementById("statusOcupacao").value =
-        quarto.statusOcupacao ?? "DISPONIVEL";
-
-    document.getElementById("statusLimpeza").value =
-        quarto.statusLimpeza ?? "LIMPO";
-
-
-    if (quarto.cafe !== undefined) {
-
-        document.getElementById("cafe").value =
-            String(quarto.cafe);
-
-    }
-
-
-    const titulo =
-        document.getElementById(
-            "tituloFormulario"
-        );
-
-    if (titulo) {
-
-        titulo.textContent =
-            "Editar quarto";
-
-    }
-
-
-    const btnCancelar =
-        document.getElementById(
-            "btnCancelar"
-        );
-
-    if (btnCancelar) {
-
-        btnCancelar.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-}
-
-
-// ============================================================
-// SALVAR QUARTO
+// SALVAR QUARTO (POST /api/quartos ou PUT /api/quartos/{id})
 // ============================================================
 
 async function salvarQuarto(evento) {
-
     evento.preventDefault();
 
-    /*
-     * ATENÇÃO:
-     *
-     * Os endpoints de POST/PUT de quartos
-     * ainda não foram enviados.
-     *
-     * Por isso não vamos inventar uma rota.
-     */
+    const id = document.getElementById("quartoId").value;
+    const numero = parseInt(document.getElementById("numero").value);
+    const tipo = document.getElementById("tipo").value;
+    const valorDiaria = parseFloat(document.getElementById("valorDiaria").value);
+    const incluiCafeDaManha = document.getElementById("cafe").value === "true";
+    const statusOcupacao = document.getElementById("statusOcupacao").value;
+    const statusLimpeza = document.getElementById("statusLimpeza").value;
 
-    mostrarMensagem(
-        "A listagem dos quartos está conectada ao Back-end. Para cadastrar ou editar, precisamos confirmar os endpoints do QuartoController.",
-        "info"
-    );
+    // Validações
+    if (!numero || !tipo || !valorDiaria) {
+        alert("Preencha todos os campos obrigatórios.");
+        return;
+    }
 
+    if (isNaN(valorDiaria) || valorDiaria <= 0) {
+        alert("O valor da diária deve ser maior que zero.");
+        return;
+    }
+
+    const dados = {
+        numero,
+        tipo,
+        valorDiaria,
+        incluiCafeDaManha,
+        statusOcupacao,
+        statusLimpeza
+    };
+
+    try {
+        if (id) {
+            // PUT /api/quartos/{id}
+            await apiRequest(`/quartos/${id}`, "PUT", dados);
+            alert("Quarto atualizado com sucesso!");
+        } else {
+            // POST /api/quartos
+            await apiRequest("/quartos", "POST", dados);
+            alert("Quarto cadastrado com sucesso!");
+        }
+
+        cancelarEdicao();
+        carregarQuartos();
+
+    } catch (error) {
+        console.error("Erro ao salvar quarto:", error);
+        alert("Erro ao salvar quarto: " + (error.message || "Tente novamente"));
+    }
 }
 
+// ============================================================
+// EDITAR QUARTO (GET /api/quartos/{id})
+// ============================================================
+
+async function editarQuarto(id) {
+    try {
+        const quarto = await apiRequest(`/quartos/${id}`, "GET");
+
+        document.getElementById("quartoId").value = quarto.id;
+        document.getElementById("numero").value = quarto.numero || "";
+        document.getElementById("tipo").value = quarto.tipo || "";
+        document.getElementById("valorDiaria").value = quarto.valorDiaria || "";
+        document.getElementById("cafe").value = quarto.incluiCafeDaManha ? "true" : "false";
+        document.getElementById("statusOcupacao").value = quarto.statusOcupacao || "DISPONIVEL";
+        document.getElementById("statusLimpeza").value = quarto.statusLimpeza || "LIMPO";
+
+        document.getElementById("tituloFormulario").textContent = "Editar quarto";
+        document.getElementById("btnCancelar").classList.remove("hidden");
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+    } catch (error) {
+        console.error("Erro ao carregar quarto:", error);
+        alert("Erro ao carregar quarto: " + (error.message || "Tente novamente"));
+    }
+}
+
+// ============================================================
+// EXCLUIR QUARTO (DELETE /api/quartos/{id})
+// ============================================================
+
+async function excluirQuarto(id) {
+    if (!confirm("Tem certeza que deseja excluir este quarto?")) {
+        return;
+    }
+
+    try {
+        await apiRequest(`/quartos/${id}`, "DELETE");
+        alert("Quarto excluído com sucesso!");
+        carregarQuartos();
+
+    } catch (error) {
+        console.error("Erro ao excluir quarto:", error);
+        alert("Erro ao excluir quarto: " + (error.message || "Tente novamente"));
+    }
+}
 
 // ============================================================
 // CANCELAR EDIÇÃO
 // ============================================================
 
 function cancelarEdicao() {
-
-    const form =
-        document.getElementById(
-            "formQuarto"
-        );
-
-    if (form) {
-
-        form.reset();
-
-    }
-
-
-    document.getElementById(
-        "quartoId"
-    ).value = "";
-
-
-    const titulo =
-        document.getElementById(
-            "tituloFormulario"
-        );
-
-    if (titulo) {
-
-        titulo.textContent =
-            "Cadastrar quarto";
-
-    }
-
-
-    const btnCancelar =
-        document.getElementById(
-            "btnCancelar"
-        );
-
-    if (btnCancelar) {
-
-        btnCancelar.classList.add(
-            "hidden"
-        );
-
-    }
-
+    document.getElementById("formQuarto").reset();
+    document.getElementById("quartoId").value = "";
+    document.getElementById("tituloFormulario").textContent = "Cadastrar quarto";
+    document.getElementById("btnCancelar").classList.add("hidden");
 }
 
+// ============================================================
+// CONFIGURAR EVENTOS
+// ============================================================
+
+function configurarEventos() {
+    document.getElementById("filtroStatus")?.addEventListener("change", renderizarQuartos);
+    document.getElementById("filtroTipo")?.addEventListener("change", renderizarQuartos);
+    document.getElementById("pesquisa")?.addEventListener("input", renderizarQuartos);
+    document.getElementById("btnLogout")?.addEventListener("click", fazerLogout);
+    document.getElementById("formQuarto")?.addEventListener("submit", salvarQuarto);
+    document.getElementById("btnCancelar")?.addEventListener("click", cancelarEdicao);
+}
 
 // ============================================================
 // LOGOUT
 // ============================================================
 
 function fazerLogout() {
-
-    localStorage.removeItem(
-        "usuarioLogado"
-    );
-
-    localStorage.removeItem(
-        "token"
-    );
-
-    window.location.href =
-        "login.html";
-
+    localStorage.removeItem("usuarioLogado");
+    localStorage.removeItem("token");
+    window.location.href = "login.html";
 }
-
 
 // ============================================================
 // FORMATAÇÕES
 // ============================================================
 
 function formatarTipo(tipo) {
-
     const tipos = {
-
         SIMPLES: "Simples",
-
         DUPLO: "Duplo",
-
         SUITE: "Suíte"
-
     };
-
     return tipos[tipo] || tipo || "-";
 }
 
-
 function formatarStatus(status) {
-
     const statusMap = {
-
         DISPONIVEL: "Disponível",
-
         OCUPADO: "Ocupado",
-
         MANUTENCAO: "Manutenção",
-
         LIMPO: "Limpo",
-
         SUJO: "Sujo",
-
         EM_LIMPEZA: "Em limpeza",
-
         INSPECIONADO: "Inspecionado"
-
     };
-
     return statusMap[status] || status || "-";
 }
 
-
-function formatarCafe(cafe) {
-
-    if (
-        cafe === true ||
-        cafe === "true"
-    ) {
-
-        return "Incluso";
-
-    }
-
-    return "Não incluso";
-
-}
-
-
 function formatarValor(valor) {
-
-    const numero =
-        Number(valor || 0);
-
-    return numero.toLocaleString(
-        "pt-BR",
-        {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }
-    );
-
+    const numero = Number(valor || 0);
+    return numero.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 }
 
-
-// ============================================================
-// MENSAGEM
-// ============================================================
-
-function mostrarMensagem(
-    mensagem,
-    tipo = "info"
-) {
-
-    console.log(
-        `[${tipo}] ${mensagem}`
-    );
-
+function mostrarMensagem(mensagem, tipo = "info") {
+    console.log(`[${tipo}] ${mensagem}`);
 }
-
 
 // ============================================================
 // FUNÇÕES GLOBAIS
 // ============================================================
 
-window.carregarQuartos =
-    carregarQuartos;
-
-window.editarQuarto =
-    editarQuarto;
-
-window.salvarQuarto =
-    salvarQuarto;
-
-window.cancelarEdicao =
-    cancelarEdicao;
-
-window.fazerLogout =
-    fazerLogout;
+window.carregarQuartos = carregarQuartos;
+window.editarQuarto = editarQuarto;
+window.excluirQuarto = excluirQuarto;
+window.salvarQuarto = salvarQuarto;
+window.cancelarEdicao = cancelarEdicao;
+window.fazerLogout = fazerLogout;
