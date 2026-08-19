@@ -231,10 +231,6 @@ main .subtitle {
 /* ============================================================
    MENU USUÁRIOS
    ============================================================ */
-#menu-usuarios {
-    display: none;
-}
-
 .operation-message {
     display: none;
     margin-bottom: 20px;
