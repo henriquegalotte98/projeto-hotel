@@ -119,8 +119,3 @@ target/
 # Ignora o arquivo .DS_Store.
 # Esse arquivo é criado automaticamente pelo macOS.
 .DS_Store
-
-# Compartilha somente a configuração de execução do HotelWeb no VS Code.
-!.vscode/
-.vscode/*
-!.vscode/launch.json

@@ -15,6 +15,7 @@ function initUsuarios() {
     try {
         const usuario = JSON.parse(usuarioLogado);
         
+        // Verifica se o usuário é ADMIN
         if (usuario.papel !== 'ADMIN') {
             alert('Acesso negado. Apenas administradores podem gerenciar usuários.');
             window.location.href = "dashboard.html";
