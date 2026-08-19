@@ -187,6 +187,9 @@ main .subtitle {
     background: var(--accent-gold-hover);
 }
 
+/* ============================================================
+   BADGES DE STATUS - RESERVAS
+   ============================================================ */
 .badge-status {
     padding: 5px 12px;
     border-radius: 20px;
@@ -205,7 +208,44 @@ main .subtitle {
     color: #065f46;
 }
 
-/* Ocultar menu de usuários por padrão (será mostrado via JS se for ADMIN) */
+.badge-status.status-reservado {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-status.status-ocupado {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-status.status-disponivel {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge-status.status-cancelado {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* ============================================================
+   MENU USUÁRIOS
+   ============================================================ */
 #menu-usuarios {
     display: none;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
 }

@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../css/app.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/dashboard.css">
-        
 </head>
 <body>
     <aside>
@@ -20,7 +19,6 @@
             <li><a href="recepcao.html"><i class="fa-solid fa-bell-concierge"></i> Recepção</a></li>
             <li><a href="governanca.html"><i class="fa-solid fa-broom"></i> Governança</a></li>
             <li><a href="manutencao.html"><i class="fa-solid fa-screwdriver-wrench"></i> Manutenção</a></li>
-            <!-- MENU USUÁRIOS - Só aparece para ADMIN -->
             <li id="menu-usuarios"><a href="usuarios.html"><i class="fa-solid fa-users-gear"></i> Usuários</a></li>
         </ul>
     </aside>
@@ -48,28 +46,28 @@
                 <div class="stat-card">
                     <div class="stat-icon primary"><i class="fa-solid fa-bed"></i></div>
                     <div class="stat-info">
-                        <h3>48</h3>
+                        <h3 id="quartos-ocupados">--</h3>
                         <p>Quartos Ocupados</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon success"><i class="fa-solid fa-door-open"></i></div>
                     <div class="stat-info">
-                        <h3>12</h3>
+                        <h3 id="quartos-disponiveis">--</h3>
                         <p>Quartos Disponíveis</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon warning"><i class="fa-solid fa-clipboard-user"></i></div>
                     <div class="stat-info">
-                        <h3>8</h3>
+                        <h3 id="checkins-pendentes">--</h3>
                         <p>Check-ins Pendentes</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
                     <div class="stat-info">
-                        <h3>3</h3>
+                        <h3 id="manutencoes">--</h3>
                         <p>Manutenções</p>
                     </div>
                 </div>
@@ -91,24 +89,11 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="ultimas-reservas">
                             <tr>
-                                <td>Carlos Eduardo Silva</td>
-                                <td><strong>Suite Presidencial 204</strong></td>
-                                <td>12/08/2026</td>
-                                <td><span class="badge-status ocupado">Confirmado</span></td>
-                            </tr>
-                            <tr>
-                                <td>Mariana Costa Souza</td>
-                                <td><strong>Standard 105</strong></td>
-                                <td>13/08/2026</td>
-                                <td><span class="badge-status disponivel">Aguardando</span></td>
-                            </tr>
-                            <tr>
-                                <td>Roberto Almeida</td>
-                                <td><strong>Luxo 301</strong></td>
-                                <td>15/08/2026</td>
-                                <td><span class="badge-status ocupado">Confirmado</span></td>
+                                <td colspan="4" style="text-align: center; color: #94a3b8; padding: 20px;">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Carregando reservas...
+                                </td>
                             </tr>
                         </tbody>
                     </table>
