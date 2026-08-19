@@ -10,9 +10,9 @@ let usuarioLogado = null;
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", () => {
-    verificarUsuario();
-    carregarQuartos();
-    configurarEventos();
+    verificarAutenticacao();
+    carregarDadosUsuario();
+    carregarReservasQuandoPermitido();
 });
 
 // ============================================================
@@ -338,47 +338,156 @@ function fazerLogout() {
     window.location.href = "login.html";
 }
 
-// ============================================================
-// FORMATAÇÕES
-// ============================================================
+window.tratarErroAPI = function(status) {
+    if (status === 401) {
+        alert("Sua sessão expirou ou você não está autenticado.");
+        fazerLogout();
+    } else if (status === 403) {
+        alert("Acesso Negado: Você não tem permissão para acessar este recurso.");
+        window.location.href = "dashboard.html";
+    }
+};
 
-function formatarTipo(tipo) {
-    const tipos = {
-        SIMPLES: "Simples",
-        DUPLO: "Duplo",
-        SUITE: "Suíte"
-    };
-    return tipos[tipo] || tipo || "-";
+function carregarReservasQuandoPermitido() {
+    const lista = document.getElementById('lista-reservas');
+    if (!lista) return;
+
+    try {
+        const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
+        if (usuario.papel === 'ADMIN' || usuario.papel === 'RECEPCIONISTA') {
+            carregarReservas();
+        } else {
+            mostrarEstadoReservas('As reservas estão disponíveis apenas para administradores e recepcionistas.');
+        }
+    } catch (_error) {
+        mostrarEstadoReservas('Não foi possível identificar o usuário logado.');
+    }
 }
 
-function formatarStatus(status) {
-    const statusMap = {
-        DISPONIVEL: "Disponível",
-        OCUPADO: "Ocupado",
-        MANUTENCAO: "Manutenção",
-        LIMPO: "Limpo",
-        SUJO: "Sujo",
-        EM_LIMPEZA: "Em limpeza",
-        INSPECIONADO: "Inspecionado"
-    };
-    return statusMap[status] || status || "-";
+async function carregarReservas() {
+    mostrarEstadoReservas('Carregando reservas...', true);
+
+    try {
+        const reservas = await apiRequest('/reservas', 'GET');
+        renderizarReservas(Array.isArray(reservas) ? reservas : []);
+    } catch (error) {
+        mostrarEstadoReservas(mensagemErroOperacao(error, 'Não foi possível carregar as reservas.'));
+    }
 }
 
-function formatarValor(valor) {
-    const numero = Number(valor || 0);
-    return numero.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+function renderizarReservas(reservas) {
+    const tbody = document.getElementById('lista-reservas');
+    if (!tbody) return;
+
+    tbody.replaceChildren();
+    if (reservas.length === 0) {
+        mostrarEstadoReservas('Nenhuma reserva encontrada.');
+        return;
+    }
+
+    reservas.forEach((reserva) => {
+        const linha = document.createElement('tr');
+        adicionarCelula(linha, reserva.hospede?.nome || '-');
+        adicionarCelula(linha, descricaoQuarto(reserva.quarto));
+        adicionarCelula(linha, formatarDataReserva(reserva.dataCheckinPrevista));
+
+        const statusCelula = document.createElement('td');
+        const status = document.createElement('span');
+        status.className = `badge-status ${reserva.status === 'RESERVADA' ? 'disponivel' : 'ocupado'}`;
+        status.textContent = reserva.status || '-';
+        statusCelula.appendChild(status);
+        linha.appendChild(statusCelula);
+
+        const acoesCelula = document.createElement('td');
+        const acoes = document.createElement('div');
+        acoes.className = 'reservation-actions';
+        if (reserva.status === 'RESERVADA') {
+            acoes.appendChild(criarBotaoOperacao('Check-in', 'checkin', reserva.id));
+        } else if (reserva.status === 'CHECKIN') {
+            acoes.appendChild(criarBotaoOperacao('Check-out', 'checkout', reserva.id));
+        } else {
+            acoes.textContent = '-';
+        }
+        acoesCelula.appendChild(acoes);
+        linha.appendChild(acoesCelula);
+        tbody.appendChild(linha);
     });
 }
 
-// ============================================================
-// FUNÇÕES GLOBAIS
-// ============================================================
+function adicionarCelula(linha, valor) {
+    const celula = document.createElement('td');
+    celula.textContent = valor;
+    linha.appendChild(celula);
+}
 
-window.carregarQuartos = carregarQuartos;
-window.editarQuarto = editarQuarto;
-window.excluirQuarto = excluirQuarto;
-window.salvarQuarto = salvarQuarto;
-window.cancelarEdicao = cancelarEdicao;
-window.fazerLogout = fazerLogout;
+function descricaoQuarto(quarto) {
+    if (!quarto) return '-';
+    return quarto.numero ? `Quarto ${quarto.numero}` : `Quarto ${quarto.id || '-'}`;
+}
+
+function formatarDataReserva(data) {
+    if (!data) return '-';
+    const partes = data.split('-');
+    return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : data;
+}
+
+function criarBotaoOperacao(rotulo, operacao, reservaId) {
+    const botao = document.createElement('button');
+    botao.type = 'button';
+    botao.className = `reservation-action ${operacao}`;
+    botao.textContent = rotulo;
+    botao.addEventListener('click', () => executarOperacaoReserva(botao, operacao, reservaId));
+    return botao;
+}
+
+async function executarOperacaoReserva(botao, operacao, reservaId) {
+    const nomeOperacao = operacao === 'checkin' ? 'check-in' : 'check-out';
+    if (!confirm(`Confirmar ${nomeOperacao} da reserva ${reservaId}?`)) return;
+
+    botao.disabled = true;
+    const textoOriginal = botao.textContent;
+    botao.textContent = 'Processando...';
+
+    try {
+        await apiRequest(`/reservas/${reservaId}/${operacao}`, 'POST');
+        mostrarMensagemOperacao(`${nomeOperacao === 'check-in' ? 'Check-in' : 'Check-out'} realizado com sucesso.`, 'success');
+        await carregarReservas();
+    } catch (error) {
+        mostrarMensagemOperacao(mensagemErroOperacao(error, `Não foi possível realizar o ${nomeOperacao}.`), 'error');
+        botao.disabled = false;
+        botao.textContent = textoOriginal;
+    }
+}
+
+function mensagemErroOperacao(error, mensagemPadrao) {
+    if (error?.status === 401) return 'Sua sessão expirou. Faça login novamente.';
+    if (error?.status === 403) return 'Você não tem permissão para realizar esta operação.';
+    if (error?.status === 404) return error.data?.erro || 'Reserva não encontrada.';
+    return error?.data?.erro || (typeof error?.message === 'string' ? error.message : mensagemPadrao) || mensagemPadrao;
+}
+
+function mostrarMensagemOperacao(mensagem, tipo) {
+    const elemento = document.getElementById('mensagem-operacao');
+    if (!elemento) return;
+    elemento.textContent = mensagem;
+    elemento.className = `operation-message visible ${tipo}`;
+}
+
+function mostrarEstadoReservas(mensagem, carregando = false) {
+    const tbody = document.getElementById('lista-reservas');
+    if (!tbody) return;
+
+    const linha = document.createElement('tr');
+    const celula = document.createElement('td');
+    celula.colSpan = 5;
+    celula.className = 'reservation-state';
+    if (carregando) {
+        const icone = document.createElement('i');
+        icone.className = 'fa-solid fa-spinner fa-spin';
+        celula.append(icone, document.createTextNode(` ${mensagem}`));
+    } else {
+        celula.textContent = mensagem;
+    }
+    linha.appendChild(celula);
+    tbody.replaceChildren(linha);
+}

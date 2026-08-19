@@ -49,6 +49,8 @@
             <h1>Painel Executivo</h1>
             <p class="subtitle">Bem-vindo ao sistema de controle e gestão hoteleira.</p>
 
+            <div id="mensagem-operacao" class="operation-message" role="status" aria-live="polite"></div>
+
             <!-- Cards de Indicadores -->
             <div class="stats-grid">
                 <div class="stat-card">
@@ -85,7 +87,8 @@
             <div class="dashboard-grid">
                 <div class="card">
                     <div class="card-header-flex">
-                        <h3>Últimas Reservas</h3>
+                        <h3>Reservas</h3>
+                        <button class="btn-gold" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fa-solid fa-plus"></i> Nova Reserva</button>
                     </div>
                     <table>
                         <thead>
@@ -94,11 +97,12 @@
                                 <th>Acomodação</th>
                                 <th>Entrada</th>
                                 <th>Status</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="ultimas-reservas">
+                        <tbody id="lista-reservas">
                             <tr>
-                                <td colspan="4" style="text-align: center; color: #94a3b8; padding: 20px;">
+                                <td colspan="5" class="reservation-state">
                                     <i class="fa-solid fa-spinner fa-spin"></i> Carregando reservas...
                                 </td>
                             </tr>
