@@ -1,135 +1,1061 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>HotelWeb - Painel Executivo</title>
+
+    <!-- CSS PRINCIPAL DO PROJETO -->
     <link rel="stylesheet" href="../css/app.css">
+
+    <!-- FONT AWESOME -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS DO DASHBOARD -->
     <link rel="stylesheet" href="../css/dashboard.css">
-        
+
+    <!-- CHART.JS PARA OS GRÁFICOS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
+
 <body>
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
     <aside>
+
         <div class="brand">
-            <i class="fa-solid fa-hotel"></i> HOTELWEB
+
+            <i class="fa-solid fa-hotel"></i>
+
+            HOTELWEB
+
         </div>
+
+
         <ul class="menu" id="menu-lateral">
-            <li><a href="dashboard.html" class="active"><i class="fa-solid fa-chart-pie"></i> Visão Geral</a></li>
-            <li><a href="quartos.html"><i class="fa-solid fa-door-open"></i> Quartos</a></li>
-            <li><a href="recepcao.html"><i class="fa-solid fa-bell-concierge"></i> Recepção</a></li>
-            <li><a href="governanca.html"><i class="fa-solid fa-broom"></i> Governança</a></li>
-            <li><a href="manutencao.html"><i class="fa-solid fa-screwdriver-wrench"></i> Manutenção</a></li>
-            <!-- MENU USUÁRIOS - Só aparece para ADMIN -->
-            <li id="menu-usuarios"><a href="usuarios.html"><i class="fa-solid fa-users-gear"></i> Usuários</a></li>
+
+            <li>
+
+                <a href="dashboard.html" class="active">
+
+                    <i class="fa-solid fa-chart-pie"></i>
+
+                    Visão Geral
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="quartos.html">
+
+                    <i class="fa-solid fa-door-open"></i>
+
+                    Quartos
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="recepcao.html">
+
+                    <i class="fa-solid fa-bell-concierge"></i>
+
+                    Recepção
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="governanca.html">
+
+                    <i class="fa-solid fa-broom"></i>
+
+                    Governança
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="manutencao.html">
+
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+
+                    Manutenção
+
+                </a>
+
+            </li>
+
+
+            <!-- NOVO: RELATÓRIOS -->
+
+            <li>
+
+                <a href="relatorios.html">
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+                    Relatórios
+
+                </a>
+
+            </li>
+
+
+            <!-- USUÁRIOS -->
+
+            <li id="menu-usuarios">
+
+                <a href="usuarios.html">
+
+                    <i class="fa-solid fa-users-gear"></i>
+
+                    Usuários
+
+                </a>
+
+            </li>
+
         </ul>
+
     </aside>
 
+
+
+    <!-- =====================================================
+         CONTAINER PRINCIPAL
+    ====================================================== -->
+
     <div class="main-container">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
         <header>
+
             <div class="user-info">
-                <div class="user-avatar" id="avatar-inicial">HW</div>
-                <div class="user-details">
-                    <h4 id="usuario-nome">Carregando...</h4>
-                    <span id="usuario-papel" class="badge">--</span>
+
+                <div class="user-avatar" id="avatar-inicial">
+
+                    HW
+
                 </div>
+
+
+                <div class="user-details">
+
+                    <h4 id="usuario-nome">
+
+                        Carregando...
+
+                    </h4>
+
+
+                    <span id="usuario-papel" class="badge">
+
+                        --
+
+                    </span>
+
+                </div>
+
             </div>
-            <button onclick="fazerLogout()" class="btn-danger" style="padding: 8px 14px; font-size: 0.85rem; border-radius: 10px;">
-                <i class="fa-solid fa-right-from-bracket"></i> Sair
+
+
+            <button onclick="fazerLogout()" class="btn-danger" style="padding: 8px 14px;
+                       font-size: 0.85rem;
+                       border-radius: 10px;">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Sair
+
             </button>
+
         </header>
 
+
+
+        <!-- =================================================
+             CONTEÚDO
+        ================================================== -->
+
         <main>
-            <h1>Painel Executivo</h1>
-            <p class="subtitle">Bem-vindo ao sistema de controle e gestão hoteleira.</p>
 
-            <!-- Cards de Indicadores -->
+
+            <!-- TÍTULO -->
+
+            <div class="dashboard-page-header">
+
+                <div>
+
+                    <span class="dashboard-kicker">
+
+                        HOTELWEB
+
+                    </span>
+
+                    <h1>
+
+                        Painel Executivo
+
+                    </h1>
+
+                    <p class="subtitle">
+
+                        Bem-vindo ao sistema de controle
+                        e gestão hoteleira.
+
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-actions">
+
+                    <button class="btn-gold" onclick="atualizarDashboard()">
+
+                        <i class="fa-solid fa-rotate"></i>
+
+                        Atualizar
+
+                    </button>
+
+
+                    <a href="relatorios.html" class="btn-report">
+
+                        <i class="fa-solid fa-chart-column"></i>
+
+                        Ver relatórios
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FILTRO POR PERÍODO
+            ================================================== -->
+
+            <section class="dashboard-filter card">
+
+                <div class="filter-title">
+
+                    <div>
+
+                        <h3>
+
+                            <i class="fa-solid fa-calendar-days"></i>
+
+                            Período de análise
+
+                        </h3>
+
+                        <p>
+
+                            Filtre os indicadores e relatórios
+                            por período.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="filter-grid">
+
+                    <div class="form-group">
+
+                        <label for="data-inicio">
+
+                            Data inicial
+
+                        </label>
+
+                        <input type="date" id="data-inicio">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="data-fim">
+
+                            Data final
+
+                        </label>
+
+                        <input type="date" id="data-fim">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="periodo-rapido">
+
+                            Período rápido
+
+                        </label>
+
+                        <select id="periodo-rapido">
+
+                            <option value="7">
+
+                                Últimos 7 dias
+
+                            </option>
+
+                            <option value="30" selected>
+
+                                Últimos 30 dias
+
+                            </option>
+
+                            <option value="90">
+
+                                Últimos 90 dias
+
+                            </option>
+
+                            <option value="365">
+
+                                Último ano
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button class="btn-gold" onclick="aplicarFiltroPeriodo()">
+
+                        <i class="fa-solid fa-filter"></i>
+
+                        Aplicar filtro
+
+                    </button>
+
+
+                    <button class="btn-clear-dashboard" onclick="limparFiltroPeriodo()">
+
+                        <i class="fa-solid fa-xmark"></i>
+
+                        Limpar
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CARDS DE INDICADORES
+            ================================================== -->
+
             <div class="stats-grid">
+
+
+                <!-- OCUPADOS -->
+
                 <div class="stat-card">
-                    <div class="stat-icon primary"><i class="fa-solid fa-bed"></i></div>
-                    <div class="stat-info">
-                        <h3>48</h3>
-                        <p>Quartos Ocupados</p>
+
+                    <div class="stat-icon primary">
+
+                        <i class="fa-solid fa-bed"></i>
+
                     </div>
+
+
+                    <div class="stat-info">
+
+                        <h3 id="total-ocupados">
+
+                            48
+
+                        </h3>
+
+                        <p>
+
+                            Quartos Ocupados
+
+                        </p>
+
+                    </div>
+
                 </div>
+
+
+
+                <!-- DISPONÍVEIS -->
+
                 <div class="stat-card">
-                    <div class="stat-icon success"><i class="fa-solid fa-door-open"></i></div>
-                    <div class="stat-info">
-                        <h3>12</h3>
-                        <p>Quartos Disponíveis</p>
+
+                    <div class="stat-icon success">
+
+                        <i class="fa-solid fa-door-open"></i>
+
                     </div>
+
+
+                    <div class="stat-info">
+
+                        <h3 id="total-disponiveis">
+
+                            12
+
+                        </h3>
+
+                        <p>
+
+                            Quartos Disponíveis
+
+                        </p>
+
+                    </div>
+
                 </div>
+
+
+
+                <!-- CHECK-IN -->
+
                 <div class="stat-card">
-                    <div class="stat-icon warning"><i class="fa-solid fa-clipboard-user"></i></div>
-                    <div class="stat-info">
-                        <h3>8</h3>
-                        <p>Check-ins Pendentes</p>
+
+                    <div class="stat-icon warning">
+
+                        <i class="fa-solid fa-clipboard-user"></i>
+
                     </div>
+
+
+                    <div class="stat-info">
+
+                        <h3 id="total-checkins">
+
+                            8
+
+                        </h3>
+
+                        <p>
+
+                            Check-ins Pendentes
+
+                        </p>
+
+                    </div>
+
                 </div>
+
+
+
+                <!-- MANUTENÇÕES -->
+
                 <div class="stat-card">
-                    <div class="stat-icon danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                    <div class="stat-info">
-                        <h3>3</h3>
-                        <p>Manutenções</p>
+
+                    <div class="stat-icon danger">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
                     </div>
+
+
+                    <div class="stat-info">
+
+                        <h3 id="total-manutencoes">
+
+                            3
+
+                        </h3>
+
+                        <p>
+
+                            Manutenções
+
+                        </p>
+
+                    </div>
+
                 </div>
+
             </div>
 
-            <!-- Grid de Conteúdo Principal -->
+
+
+            <!-- =================================================
+                 INDICADORES EXTRAS
+            ================================================== -->
+
+            <div class="extra-stats-grid">
+
+
+                <div class="mini-stat">
+
+                    <div class="mini-stat-icon">
+
+                        <i class="fa-solid fa-calendar-check"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Reservas</span>
+
+                        <strong id="total-reservas">
+
+                            0
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mini-stat">
+
+                    <div class="mini-stat-icon">
+
+                        <i class="fa-solid fa-percent"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Taxa de ocupação</span>
+
+                        <strong id="taxa-ocupacao">
+
+                            0%
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mini-stat">
+
+                    <div class="mini-stat-icon">
+
+                        <i class="fa-solid fa-money-bill-wave"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Receita do período</span>
+
+                        <strong id="receita-periodo">
+
+                            R$ 0,00
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 GRÁFICOS
+            ================================================== -->
+
+            <div class="charts-grid">
+
+
+                <!-- OCUPAÇÃO -->
+
+                <div class="card chart-card">
+
+                    <div class="card-header-flex">
+
+                        <div>
+
+                            <h3>
+
+                                Ocupação por período
+
+                            </h3>
+
+                            <p class="chart-description">
+
+                                Acompanhamento da ocupação
+                                dos quartos.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-container">
+
+                        <canvas id="graficoOcupacao"></canvas>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RECEITA -->
+
+                <div class="card chart-card">
+
+                    <div class="card-header-flex">
+
+                        <div>
+
+                            <h3>
+
+                                Receita por período
+
+                            </h3>
+
+                            <p class="chart-description">
+
+                                Evolução da receita.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-container">
+
+                        <canvas id="graficoReceita"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 GRID PRINCIPAL
+            ================================================== -->
+
             <div class="dashboard-grid">
-                <div class="card">
-                    <div class="card-header-flex">
-                        <h3>Últimas Reservas</h3>
-                        <button class="btn-gold" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fa-solid fa-plus"></i> Nova Reserva</button>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Hóspede</th>
-                                <th>Acomodação</th>
-                                <th>Entrada</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Carlos Eduardo Silva</td>
-                                <td><strong>Suite Presidencial 204</strong></td>
-                                <td>12/08/2026</td>
-                                <td><span class="badge-status ocupado">Confirmado</span></td>
-                            </tr>
-                            <tr>
-                                <td>Mariana Costa Souza</td>
-                                <td><strong>Standard 105</strong></td>
-                                <td>13/08/2026</td>
-                                <td><span class="badge-status disponivel">Aguardando</span></td>
-                            </tr>
-                            <tr>
-                                <td>Roberto Almeida</td>
-                                <td><strong>Luxo 301</strong></td>
-                                <td>15/08/2026</td>
-                                <td><span class="badge-status ocupado">Confirmado</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+
+
+                <!-- RESERVAS -->
 
                 <div class="card">
+
                     <div class="card-header-flex">
-                        <h3>Atalhos de Gestão</h3>
+
+                        <h3>
+
+                            Últimas Reservas
+
+                        </h3>
+
+
+                        <a href="reservas.html" class="btn-gold" style="padding: 6px 12px;
+                                  font-size: 0.8rem;">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            Nova Reserva
+
+                        </a>
+
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <a href="recepcao.html" class="btn-gold" style="justify-content: center;"><i class="fa-solid fa-key"></i> Painel de Recepção</a>
-                        <a href="quartos.html" class="btn" style="width: 100%; justify-content: center; background: #0f172a;"><i class="fa-solid fa-door-closed"></i> Gerenciar Quartos</a>
-                        <a href="governanca.html" class="btn" style="width: 100%; justify-content: center; background: #334155;"><i class="fa-solid fa-broom"></i> Controle de Limpeza</a>
+
+
+                    <div class="table-responsive-dashboard">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Hóspede</th>
+
+                                    <th>Acomodação</th>
+
+                                    <th>Entrada</th>
+
+                                    <th>Status</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="tabela-reservas">
+
+                                <tr>
+
+                                    <td>
+
+                                        Carlos Eduardo Silva
+
+                                    </td>
+
+                                    <td>
+
+                                        <strong>
+
+                                            Suite Presidencial 204
+
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        12/08/2026
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge-status ocupado">
+
+                                            Confirmado
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+
+                                        Mariana Costa Souza
+
+                                    </td>
+
+                                    <td>
+
+                                        <strong>
+
+                                            Standard 105
+
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        13/08/2026
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge-status disponivel">
+
+                                            Aguardando
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+
+                                        Roberto Almeida
+
+                                    </td>
+
+                                    <td>
+
+                                        <strong>
+
+                                            Luxo 301
+
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        15/08/2026
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge-status ocupado">
+
+                                            Confirmado
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
                     </div>
+
                 </div>
+
+
+
+                <!-- ATALHOS -->
+
+                <div class="card">
+
+                    <div class="card-header-flex">
+
+                        <h3>
+
+                            Atalhos de Gestão
+
+                        </h3>
+
+                    </div>
+
+
+                    <div class="dashboard-shortcuts">
+
+                        <a href="recepcao.html" class="btn-gold">
+
+                            <i class="fa-solid fa-key"></i>
+
+                            Painel de Recepção
+
+                        </a>
+
+
+                        <a href="quartos.html" class="btn-dashboard-dark">
+
+                            <i class="fa-solid fa-door-closed"></i>
+
+                            Gerenciar Quartos
+
+                        </a>
+
+
+                        <a href="governanca.html" class="btn-dashboard-gray">
+
+                            <i class="fa-solid fa-broom"></i>
+
+                            Controle de Limpeza
+
+                        </a>
+
+
+                        <a href="relatorios.html" class="btn-dashboard-outline">
+
+                            <i class="fa-solid fa-chart-column"></i>
+
+                            Relatórios
+
+                        </a>
+
+                    </div>
+
+                </div>
+
             </div>
+
+
+
+            <!-- =================================================
+                 RANKING DE QUARTOS
+            ================================================== -->
+
+            <div class="card ranking-card">
+
+                <div class="card-header-flex">
+
+                    <div>
+
+                        <h3>
+
+                            <i class="fa-solid fa-ranking-star"></i>
+
+                            Ranking de Quartos
+
+                        </h3>
+
+                        <p class="chart-description">
+
+                            Quartos com maior número de reservas.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ranking-list" id="ranking-quartos">
+
+                    <div class="ranking-item">
+
+                        <span class="ranking-position">
+
+                            1
+
+                        </span>
+
+                        <div class="ranking-info">
+
+                            <strong>
+
+                                Suite Presidencial 204
+
+                            </strong>
+
+                            <span>
+
+                                24 reservas
+
+                            </span>
+
+                        </div>
+
+                        <i class="fa-solid fa-trophy ranking-trophy"></i>
+
+                    </div>
+
+
+                    <div class="ranking-item">
+
+                        <span class="ranking-position">
+
+                            2
+
+                        </span>
+
+                        <div class="ranking-info">
+
+                            <strong>
+
+                                Luxo 301
+
+                            </strong>
+
+                            <span>
+
+                                19 reservas
+
+                            </span>
+
+                        </div>
+
+                        <i class="fa-solid fa-medal ranking-trophy"></i>
+
+                    </div>
+
+
+                    <div class="ranking-item">
+
+                        <span class="ranking-position">
+
+                            3
+
+                        </span>
+
+                        <div class="ranking-info">
+
+                            <strong>
+
+                                Standard 105
+
+                            </strong>
+
+                            <span>
+
+                                15 reservas
+
+                            </span>
+
+                        </div>
+
+                        <i class="fa-solid fa-medal ranking-trophy"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MENSAGEM DE STATUS
+            ================================================== -->
+
+            <div id="dashboard-status" class="dashboard-status">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                Dashboard atualizado.
+
+            </div>
+
         </main>
+
     </div>
 
+
+
+    <!-- =====================================================
+         SCRIPTS EXISTENTES
+    ====================================================== -->
+
     <script src="../js/api.js"></script>
+
     <script src="../js/menu.js"></script>
+
     <script src="../js/dashboard.js"></script>
+
 </body>
+
 </html>
