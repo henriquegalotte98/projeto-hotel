@@ -1,10 +1,6 @@
 /* ==========================================================================
    Estilos Anteriores
    ========================================================================== */
-#menu-usuarios {
-    display: none;
-}
-
 .maintenance-logout {
     padding: 8px 14px;
     border-radius: 10px;
@@ -156,6 +152,18 @@
 
 .chamado-card button:hover {
     background: #e2e8f0;
+}
+
+.chamado-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.chamado-card .chamado-actions button {
+    width: auto;
+    flex: 1;
+    margin-top: 0;
 }
 
 /* Modal e Histórico */

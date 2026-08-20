@@ -23,6 +23,11 @@ public class GlobalExceptionHandler {
         return resposta(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> argumentoInvalido(IllegalArgumentException ex) {
+        return resposta(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> dadosInvalidos(MethodArgumentNotValidException ex) {
         Map<String, String> erros = new LinkedHashMap<>();

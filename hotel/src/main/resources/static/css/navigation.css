@@ -1,0 +1,115 @@
+/* Aparencia compartilhada do menu lateral em todas as telas internas. */
+:root {
+    --nav-width: 280px;
+    --nav-bg: #222059;
+    --nav-text: #B8D9D3;
+    --nav-accent: #37748C;
+}
+
+body > aside,
+body > .sidebar {
+    width: var(--nav-width) !important;
+    min-width: var(--nav-width);
+    height: 100vh;
+    background: var(--nav-bg) !important;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 4px 0 14px rgba(15, 23, 42, .14);
+}
+
+body > .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+}
+
+.brand,
+.sidebar .logo {
+    min-height: 86px;
+    padding: 24px !important;
+    justify-content: flex-start !important;
+    border-bottom: 1px solid rgba(255, 255, 255, .09) !important;
+}
+
+.sidebar .logo-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    box-shadow: none;
+    font-size: 1rem;
+}
+
+.menu {
+    padding: 24px 16px !important;
+    gap: 8px !important;
+    list-style: none;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.menu li { display: block; }
+
+.menu a {
+    min-height: 48px;
+    padding: 13px 18px !important;
+    border-radius: 12px !important;
+    color: var(--nav-text) !important;
+    border-left: 4px solid transparent;
+    font-weight: 600;
+}
+
+.menu a:hover,
+.menu a.active {
+    color: #fff !important;
+    background: rgba(55, 116, 140, .32) !important;
+}
+
+.nav-logout {
+    flex: 0 0 auto;
+    padding: 14px 16px 18px;
+    border-top: 1px solid rgba(184, 217, 211, .2);
+    background: var(--nav-bg);
+}
+
+.nav-logout-button {
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1px solid rgba(184, 217, 211, .24);
+    border-radius: 12px;
+    background: rgba(184, 217, 211, .1);
+    color: #F2F2F2;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.nav-logout-button:hover,
+.nav-logout-button:focus-visible {
+    background: #37748C;
+    border-color: #B8D9D3;
+    outline: none;
+}
+
+.menu a.active {
+    border-left-color: var(--nav-accent) !important;
+}
+
+.sidebar + .main-content {
+    margin-left: var(--nav-width) !important;
+    width: calc(100% - var(--nav-width)) !important;
+}
+
+.dashboard-empty {
+    padding: 24px !important;
+    text-align: center;
+    color: #64748b;
+}
+
+@media (max-width: 800px) {
+    :root { --nav-width: 230px; }
+}

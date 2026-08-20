@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../css/app.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/manutencao.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
     <aside>
@@ -47,20 +49,14 @@
                 <h2><i class="fa-solid fa-plus"></i> Abrir Novo Chamado</h2>
                 <form id="form-chamado">
                     <div class="form-group">
-                        <label for="quartoId">Número do Quarto / Local:</label>
-                        <input type="text" id="quartoId" required placeholder="Ex: Quarto 102 ou Recepção">
+                        <label for="quartoId">Quarto:</label>
+                        <select id="quartoId" required>
+                            <option value="" selected disabled>Carregando quartos...</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="descricao">Descrição do Problema:</label>
                         <textarea id="descricao" required rows="3" placeholder="Descreva o problema em detalhes..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="prioridade">Prioridade:</label>
-                        <select id="prioridade">
-                            <option value="BAIXA">Baixa</option>
-                            <option value="MEDIA" selected>Média</option>
-                            <option value="ALTA">Alta</option>
-                        </select>
                     </div>
                     <button type="submit" class="btn-primary">
                         <i class="fa-solid fa-paper-plane"></i> Criar Chamado
@@ -72,17 +68,17 @@
             <section class="card maintenance-card">
                 <h2><i class="fa-solid fa-list-check"></i> Painel de Chamados</h2>
                 <div class="kanban-board">
-                    <div class="column" id="coluna-PENDENTE">
-                        <h3>Pendente</h3>
-                        <div class="chamados-list" id="lista-PENDENTE"></div>
+                    <div class="column" id="coluna-ABERTA">
+                        <h3>Aberta</h3>
+                        <div class="chamados-list" id="lista-ABERTA"></div>
                     </div>
                     <div class="column" id="coluna-EM_ANDAMENTO">
                         <h3>Em Andamento</h3>
                         <div class="chamados-list" id="lista-EM_ANDAMENTO"></div>
                     </div>
-                    <div class="column" id="coluna-CONCLUIDO">
-                        <h3>Concluído</h3>
-                        <div class="chamados-list" id="lista-CONCLUIDO"></div>
+                    <div class="column" id="coluna-CONCLUIDA">
+                        <h3>Concluída</h3>
+                        <div class="chamados-list" id="lista-CONCLUIDA"></div>
                     </div>
                 </div>
             </section>
@@ -106,7 +102,6 @@
 
     <script src="../js/api.js"></script>
     <script src="../js/menu.js"></script>
-    <script src="../js/dashboard.js"></script>
     <script src="../js/manutencao.js"></script>
 </body>
 </html>

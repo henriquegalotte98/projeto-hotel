@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HotelWeb - Recepção</title>
+
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/recepcao.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/theme.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         MENU LATERAL
+    ====================================================== -->
+
+    <aside>
+
+        <div class="brand">
+            <i class="fa-solid fa-hotel"></i>
+            HOTELWEB
+        </div>
+
+        <ul class="menu" id="menu-lateral">
+
+            <li>
+                <a href="dashboard.html">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    Visão Geral
+                </a>
+            </li>
+
+            <li>
+                <a href="quartos.html">
+                    <i class="fa-solid fa-door-open"></i>
+                    Quartos
+                </a>
+            </li>
+
+            <li>
+                <a href="recepcao.html" class="active">
+                    <i class="fa-solid fa-bell-concierge"></i>
+                    Recepção
+                </a>
+            </li>
+
+            <li>
+                <a href="governanca.html">
+                    <i class="fa-solid fa-broom"></i>
+                    Governança
+                </a>
+            </li>
+
+            <li>
+                <a href="manutencao.html">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    Manutenção
+                </a>
+            </li>
+
+            <li id="menu-usuarios">
+                <a href="usuarios.html">
+                    <i class="fa-solid fa-users-gear"></i>
+                    Usuários
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+    ====================================================== -->
+
+    <div class="main-container">
+
+        <!-- HEADER -->
+
+        <header>
+
+            <div class="user-info">
+
+                <div class="user-avatar" id="avatar-inicial">
+                    HW
+                </div>
+
+                <div class="user-details">
+
+                    <h4 id="usuario-nome">
+                        Carregando...
+                    </h4>
+
+                    <span id="usuario-papel" class="badge">
+                        --
+                    </span>
+
+                </div>
+
+            </div>
+
+            <button
+                onclick="fazerLogout()"
+                class="btn-danger btn-sair">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Sair
+
+            </button>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTEÚDO
+        ================================================== -->
+
+        <main>
+
+            <div class="pagina-titulo">
+
+                <div>
+                    <h1>
+                        <i class="fa-solid fa-bell-concierge"></i>
+                        Recepção
+                    </h1>
+
+                    <p class="subtitle">
+                        Controle de reservas, check-in e check-out.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CARDS
+            ================================================== -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon primary">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <h3 id="total-reservas">
+                            0
+                        </h3>
+
+                        <p>
+                            Reservas
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon warning">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <h3 id="total-pendentes">
+                            0
+                        </h3>
+
+                        <p>
+                            Check-ins Pendentes
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon success">
+                        <i class="fa-solid fa-bed"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <h3 id="total-hospedados">
+                            0
+                        </h3>
+
+                        <p>
+                            Hóspedes Hospedados
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon danger">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <h3 id="total-checkouts">
+                            0
+                        </h3>
+
+                        <p>
+                            Check-outs
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ÁREA DE RESERVAS
+            ================================================== -->
+
+            <div class="card">
+
+                <div class="card-header-flex">
+
+                    <div>
+
+                        <h3>
+                            Reservas
+                        </h3>
+
+                        <p class="card-description">
+                            Consulte e gerencie as hospedagens.
+                        </p>
+
+                    </div>
+
+                    <button
+                        class="btn-gold"
+                        onclick="carregarReservas()">
+
+                        <i class="fa-solid fa-rotate"></i>
+                        Atualizar
+
+                    </button>
+
+                </div>
+
+
+                <!-- BUSCA -->
+
+                <div class="filtros">
+
+                    <div class="campo-busca">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input
+                            type="text"
+                            id="campoBusca"
+                            placeholder="Buscar por hóspede, quarto ou CPF...">
+
+                    </div>
+
+                    <select id="filtroStatus">
+
+                        <option value="">
+                            Todos os status
+                        </option>
+
+                        <option value="RESERVADA">
+                            Reservadas
+                        </option>
+
+                        <option value="CHECKIN">
+                            Hospedados
+                        </option>
+
+                        <option value="FINALIZADA">
+                            Finalizadas
+                        </option>
+
+                        <option value="CANCELADA">
+                            Canceladas
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- MENSAGEM -->
+
+                <div
+                    id="mensagem"
+                    class="mensagem">
+                </div>
+
+
+                <!-- TABELA -->
+
+                <div class="tabela-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Reserva
+                                </th>
+
+                                <th>
+                                    Hóspede
+                                </th>
+
+                                <th>
+                                    Quarto
+                                </th>
+
+                                <th>
+                                    Entrada
+                                </th>
+
+                                <th>
+                                    Saída
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="listaReservas">
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="carregando">
+
+                                    <i class="fa-solid fa-spinner fa-spin"></i>
+                                    Carregando reservas...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <div id="modalCheckout" class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalCheckout">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <h2 id="tituloModalCheckout"><i class="fa-solid fa-receipt"></i> Conferência do check-out</h2>
+                <button type="button" id="btnFecharCheckout" class="btn-fechar" aria-label="Fechar conferência" title="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="checkout-resumo">
+                <p><strong id="checkoutHospede">Hóspede</strong></p>
+                <p id="checkoutQuarto">Quarto</p>
+                <p id="checkoutAvisoData" class="checkout-aviso"></p>
+            </div>
+            <div class="checkout-diarias">
+                <div><span>Diárias</span><strong id="checkoutQuantidadeDiarias">1 diária</strong></div>
+                <div><span>Valor da diária</span><strong id="checkoutValorDiaria">R$ 0,00</strong></div>
+                <div><span>Subtotal das diárias</span><strong id="checkoutTotalDiarias">R$ 0,00</strong></div>
+            </div>
+            <h3>Consumos realizados</h3>
+            <div id="checkoutConsumos" class="checkout-consumos"></div>
+            <div class="checkout-total"><span>Total de consumos</span><strong id="checkoutTotal">R$ 0,00</strong></div>
+            <div class="checkout-total checkout-total-geral"><span>Total geral</span><strong id="checkoutTotalGeral">R$ 0,00</strong></div>
+            <div class="modal-footer checkout-acoes">
+                <button type="button" id="btnCancelarCheckout" class="btn-modal-fechar">Voltar</button>
+                <button type="button" id="btnConfirmarCheckout" class="btn-confirmar-checkout">
+                    <i class="fa-solid fa-check"></i> Confirmar check-out
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =====================================================
+         MODAL DETALHES
+    ====================================================== -->
+
+    <div
+        id="modalDetalhes"
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tituloModalDetalhes">
+
+        <div class="modal-conteudo">
+
+            <div class="modal-header">
+
+                <h2 id="tituloModalDetalhes">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Detalhes da Reserva
+                </h2>
+
+                <button
+                    type="button"
+                    id="btnFecharModalDetalhes"
+                    class="btn-fechar"
+                    aria-label="Fechar detalhes da reserva"
+                    title="Fechar">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <div id="detalhesReserva">
+
+                <!-- preenchido pelo JavaScript -->
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnFecharModalRodape" class="btn-modal-fechar">
+                    Fechar
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCRIPTS
+    ====================================================== -->
+
+    <script src="../js/api.js"></script>
+    <script src="../js/menu.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/recepcao.js"></script>
+
+</body>
+
+</html>

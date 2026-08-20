@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelWeb - Restaurante</title>
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/restaurante.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/theme.css">
+</head>
+<body>
+    <aside>
+        <div class="brand">
+            <i class="fa-solid fa-hotel" aria-hidden="true"></i> HOTELWEB
+        </div>
+        <ul class="menu" id="menu-lateral">
+            <li><a href="dashboard.html"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i> Visão Geral</a></li>
+            <li><a href="quartos.html"><i class="fa-solid fa-door-open" aria-hidden="true"></i> Quartos</a></li>
+            <li><a href="recepcao.html"><i class="fa-solid fa-bell-concierge" aria-hidden="true"></i> Recepção</a></li>
+            <li><a href="hospedes.html"><i class="fa-solid fa-user" aria-hidden="true"></i> Hóspedes</a></li>
+            <li><a href="reservas.html"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Reservas</a></li>
+            <li><a href="restaurante.html" class="active" aria-current="page"><i class="fa-solid fa-utensils" aria-hidden="true"></i> Restaurante</a></li>
+            <li><a href="governanca.html"><i class="fa-solid fa-broom" aria-hidden="true"></i> Governança</a></li>
+            <li><a href="manutencao.html"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> Manutenção</a></li>
+            <li><a href="relatorios.html"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Relatórios</a></li>
+            <li id="menu-usuarios"><a href="usuarios.html"><i class="fa-solid fa-users-gear" aria-hidden="true"></i> Usuários</a></li>
+        </ul>
+    </aside>
+
+    <div class="main-container">
+        <header>
+            <div class="user-info">
+                <div class="user-avatar" id="avatar-inicial" aria-hidden="true">HW</div>
+                <div class="user-details">
+                    <h4 id="usuario-nome">Carregando...</h4>
+                    <span id="usuario-papel" class="badge">--</span>
+                </div>
+            </div>
+            <button type="button" onclick="fazerLogout()" class="btn-danger restaurante-logout">
+                <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair
+            </button>
+        </header>
+
+        <main class="restaurante-main">
+            <div class="restaurante-page">
+                <h1>Restaurante</h1>
+                <p class="subtitle">Lançamento e acompanhamento de consumos extras das reservas.</p>
+
+                <section class="card" aria-labelledby="titulo-lancamento">
+                    <h2 id="titulo-lancamento">Lançar consumo</h2>
+                    <form id="form-consumo" class="consumo-form">
+                        <div class="form-group">
+                            <label for="reservaId">Hóspede / quarto</label>
+                            <select id="reservaId" required>
+                                <option value="" selected disabled>Carregando hospedagens...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <input id="descricao" maxlength="255" required placeholder="Ex.: Jantar, frigobar, lavanderia">
+                        </div>
+                        <div class="form-group">
+                            <label for="valor">Valor</label>
+                            <input id="valor" type="number" min="0.01" step="0.01" required placeholder="0,00">
+                        </div>
+                        <button type="submit" class="btn-primary"><i class="fa-solid fa-plus"></i> Adicionar consumo</button>
+                    </form>
+                </section>
+
+                <section class="card" aria-labelledby="titulo-consumos">
+                    <div class="consumos-header">
+                        <h2 id="titulo-consumos">Consumos da hospedagem</h2>
+                        <strong id="total-consumos">Total: R$ 0,00</strong>
+                    </div>
+                    <div id="lista-consumos" class="lista-consumos" aria-live="polite">
+                        Selecione uma hospedagem para consultar os consumos.
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/menu.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/restaurante.js"></script>
+</body>
+</html>

@@ -29,10 +29,6 @@ public class AutenticacaoService implements UserDetailsService {
         if (!u.isAtivo())
             throw new UsernameNotFoundException("Usuário inativo");
 
-        // Retorna os dados usados pelo Spring Security.
-        return User.withUsername(u.getCpf())
-            .password(u.getSenha())
-            .roles(u.getPapel())
-            .build();
+        return new UsuarioPrincipal(u);
     }
 }

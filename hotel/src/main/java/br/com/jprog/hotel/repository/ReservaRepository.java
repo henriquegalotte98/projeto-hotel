@@ -45,7 +45,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     //
     // Exemplo: findByHospedeId(5L)
     // Busca reservas cujo hospede.id seja 5.
-    List<Reserva> findByHospedeCpf(String hospedeCpf);
+    List<Reserva> findByHospedeId(Long hospedeId);
 
     // Cria automaticamente uma consulta para buscar
     // todas as reservas de um quarto pelo ID dele.

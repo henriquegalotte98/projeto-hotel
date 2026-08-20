@@ -84,16 +84,16 @@ public class UsuarioController {
     // Exemplo:
     //
     // GET /api/usuarios/5
-    @GetMapping("/{cpf}")
+    @GetMapping("/{id}")
 
     // Método responsável por buscar um usuário específico.
     //
     // @PathVariable pega o valor "{id}" presente na URL
     // e coloca dentro da variável "id".
-    public Usuario buscar(@PathVariable String cpf) {
+    public Usuario buscar(@PathVariable Long id) {
 
         // Chama o Service para procurar o usuário pelo ID.
-        return service.buscar(cpf);
+        return service.buscar(id);
     }
 
 
@@ -137,13 +137,13 @@ public class UsuarioController {
     // Exemplo:
     //
     // PUT /api/usuarios/5
-    @PutMapping("/{cpf}")
+    @PutMapping("/{id}")
 
     // Método responsável por atualizar um usuário.
     public Usuario atualizar(
 
             // Recebe o ID do usuário através da URL.
-            @PathVariable String cpf,
+            @PathVariable Long id,
 
             // Valida os novos dados enviados.
             @Valid
@@ -153,7 +153,7 @@ public class UsuarioController {
 
         // Chama o Service para atualizar o usuário
         // correspondente ao ID informado.
-        return service.atualizar(cpf, u);
+        return service.atualizar(id, u);
     }
 
 
@@ -162,20 +162,20 @@ public class UsuarioController {
     // Exemplo:
     //
     // DELETE /api/usuarios/5
-    @DeleteMapping("/{cpf}")
+    @DeleteMapping("/{id}")
 
     // ResponseEntity<Void> significa que a resposta
     // não terá nenhum conteúdo no corpo.
     public ResponseEntity<Void> desativar(
 
             // Recebe o ID informado na URL.
-            @PathVariable String cpf) {
+            @PathVariable Long id) {
 
         // Chama o método desativar() do Service.
         //
         // Pelo nome do método, provavelmente o usuário não é
         // excluído fisicamente do banco, apenas marcado como inativo.
-        service.desativar(cpf);
+        service.desativar(id);
 
         // Retorna HTTP 204 - No Content.
         //
