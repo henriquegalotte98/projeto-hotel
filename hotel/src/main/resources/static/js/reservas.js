@@ -1,15 +1,12 @@
-/* =========================================================
-   HOTELWEB - RESERVAS
-   JavaScript da página de reservas
-========================================================= */
+/* ============================================================
+   HOTELWEB
+   RESERVAS - SPRINT 4
+============================================================ */
 
 
-/* =========================================================
-   CONFIGURAÇÃO
-========================================================= */
-
-const API_BASE = "/api";
-
+/* ============================================================
+   VARIÁVEIS
+============================================================ */
 
 let reservas = [];
 let hospedes = [];
@@ -18,64 +15,238 @@ let quartos = [];
 let reservaSelecionada = null;
 
 
-/* =========================================================
-   ELEMENTOS
-========================================================= */
-
-const form = document.getElementById("reservaForm");
-
-const hospedeSelect =
-    document.getElementById("hospede");
-
-const quartoSelect =
-    document.getElementById("quarto");
-
-const checkinInput =
-    document.getElementById("checkin");
-
-const checkoutInput =
-    document.getElementById("checkout");
-
-const quartoInfo =
-    document.getElementById("quartoInfo");
-
-const quartoNumero =
-    document.getElementById("quartoNumero");
-
-const quartoTipo =
-    document.getElementById("quartoTipo");
-
-const quartoValor =
-    document.getElementById("quartoValor");
-
-const resumoPeriodo =
-    document.getElementById("resumoPeriodo");
-
-const resumoDiarias =
-    document.getElementById("resumoDiarias");
-
-const resumoValor =
-    document.getElementById("resumoValor");
-
-
-/* =========================================================
+/* ============================================================
    INICIALIZAÇÃO
-========================================================= */
+============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    definirDatasMinimas();
+    configurarEventos();
+
+    definirDataMinima();
 
     carregarDados();
-
-    configurarEventos();
 
 });
 
 
-/* =========================================================
+/* ============================================================
+   EVENTOS
+============================================================ */
+
+function configurarEventos() {
+
+    const btnNovaReserva =
+        document.getElementById("btnNovaReserva");
+
+    const btnFechar =
+        document.getElementById("modalFechar");
+
+    const btnCancelar =
+        document.getElementById("btnCancelar");
+
+    const form =
+        document.getElementById("formReserva");
+
+    const btnLimparFiltros =
+        document.getElementById("btnLimparFiltros");
+
+    const btnFecharDetalhes =
+        document.getElementById("fecharDetalhes");
+
+    const btnFecharDetalhes2 =
+        document.getElementById("btnFecharDetalhes");
+
+    const btnCancelarReserva =
+        document.getElementById("btnCancelarReserva");
+
+
+    if (btnNovaReserva) {
+        btnNovaReserva.addEventListener(
+            "click",
+            abrirModalNovaReserva
+        );
+    }
+
+
+    if (btnFechar) {
+        btnFechar.addEventListener(
+            "click",
+            fecharModalReserva
+        );
+    }
+
+
+    if (btnCancelar) {
+        btnCancelar.addEventListener(
+            "click",
+            fecharModalReserva
+        );
+    }
+
+
+    if (form) {
+        form.addEventListener(
+            "submit",
+            salvarReserva
+        );
+    }
+
+
+    if (btnLimparFiltros) {
+        btnLimparFiltros.addEventListener(
+            "click",
+            limparFiltros
+        );
+    }
+
+
+    if (btnFecharDetalhes) {
+        btnFecharDetalhes.addEventListener(
+            "click",
+            fecharModalDetalhes
+        );
+    }
+
+
+    if (btnFecharDetalhes2) {
+        btnFecharDetalhes2.addEventListener(
+            "click",
+            fecharModalDetalhes
+        );
+    }
+
+
+    if (btnCancelarReserva) {
+        btnCancelarReserva.addEventListener(
+            "click",
+            cancelarReservaSelecionada
+        );
+    }
+
+
+    const dataCheckin =
+        document.getElementById("dataCheckin");
+
+    const dataCheckout =
+        document.getElementById("dataCheckout");
+
+    const quarto =
+        document.getElementById("quartoId");
+
+
+    if (dataCheckin) {
+
+        dataCheckin.addEventListener(
+            "change",
+            atualizarPreview
+        );
+
+    }
+
+
+    if (dataCheckout) {
+
+        dataCheckout.addEventListener(
+            "change",
+            atualizarPreview
+        );
+
+    }
+
+
+    if (quarto) {
+
+        quarto.addEventListener(
+            "change",
+            atualizarPreview
+        );
+
+    }
+
+
+    /* ========================================================
+       FILTROS AUTOMÁTICOS
+    ======================================================== */
+
+    const filtros = [
+        "filtroHospede",
+        "filtroQuarto",
+        "filtroCheckin",
+        "filtroCheckout",
+        "filtroStatus"
+    ];
+
+    filtros.forEach(id => {
+
+        const elemento =
+            document.getElementById(id);
+
+        if (!elemento) {
+            return;
+        }
+
+        elemento.addEventListener(
+            "input",
+            aplicarFiltros
+        );
+
+        elemento.addEventListener(
+            "change",
+            aplicarFiltros
+        );
+
+    });
+
+
+    /* ========================================================
+       FECHAR MODAIS CLICANDO FORA
+    ======================================================== */
+
+    const modalReserva =
+        document.getElementById("modalReserva");
+
+    const modalDetalhes =
+        document.getElementById("modalDetalhes");
+
+
+    if (modalReserva) {
+
+        modalReserva.addEventListener(
+            "click",
+            evento => {
+
+                if (evento.target === modalReserva) {
+                    fecharModalReserva();
+                }
+
+            }
+        );
+
+    }
+
+
+    if (modalDetalhes) {
+
+        modalDetalhes.addEventListener(
+            "click",
+            evento => {
+
+                if (evento.target === modalDetalhes) {
+                    fecharModalDetalhes();
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+/* ============================================================
    CARREGAR DADOS
-========================================================= */
+============================================================ */
 
 async function carregarDados() {
 
@@ -87,8 +258,6 @@ async function carregarDados() {
             carregarReservas()
         ]);
 
-        atualizarEstatisticas();
-
     } catch (erro) {
 
         console.error(
@@ -96,9 +265,9 @@ async function carregarDados() {
             erro
         );
 
-        mostrarAlerta(
-            "Não foi possível carregar os dados do sistema.",
-            "error"
+        mostrarMensagem(
+            "Não foi possível carregar os dados da tela.",
+            "erro"
         );
 
     }
@@ -106,222 +275,299 @@ async function carregarDados() {
 }
 
 
-/* =========================================================
-   HÓSPEDES
-========================================================= */
+/* ============================================================
+   CARREGAR HÓSPEDES
+============================================================ */
 
 async function carregarHospedes() {
 
     try {
 
         const resposta =
-            await fetch(`${API_BASE}/hospedes`, {
-                credentials: "include"
-            });
+            await fetch("/api/hospedes");
 
         if (!resposta.ok) {
-
             throw new Error(
                 "Erro ao buscar hóspedes."
             );
-
         }
 
-        hospedes = await resposta.json();
+        hospedes =
+            await resposta.json();
 
-        preencherHospedes();
+        preencherSelectHospedes();
 
     } catch (erro) {
 
-        console.error(erro);
+        console.error(
+            "Erro ao carregar hóspedes:",
+            erro
+        );
 
-        /*
-         * Caso o Back-End ainda não esteja conectado,
-         * o select continuará funcionando normalmente.
-         */
+        const select =
+            document.getElementById("hospedeId");
 
-        hospedes = [];
+        if (select) {
+
+            select.innerHTML = `
+                <option value="">
+                    Erro ao carregar hóspedes
+                </option>
+            `;
+
+        }
 
     }
 
 }
 
 
-function preencherHospedes() {
+/* ============================================================
+   SELECT DE HÓSPEDES
+============================================================ */
 
-    hospedeSelect.innerHTML = `
+function preencherSelectHospedes() {
+
+    const select =
+        document.getElementById("hospedeId");
+
+    if (!select) {
+        return;
+    }
+
+
+    select.innerHTML = `
         <option value="">
             Selecione o hóspede
         </option>
     `;
+
 
     hospedes.forEach(hospede => {
 
         const option =
             document.createElement("option");
 
-        option.value = hospede.id;
+        option.value =
+            hospede.id;
 
         option.textContent =
-            `${hospede.nome} - CPF: ${formatarCPF(hospede.cpf)}`;
+            `${hospede.nome} - CPF ${hospede.cpf || ""}`;
 
-        hospedeSelect.appendChild(option);
+        select.appendChild(option);
 
     });
 
 }
 
 
-/* =========================================================
-   QUARTOS
-========================================================= */
+/* ============================================================
+   CARREGAR QUARTOS
+============================================================ */
 
 async function carregarQuartos() {
 
     try {
 
         const resposta =
-            await fetch(`${API_BASE}/quartos`, {
-                credentials: "include"
-            });
+            await fetch("/api/quartos");
 
         if (!resposta.ok) {
-
             throw new Error(
                 "Erro ao buscar quartos."
             );
-
         }
 
-        quartos = await resposta.json();
+        quartos =
+            await resposta.json();
 
-        preencherQuartos();
+        preencherSelectQuartos();
 
     } catch (erro) {
 
-        console.error(erro);
-
-        quartos = [];
+        console.error(
+            "Erro ao carregar quartos:",
+            erro
+        );
 
     }
 
 }
 
 
-function preencherQuartos() {
+/* ============================================================
+   SELECT DE QUARTOS
+============================================================ */
 
-    quartoSelect.innerHTML = `
+function preencherSelectQuartos() {
+
+    const select =
+        document.getElementById("quartoId");
+
+    if (!select) {
+        return;
+    }
+
+
+    select.innerHTML = `
         <option value="">
             Selecione o quarto
         </option>
     `;
 
-    quartos.forEach(quarto => {
 
-        /*
-         * Quartos em manutenção não podem ser reservados.
-         */
+    /*
+     * Pela regra do projeto:
+     * quarto em MANUTENÇÃO não pode ser reservado.
+     */
 
-        if (
-            String(quarto.statusOcupacao)
-                .toUpperCase() === "MANUTENCAO"
-        ) {
+    const quartosDisponiveis =
+        quartos.filter(quarto => {
 
-            return;
+            const status =
+                normalizar(
+                    quarto.statusOcupacao ||
+                    quarto.status_ocupacao
+                );
 
-        }
+            return status !== "MANUTENCAO";
+
+        });
+
+
+    quartosDisponiveis.forEach(quarto => {
 
         const option =
             document.createElement("option");
 
-        option.value = quarto.id;
+        option.value =
+            quarto.id;
 
-        option.dataset.valor =
-            quarto.valorDiaria || 0;
+        const numero =
+            quarto.numero || "-";
+
+        const tipo =
+            formatarTipoQuarto(
+                quarto.tipo
+            );
+
+        const valor =
+            formatarMoeda(
+                quarto.valorDiaria ??
+                quarto.valor_diaria ??
+                0
+            );
 
         option.textContent =
-            `Quarto ${quarto.numero} - ${formatarTipo(quarto.tipo)} - ${formatarMoeda(quarto.valorDiaria)}/dia`;
+            `Quarto ${numero} - ${tipo} - ${valor}/diária`;
 
-        quartoSelect.appendChild(option);
+        select.appendChild(option);
 
     });
 
 }
 
 
-/* =========================================================
-   RESERVAS
-========================================================= */
+/* ============================================================
+   CARREGAR RESERVAS
+============================================================ */
 
 async function carregarReservas() {
+
+    const tbody =
+        document.getElementById(
+            "lista-reservas"
+        );
 
     try {
 
         const resposta =
-            await fetch(`${API_BASE}/reservas`, {
-                credentials: "include"
-            });
+            await fetch("/api/reservas");
 
         if (!resposta.ok) {
-
             throw new Error(
                 "Erro ao buscar reservas."
             );
-
         }
 
-        reservas = await resposta.json();
+        reservas =
+            await resposta.json();
 
-        renderizarReservas();
+        renderizarReservas(
+            reservas
+        );
 
-        atualizarEstatisticas();
+        atualizarIndicadores(
+            reservas
+        );
 
     } catch (erro) {
 
-        console.error(erro);
+        console.error(
+            "Erro ao carregar reservas:",
+            erro
+        );
 
-        reservas = [];
 
-        renderizarReservas();
+        if (tbody) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="6"
+                        class="empty-message">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                        Não foi possível carregar as reservas.
+
+                    </td>
+                </tr>
+            `;
+
+        }
 
     }
 
 }
 
 
-/* =========================================================
-   RENDERIZAR TABELA
-========================================================= */
+/* ============================================================
+   RENDERIZAR RESERVAS
+============================================================ */
 
-function renderizarReservas(lista = reservas) {
+function renderizarReservas(lista) {
 
     const tbody =
-        document.getElementById("reservasTable");
+        document.getElementById(
+            "lista-reservas"
+        );
 
-    const resultadoTexto =
-        document.getElementById("resultadoTexto");
+    if (!tbody) {
+        return;
+    }
 
 
-    if (!lista.length) {
+    if (!lista || lista.length === 0) {
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="8" class="loading">
+                <td
+                    colspan="6"
+                    class="empty-message">
+
+                    <i class="fa-solid fa-calendar-xmark"></i>
+
                     Nenhuma reserva encontrada.
+
                 </td>
             </tr>
         `;
 
-        resultadoTexto.textContent =
-            "Nenhuma reserva encontrada.";
+        atualizarContador(0);
 
         return;
-
     }
-
-
-    resultadoTexto.textContent =
-        `${lista.length} reserva(s) encontrada(s).`;
 
 
     tbody.innerHTML = "";
@@ -329,124 +575,165 @@ function renderizarReservas(lista = reservas) {
 
     lista.forEach(reserva => {
 
-        const tr =
-            document.createElement("tr");
-
-
         const hospede =
             encontrarHospede(
-                reserva.hospedeId ||
-                reserva.hospede_id ||
+                reserva.hospedeId ??
+                reserva.hospede_id ??
                 reserva.hospede?.id
             );
 
 
         const quarto =
             encontrarQuarto(
-                reserva.quartoId ||
-                reserva.quarto_id ||
+                reserva.quartoId ??
+                reserva.quarto_id ??
                 reserva.quarto?.id
             );
 
 
+        /*
+         * O Back-End pode devolver:
+         * hospede/quarto como objetos
+         * ou apenas os IDs.
+         */
+
         const nomeHospede =
             reserva.hospede?.nome ||
             hospede?.nome ||
-            "Não informado";
+            "Hóspede não encontrado";
+
+
+        const cpfHospede =
+            reserva.hospede?.cpf ||
+            hospede?.cpf ||
+            "";
 
 
         const numeroQuarto =
             reserva.quarto?.numero ||
             quarto?.numero ||
-            "—";
+            "-";
 
 
         const checkin =
             reserva.dataCheckinPrevista ||
-            reserva.data_checkin_prevista ||
-            reserva.checkinPrevisto ||
-            "—";
+            reserva.data_checkin_prevista;
 
 
         const checkout =
             reserva.dataCheckoutPrevista ||
-            reserva.data_checkout_prevista ||
-            reserva.checkoutPrevisto ||
-            "—";
-
-
-        const diarias =
-            calcularDiarias(
-                checkin,
-                checkout
-            );
+            reserva.data_checkout_prevista;
 
 
         const status =
-            String(
-                reserva.status || "RESERVADA"
-            ).toUpperCase();
+            normalizar(
+                reserva.status
+            );
+
+
+        const tr =
+            document.createElement("tr");
 
 
         tr.innerHTML = `
 
             <td>
-                #${reserva.id}
+
+                <div class="hospede-cell">
+
+                    <div class="hospede-avatar">
+
+                        ${obterIniciais(nomeHospede)}
+
+                    </div>
+
+                    <div class="hospede-info">
+
+                        <strong>
+                            ${escaparHTML(nomeHospede)}
+                        </strong>
+
+                        <span>
+                            ${escaparHTML(cpfHospede)}
+                        </span>
+
+                    </div>
+
+                </div>
+
             </td>
 
-            <td>
-                <strong>
-                    ${escaparHTML(nomeHospede)}
-                </strong>
-            </td>
 
             <td>
-                Quarto ${escaparHTML(numeroQuarto)}
+
+                <div class="quarto-cell">
+
+                    <i class="fa-solid fa-bed"></i>
+
+                    <strong>
+                        ${escaparHTML(
+            String(numeroQuarto)
+        )}
+                    </strong>
+
+                </div>
+
             </td>
+
 
             <td>
                 ${formatarData(checkin)}
             </td>
 
+
             <td>
                 ${formatarData(checkout)}
             </td>
 
+
             <td>
-                ${diarias}
+
+                <span class="
+                    status-badge
+                    ${classeStatus(status)}
+                ">
+
+                    ${textoStatus(status)}
+
+                </span>
+
             </td>
 
-            <td>
-                ${criarBadgeStatus(status)}
-            </td>
 
             <td>
 
-                <div class="table-actions">
+                <div class="action-buttons">
 
                     <button
-                        class="btn btn-secondary btn-small"
-                        onclick="verDetalhes(${reserva.id})">
+                        type="button"
+                        class="btn-view"
+                        title="Ver detalhes"
+                        data-id="${reserva.id}">
 
-                        👁️
+                        <i class="fa-solid fa-eye"></i>
 
                     </button>
 
-                    ${
-                        status === "RESERVADA"
-                        ?
-                        `
-                        <button
-                            class="btn btn-danger btn-small"
-                            onclick="cancelarReserva(${reserva.id})">
 
-                            Cancelar
+                    ${status === "RESERVADA"
+                ? `
+                            <button
+                                type="button"
+                                class="btn-delete"
+                                title="Cancelar reserva"
+                                data-id="${reserva.id}">
 
-                        </button>
+                                <i class="fa-solid fa-ban"></i>
+
+                            </button>
                         `
-                        :
-                        ""
-                    }
+                : ""
+            }
 
                 </div>
 
@@ -455,302 +742,224 @@ function renderizarReservas(lista = reservas) {
         `;
 
 
+        /* ========================================================
+           BOTÃO DETALHES
+        ======================================================== */
+
+        const btnView =
+            tr.querySelector(
+                ".btn-view"
+            );
+
+        if (btnView) {
+
+            btnView.addEventListener(
+                "click",
+                () => {
+
+                    const id =
+                        Number(
+                            btnView.dataset.id
+                        );
+
+                    abrirDetalhes(id);
+
+                }
+            );
+
+        }
+
+
+        /* ========================================================
+           BOTÃO CANCELAR
+        ======================================================== */
+
+        const btnDelete =
+            tr.querySelector(
+                ".btn-delete"
+            );
+
+        if (btnDelete) {
+
+            btnDelete.addEventListener(
+                "click",
+                () => {
+
+                    const id =
+                        Number(
+                            btnDelete.dataset.id
+                        );
+
+                    cancelarReserva(id);
+
+                }
+            );
+
+        }
+
+
         tbody.appendChild(tr);
 
     });
 
+
+    atualizarContador(
+        lista.length
+    );
+
 }
 
 
-/* =========================================================
-   CRIAR RESERVA
-========================================================= */
+/* ============================================================
+   SALVAR RESERVA
+============================================================ */
 
-form.addEventListener("submit", async event => {
+async function salvarReserva(evento) {
 
-    event.preventDefault();
+    evento.preventDefault();
 
 
     const hospedeId =
-        hospedeSelect.value;
+        document.getElementById(
+            "hospedeId"
+        ).value;
+
 
     const quartoId =
-        quartoSelect.value;
+        document.getElementById(
+            "quartoId"
+        ).value;
 
-    const checkin =
-        checkinInput.value;
 
-    const checkout =
-        checkoutInput.value;
+    const dataCheckin =
+        document.getElementById(
+            "dataCheckin"
+        ).value;
 
+
+    const dataCheckout =
+        document.getElementById(
+            "dataCheckout"
+        ).value;
+
+
+    /* ========================================================
+       VALIDAÇÕES
+    ======================================================== */
+
+    if (!hospedeId) {
+
+        mostrarMensagem(
+            "Selecione um hóspede.",
+            "erro"
+        );
+
+        return;
+    }
+
+
+    if (!quartoId) {
+
+        mostrarMensagem(
+            "Selecione um quarto.",
+            "erro"
+        );
+
+        return;
+    }
+
+
+    if (!dataCheckin || !dataCheckout) {
+
+        mostrarMensagem(
+            "Informe as datas de check-in e check-out.",
+            "erro"
+        );
+
+        return;
+    }
+
+
+    const entrada =
+        converterData(dataCheckin);
+
+    const saida =
+        converterData(dataCheckout);
+
+
+    if (saida <= entrada) {
+
+        mostrarMensagem(
+            "A data de check-out deve ser posterior ao check-in.",
+            "erro"
+        );
+
+        return;
+    }
+
+
+    /*
+     * Verificação local apenas para melhorar
+     * a experiência do usuário.
+     *
+     * A validação definitiva deve ser feita
+     * pelo Back-End.
+     */
 
     if (
-        !hospedeId ||
-        !quartoId ||
-        !checkin ||
-        !checkout
+        existeConflitoLocal(
+            Number(quartoId),
+            dataCheckin,
+            dataCheckout
+        )
     ) {
 
-        mostrarAlerta(
-            "Preencha todos os campos obrigatórios.",
-            "error"
+        mostrarMensagem(
+            "Este quarto já possui uma reserva para esse período.",
+            "erro"
         );
 
         return;
-
     }
 
 
-    if (!validarDatas(checkin, checkout)) {
+    const dados = {
 
-        return;
+        hospedeId:
+            Number(hospedeId),
 
-    }
+        quartoId:
+            Number(quartoId),
 
+        dataCheckinPrevista:
+            dataCheckin,
 
-    try {
+        dataCheckoutPrevista:
+            dataCheckout
 
-        const resposta =
-            await fetch(`${API_BASE}/reservas`, {
-
-                method: "POST",
-
-                credentials: "include",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    hospedeId: Number(hospedeId),
-
-                    quartoId: Number(quartoId),
-
-                    dataCheckinPrevista:
-                        checkin,
-
-                    dataCheckoutPrevista:
-                        checkout
-
-                })
-
-            });
+    };
 
 
-        if (!resposta.ok) {
-
-            const erro =
-                await obterErroResposta(resposta);
-
-            throw new Error(erro);
-
-        }
-
-
-        const reservaCriada =
-            await resposta.json();
-
-
-        mostrarAlerta(
-            `Reserva #${reservaCriada.id || ""} criada com sucesso!`,
-            "success"
+    const botao =
+        document.getElementById(
+            "btnSalvarReserva"
         );
 
 
-        limparFormulario();
+    const textoOriginal =
+        botao
+            ? botao.innerHTML
+            : "";
 
 
-        await carregarReservas();
+    if (botao) {
 
-    } catch (erro) {
+        botao.disabled = true;
 
-        console.error(erro);
-
-        mostrarAlerta(
-            erro.message ||
-            "Não foi possível criar a reserva.",
-            "error"
-        );
-
-    }
-
-});
-
-
-/* =========================================================
-   VERIFICAR DISPONIBILIDADE
-========================================================= */
-
-document
-    .getElementById("btnVerificar")
-    .addEventListener("click", async () => {
-
-
-        const quartoId =
-            quartoSelect.value;
-
-        const checkin =
-            checkinInput.value;
-
-        const checkout =
-            checkoutInput.value;
-
-
-        if (
-            !quartoId ||
-            !checkin ||
-            !checkout
-        ) {
-
-            mostrarAlerta(
-                "Selecione o quarto e informe as datas.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        if (!validarDatas(checkin, checkout)) {
-
-            return;
-
-        }
-
-
-        const disponivel =
-            verificarDisponibilidadeLocal(
-                Number(quartoId),
-                checkin,
-                checkout
-            );
-
-
-        if (disponivel) {
-
-            mostrarAlerta(
-                "✓ O quarto está disponível para o período selecionado.",
-                "success"
-            );
-
-        } else {
-
-            mostrarAlerta(
-                "✕ O quarto possui conflito com outra reserva.",
-                "error"
-            );
-
-        }
-
-    });
-
-
-/* =========================================================
-   VERIFICAÇÃO LOCAL DE CONFLITO
-========================================================= */
-
-function verificarDisponibilidadeLocal(
-    quartoId,
-    novaEntrada,
-    novaSaida
-) {
-
-    const inicioNovo =
-        converterData(novaEntrada);
-
-    const fimNovo =
-        converterData(novaSaida);
-
-
-    return !reservas.some(reserva => {
-
-        const status =
-            String(
-                reserva.status || ""
-            ).toUpperCase();
-
-
-        /*
-         * Reservas canceladas não bloqueiam o quarto.
-         */
-
-        if (status === "CANCELADA") {
-
-            return false;
-
-        }
-
-
-        const idQuarto =
-            Number(
-                reserva.quartoId ||
-                reserva.quarto_id ||
-                reserva.quarto?.id
-            );
-
-
-        if (idQuarto !== Number(quartoId)) {
-
-            return false;
-
-        }
-
-
-        const entrada =
-            reserva.dataCheckinPrevista ||
-            reserva.data_checkin_prevista;
-
-
-        const saida =
-            reserva.dataCheckoutPrevista ||
-            reserva.data_checkout_prevista;
-
-
-        if (!entrada || !saida) {
-
-            return false;
-
-        }
-
-
-        const inicioExistente =
-            converterData(entrada);
-
-        const fimExistente =
-            converterData(saida);
-
-
-        /*
-         * Existe conflito quando os períodos se sobrepõem.
-         */
-
-        return (
-            inicioNovo < fimExistente &&
-            fimNovo > inicioExistente
-        );
-
-    });
-
-}
-
-
-/* =========================================================
-   CANCELAR RESERVA
-========================================================= */
-
-async function cancelarReserva(id) {
-
-    const confirmar =
-        confirm(
-            `Deseja realmente cancelar a reserva #${id}?`
-        );
-
-
-    if (!confirmar) {
-
-        return;
+        botao.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Salvando...
+        `;
 
     }
 
@@ -759,62 +968,210 @@ async function cancelarReserva(id) {
 
         const resposta =
             await fetch(
-                `${API_BASE}/reservas/${id}/cancelar`,
+                "/api/reservas",
                 {
-                    method: "PATCH",
-                    credentials: "include"
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(dados)
                 }
             );
 
 
         /*
-         * Alguns Back-Ends podem implementar
-         * cancelamento com PUT.
-         *
-         * Se o PATCH não existir, tentamos PUT.
+         * O Back-End deve retornar
+         * 201 Created em criação válida.
          */
 
         if (!resposta.ok) {
 
-            const segundaTentativa =
-                await fetch(
-                    `${API_BASE}/reservas/${id}/cancelar`,
-                    {
-                        method: "PUT",
-                        credentials: "include"
-                    }
-                );
+            let mensagem =
+                "Não foi possível criar a reserva.";
 
 
-            if (!segundaTentativa.ok) {
+            try {
 
-                throw new Error(
-                    await obterErroResposta(
-                        segundaTentativa
-                    )
-                );
+                const erro =
+                    await resposta.json();
 
+                mensagem =
+                    erro.message ||
+                    erro.mensagem ||
+                    mensagem;
+
+            } catch (_) {
+                // Resposta sem JSON.
             }
+
+
+            throw new Error(
+                mensagem
+            );
 
         }
 
 
-        mostrarAlerta(
-            "Reserva cancelada com sucesso.",
-            "success"
+        mostrarMensagem(
+            "Reserva criada com sucesso!",
+            "sucesso"
         );
+
+
+        fecharModalReserva();
 
 
         await carregarReservas();
 
+
     } catch (erro) {
 
-        console.error(erro);
+        console.error(
+            "Erro ao criar reserva:",
+            erro
+        );
 
-        mostrarAlerta(
+
+        mostrarMensagem(
             erro.message ||
-            "Não foi possível cancelar a reserva.",
-            "error"
+            "Erro ao criar reserva.",
+            "erro"
+        );
+
+
+    } finally {
+
+        if (botao) {
+
+            botao.disabled = false;
+
+            botao.innerHTML =
+                textoOriginal;
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   CANCELAR RESERVA
+============================================================ */
+
+async function cancelarReserva(id) {
+
+    const reserva =
+        reservas.find(
+            item =>
+                Number(item.id) === Number(id)
+        );
+
+
+    if (!reserva) {
+
+        mostrarMensagem(
+            "Reserva não encontrada.",
+            "erro"
+        );
+
+        return;
+    }
+
+
+    const status =
+        normalizar(
+            reserva.status
+        );
+
+
+    if (status !== "RESERVADA") {
+
+        mostrarMensagem(
+            "Somente reservas com status RESERVADA podem ser canceladas.",
+            "erro"
+        );
+
+        return;
+    }
+
+
+    const confirmar =
+        confirm(
+            "Deseja realmente cancelar esta reserva?"
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    try {
+
+        const resposta =
+            await fetch(
+                `/api/reservas/${id}/cancelar`,
+                {
+                    method: "POST"
+                }
+            );
+
+
+        if (!resposta.ok) {
+
+            let mensagem =
+                "Não foi possível cancelar a reserva.";
+
+
+            try {
+
+                const erro =
+                    await resposta.json();
+
+                mensagem =
+                    erro.message ||
+                    erro.mensagem ||
+                    mensagem;
+
+            } catch (_) { }
+
+
+            throw new Error(
+                mensagem
+            );
+
+        }
+
+
+        mostrarMensagem(
+            "Reserva cancelada com sucesso.",
+            "sucesso"
+        );
+
+
+        fecharModalDetalhes();
+
+
+        await carregarReservas();
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao cancelar reserva:",
+            erro
+        );
+
+
+        mostrarMensagem(
+            erro.message ||
+            "Erro ao cancelar reserva.",
+            "erro"
         );
 
     }
@@ -822,27 +1179,130 @@ async function cancelarReserva(id) {
 }
 
 
-/* =========================================================
-   DETALHES
-========================================================= */
+/* ============================================================
+   CANCELAR PELO MODAL
+============================================================ */
 
-function verDetalhes(id) {
+function cancelarReservaSelecionada() {
+
+    if (!reservaSelecionada) {
+        return;
+    }
+
+
+    cancelarReserva(
+        reservaSelecionada.id
+    );
+
+}
+
+
+/* ============================================================
+   ABRIR MODAL DE NOVA RESERVA
+============================================================ */
+
+function abrirModalNovaReserva() {
+
+    const modal =
+        document.getElementById(
+            "modalReserva"
+        );
+
+    const form =
+        document.getElementById(
+            "formReserva"
+        );
+
+
+    if (form) {
+        form.reset();
+    }
+
+
+    document.getElementById(
+        "modalTitulo"
+    ).textContent =
+        "Nova Reserva";
+
+
+    document.getElementById(
+        "reservaId"
+    ).value = "";
+
+
+    const mensagem =
+        document.getElementById(
+            "mensagemDisponibilidade"
+        );
+
+
+    if (mensagem) {
+
+        mensagem.innerHTML = `
+            <i class="fa-solid fa-circle-info"></i>
+
+            Selecione o quarto e as datas para verificar
+            a disponibilidade.
+        `;
+
+        mensagem.style.background =
+            "#eff6ff";
+
+        mensagem.style.color =
+            "#1d4ed8";
+
+        mensagem.style.borderColor =
+            "#bfdbfe";
+
+    }
+
+
+    atualizarPreview();
+
+
+    if (modal) {
+        modal.classList.add("active");
+    }
+
+}
+
+
+/* ============================================================
+   FECHAR MODAL DE RESERVA
+============================================================ */
+
+function fecharModalReserva() {
+
+    const modal =
+        document.getElementById(
+            "modalReserva"
+        );
+
+
+    if (modal) {
+        modal.classList.remove(
+            "active"
+        );
+    }
+
+}
+
+
+/* ============================================================
+   ABRIR DETALHES
+============================================================ */
+
+function abrirDetalhes(id) {
 
     const reserva =
         reservas.find(
-            item => Number(item.id) === Number(id)
+            item =>
+                Number(item.id) === Number(id)
         );
 
 
     if (!reserva) {
-
-        mostrarAlerta(
-            "Reserva não encontrada.",
-            "error"
-        );
-
         return;
-
     }
 
 
@@ -852,16 +1312,16 @@ function verDetalhes(id) {
 
     const hospede =
         encontrarHospede(
-            reserva.hospedeId ||
-            reserva.hospede_id ||
+            reserva.hospedeId ??
+            reserva.hospede_id ??
             reserva.hospede?.id
         );
 
 
     const quarto =
         encontrarQuarto(
-            reserva.quartoId ||
-            reserva.quarto_id ||
+            reserva.quartoId ??
+            reserva.quarto_id ??
             reserva.quarto?.id
         );
 
@@ -888,6 +1348,183 @@ function verDetalhes(id) {
         reserva.data_checkout_prevista;
 
 
+    document.getElementById(
+        "detalheId"
+    ).textContent =
+        `#${reserva.id}`;
+
+
+    document.getElementById(
+        "detalheStatus"
+    ).innerHTML = `
+        <span class="
+            status-badge
+            ${classeStatus(
+        normalizar(reserva.status)
+    )}
+        ">
+            ${textoStatus(
+        normalizar(reserva.status)
+    )}
+        </span>
+    `;
+
+
+    document.getElementById(
+        "detalheHospede"
+    ).textContent =
+        nomeHospede;
+
+
+    document.getElementById(
+        "detalheQuarto"
+    ).textContent =
+        `Quarto ${numeroQuarto}`;
+
+
+    document.getElementById(
+        "detalheCheckin"
+    ).textContent =
+        formatarData(checkin);
+
+
+    document.getElementById(
+        "detalheCheckout"
+    ).textContent =
+        formatarData(checkout);
+
+
+    const btnCancelar =
+        document.getElementById(
+            "btnCancelarReserva"
+        );
+
+
+    if (btnCancelar) {
+
+        const status =
+            normalizar(
+                reserva.status
+            );
+
+
+        btnCancelar.style.display =
+            status === "RESERVADA"
+                ? "block"
+                : "none";
+
+    }
+
+
+    const modal =
+        document.getElementById(
+            "modalDetalhes"
+        );
+
+
+    if (modal) {
+        modal.classList.add(
+            "active"
+        );
+    }
+
+}
+
+
+/* ============================================================
+   FECHAR DETALHES
+============================================================ */
+
+function fecharModalDetalhes() {
+
+    const modal =
+        document.getElementById(
+            "modalDetalhes"
+        );
+
+
+    if (modal) {
+
+        modal.classList.remove(
+            "active"
+        );
+
+    }
+
+
+    reservaSelecionada =
+        null;
+
+}
+
+
+/* ============================================================
+   PREVIEW DA RESERVA
+============================================================ */
+
+function atualizarPreview() {
+
+    const quartoId =
+        document.getElementById(
+            "quartoId"
+        ).value;
+
+
+    const checkin =
+        document.getElementById(
+            "dataCheckin"
+        ).value;
+
+
+    const checkout =
+        document.getElementById(
+            "dataCheckout"
+        ).value;
+
+
+    const quarto =
+        encontrarQuarto(
+            Number(quartoId)
+        );
+
+
+    const previewQuarto =
+        document.getElementById(
+            "previewQuarto"
+        );
+
+
+    const previewDiarias =
+        document.getElementById(
+            "previewDiarias"
+        );
+
+
+    const previewValor =
+        document.getElementById(
+            "previewValor"
+        );
+
+
+    if (quarto) {
+
+        const tipo =
+            formatarTipoQuarto(
+                quarto.tipo
+            );
+
+
+        previewQuarto.textContent =
+            `Quarto ${quarto.numero} • ${tipo}`;
+
+    } else {
+
+        previewQuarto.textContent =
+            "Selecione um quarto";
+
+    }
+
+
     const diarias =
         calcularDiarias(
             checkin,
@@ -895,804 +1532,741 @@ function verDetalhes(id) {
         );
 
 
+    previewDiarias.textContent =
+        diarias;
+
+
     const valorDiaria =
-        Number(
-            reserva.quarto?.valorDiaria ||
-            quarto?.valorDiaria ||
-            0
-        );
+        quarto
+            ? Number(
+                quarto.valorDiaria ??
+                quarto.valor_diaria ??
+                0
+            )
+            : 0;
 
 
     const valorTotal =
         diarias * valorDiaria;
 
 
-    document.getElementById(
-        "detalhesReserva"
-    ).innerHTML = `
-
-        <div class="detail-grid">
-
-            <div class="detail-item">
-
-                <span>
-                    Número da reserva
-                </span>
-
-                <strong>
-                    #${reserva.id}
-                </strong>
-
-            </div>
+    previewValor.textContent =
+        formatarMoeda(
+            valorTotal
+        );
 
 
-            <div class="detail-item">
+    atualizarMensagemDisponibilidade(
+        quarto,
+        checkin,
+        checkout
+    );
 
-                <span>
-                    Status
-                </span>
-
-                ${criarBadgeStatus(
-                    String(
-                        reserva.status ||
-                        "RESERVADA"
-                    ).toUpperCase()
-                )}
-
-            </div>
+}
 
 
-            <div class="detail-item">
+/* ============================================================
+   DISPONIBILIDADE
+============================================================ */
 
-                <span>
-                    Hóspede
-                </span>
+function atualizarMensagemDisponibilidade(
+    quarto,
+    checkin,
+    checkout
+) {
 
-                <strong>
-                    ${escaparHTML(nomeHospede)}
-                </strong>
-
-            </div>
-
-
-            <div class="detail-item">
-
-                <span>
-                    Quarto
-                </span>
-
-                <strong>
-                    ${escaparHTML(numeroQuarto)}
-                </strong>
-
-            </div>
+    const elemento =
+        document.getElementById(
+            "mensagemDisponibilidade"
+        );
 
 
-            <div class="detail-item">
-
-                <span>
-                    Check-in previsto
-                </span>
-
-                <strong>
-                    ${formatarData(checkin)}
-                </strong>
-
-            </div>
+    if (!elemento) {
+        return;
+    }
 
 
-            <div class="detail-item">
+    if (!quarto || !checkin || !checkout) {
 
-                <span>
-                    Check-out previsto
-                </span>
+        elemento.innerHTML = `
+            <i class="fa-solid fa-circle-info"></i>
 
-                <strong>
-                    ${formatarData(checkout)}
-                </strong>
+            Selecione o quarto e as datas para verificar
+            a disponibilidade.
+        `;
 
-            </div>
+        elemento.style.background =
+            "#eff6ff";
 
+        elemento.style.color =
+            "#1d4ed8";
 
-            <div class="detail-item">
+        elemento.style.borderColor =
+            "#bfdbfe";
 
-                <span>
-                    Quantidade de diárias
-                </span>
-
-                <strong>
-                    ${diarias}
-                </strong>
-
-            </div>
+        return;
+    }
 
 
-            <div class="detail-item">
+    const entrada =
+        converterData(checkin);
 
-                <span>
-                    Valor estimado
-                </span>
+    const saida =
+        converterData(checkout);
 
-                <strong>
-                    ${formatarMoeda(valorTotal)}
-                </strong>
 
-            </div>
+    if (saida <= entrada) {
 
-        </div>
+        elemento.innerHTML = `
+            <i class="fa-solid fa-triangle-exclamation"></i>
 
+            A data de check-out deve ser posterior
+            ao check-in.
+        `;
+
+        elemento.style.background =
+            "#fee2e2";
+
+        elemento.style.color =
+            "#b91c1c";
+
+        elemento.style.borderColor =
+            "#fecaca";
+
+        return;
+    }
+
+
+    const conflito =
+        existeConflitoLocal(
+            quarto.id,
+            checkin,
+            checkout
+        );
+
+
+    if (conflito) {
+
+        elemento.innerHTML = `
+            <i class="fa-solid fa-circle-xmark"></i>
+
+            Este quarto possui uma reserva conflitante
+            para o período selecionado.
+        `;
+
+        elemento.style.background =
+            "#fee2e2";
+
+        elemento.style.color =
+            "#b91c1c";
+
+        elemento.style.borderColor =
+            "#fecaca";
+
+        return;
+    }
+
+
+    elemento.innerHTML = `
+        <i class="fa-solid fa-circle-check"></i>
+
+        Quarto aparentemente disponível para o
+        período selecionado.
     `;
 
+    elemento.style.background =
+        "#dcfce7";
 
-    document
-        .getElementById("modalDetalhes")
-        .classList.remove("hidden");
+    elemento.style.color =
+        "#166534";
 
-}
-
-
-/* =========================================================
-   FECHAR MODAL
-========================================================= */
-
-function fecharModal() {
-
-    document
-        .getElementById("modalDetalhes")
-        .classList.add("hidden");
+    elemento.style.borderColor =
+        "#bbf7d0";
 
 }
 
 
-document
-    .getElementById("fecharModal")
-    .addEventListener(
-        "click",
-        fecharModal
-    );
+/* ============================================================
+   VERIFICAR CONFLITO LOCAL
+============================================================ */
+
+function existeConflitoLocal(
+    quartoId,
+    dataCheckin,
+    dataCheckout
+) {
+
+    const novaEntrada =
+        converterData(dataCheckin);
+
+    const novaSaida =
+        converterData(dataCheckout);
 
 
-document
-    .getElementById("fecharModalBtn")
-    .addEventListener(
-        "click",
-        fecharModal
-    );
+    return reservas.some(reserva => {
+
+        const reservaQuartoId =
+            Number(
+                reserva.quartoId ??
+                reserva.quarto_id ??
+                reserva.quarto?.id
+            );
 
 
-document
-    .getElementById("modalDetalhes")
-    .addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target.id ===
-                "modalDetalhes"
-            ) {
-
-                fecharModal();
-
-            }
-
+        if (
+            reservaQuartoId !==
+            Number(quartoId)
+        ) {
+            return false;
         }
-    );
 
 
-/* =========================================================
+        const status =
+            normalizar(
+                reserva.status
+            );
+
+
+        /*
+         * Reservas canceladas e finalizadas
+         * não bloqueiam o período.
+         */
+
+        if (
+            status === "CANCELADA" ||
+            status === "FINALIZADA"
+        ) {
+            return false;
+        }
+
+
+        const entradaExistente =
+            reserva.dataCheckinPrevista ||
+            reserva.data_checkin_prevista;
+
+
+        const saidaExistente =
+            reserva.dataCheckoutPrevista ||
+            reserva.data_checkout_prevista;
+
+
+        if (
+            !entradaExistente ||
+            !saidaExistente
+        ) {
+            return false;
+        }
+
+
+        const entrada =
+            converterData(
+                entradaExistente
+            );
+
+        const saida =
+            converterData(
+                saidaExistente
+            );
+
+
+        /*
+         * Existe conflito quando:
+         *
+         * nova entrada < saída existente
+         * E
+         * nova saída > entrada existente
+         */
+
+        return (
+            novaEntrada < saida &&
+            novaSaida > entrada
+        );
+
+    });
+
+}
+
+
+/* ============================================================
    FILTROS
-========================================================= */
-
-document
-    .getElementById("btnFiltrar")
-    .addEventListener(
-        "click",
-        aplicarFiltros
-    );
-
-
-document
-    .getElementById("filtroBusca")
-    .addEventListener(
-        "input",
-        aplicarFiltros
-    );
-
-
-document
-    .getElementById("filtroStatus")
-    .addEventListener(
-        "change",
-        aplicarFiltros
-    );
-
+============================================================ */
 
 function aplicarFiltros() {
 
-    const busca =
-        document
-            .getElementById("filtroBusca")
-            .value
-            .toLowerCase()
-            .trim();
+    const nome =
+        normalizar(
+            document.getElementById(
+                "filtroHospede"
+            ).value
+        );
 
 
-    const dataInicio =
-        document
-            .getElementById("filtroCheckin")
-            .value;
+    const quartoFiltro =
+        normalizar(
+            document.getElementById(
+                "filtroQuarto"
+            ).value
+        );
 
 
-    const dataFim =
-        document
-            .getElementById("filtroCheckout")
-            .value;
+    const checkinFiltro =
+        document.getElementById(
+            "filtroCheckin"
+        ).value;
+
+
+    const checkoutFiltro =
+        document.getElementById(
+            "filtroCheckout"
+        ).value;
 
 
     const statusFiltro =
-        document
-            .getElementById("filtroStatus")
-            .value;
+        normalizar(
+            document.getElementById(
+                "filtroStatus"
+            ).value
+        );
 
 
     const resultado =
-        reservas.filter(reserva => {
+        reservas.filter(
+            reserva => {
+
+                const hospede =
+                    encontrarHospede(
+                        reserva.hospedeId ??
+                        reserva.hospede_id ??
+                        reserva.hospede?.id
+                    );
 
 
-            const hospede =
-                encontrarHospede(
-                    reserva.hospedeId ||
-                    reserva.hospede_id ||
-                    reserva.hospede?.id
-                );
+                const quarto =
+                    encontrarQuarto(
+                        reserva.quartoId ??
+                        reserva.quarto_id ??
+                        reserva.quarto?.id
+                    );
 
 
-            const quarto =
-                encontrarQuarto(
-                    reserva.quartoId ||
-                    reserva.quarto_id ||
-                    reserva.quarto?.id
-                );
+                const nomeHospede =
+                    normalizar(
+                        reserva.hospede?.nome ||
+                        hospede?.nome ||
+                        ""
+                    );
 
 
-            const nome =
-                (
-                    reserva.hospede?.nome ||
-                    hospede?.nome ||
-                    ""
-                ).toLowerCase();
+                const cpfHospede =
+                    normalizar(
+                        reserva.hospede?.cpf ||
+                        hospede?.cpf ||
+                        ""
+                    );
 
 
-            const numero =
-                String(
-                    reserva.quarto?.numero ||
-                    quarto?.numero ||
-                    ""
-                ).toLowerCase();
+                const numeroQuarto =
+                    normalizar(
+                        reserva.quarto?.numero ||
+                        quarto?.numero ||
+                        ""
+                    );
 
 
-            const checkin =
-                reserva.dataCheckinPrevista ||
-                reserva.data_checkin_prevista ||
-                "";
+                const status =
+                    normalizar(
+                        reserva.status
+                    );
 
 
-            const checkout =
-                reserva.dataCheckoutPrevista ||
-                reserva.data_checkout_prevista ||
-                "";
+                const dataEntrada =
+                    reserva.dataCheckinPrevista ||
+                    reserva.data_checkin_prevista;
 
 
-            const status =
-                String(
-                    reserva.status || ""
-                ).toUpperCase();
+                const dataSaida =
+                    reserva.dataCheckoutPrevista ||
+                    reserva.data_checkout_prevista;
 
 
-            const correspondeBusca =
-                !busca ||
-                nome.includes(busca) ||
-                numero.includes(busca);
+                /* HÓSPEDE */
+
+                if (
+                    nome &&
+                    !nomeHospede.includes(nome) &&
+                    !cpfHospede.includes(nome)
+                ) {
+
+                    return false;
+
+                }
 
 
-            const correspondeInicio =
-                !dataInicio ||
-                checkin >= dataInicio;
+                /* QUARTO */
+
+                if (
+                    quartoFiltro &&
+                    !numeroQuarto.includes(
+                        quartoFiltro
+                    )
+                ) {
+
+                    return false;
+
+                }
 
 
-            const correspondeFim =
-                !dataFim ||
-                checkout <= dataFim;
+                /* STATUS */
+
+                if (
+                    statusFiltro &&
+                    status !== statusFiltro
+                ) {
+
+                    return false;
+
+                }
 
 
-            const correspondeStatus =
-                !statusFiltro ||
-                status === statusFiltro;
+                /* DATA CHECK-IN */
+
+                if (
+                    checkinFiltro &&
+                    dataEntrada < checkinFiltro
+                ) {
+
+                    return false;
+
+                }
 
 
-            return (
-                correspondeBusca &&
-                correspondeInicio &&
-                correspondeFim &&
-                correspondeStatus
-            );
+                /* DATA CHECK-OUT */
 
-        });
+                if (
+                    checkoutFiltro &&
+                    dataSaida > checkoutFiltro
+                ) {
+
+                    return false;
+
+                }
 
 
-    renderizarReservas(resultado);
+                return true;
+
+            }
+        );
+
+
+    renderizarReservas(
+        resultado
+    );
 
 }
 
 
-/* =========================================================
+/* ============================================================
    LIMPAR FILTROS
-========================================================= */
+============================================================ */
 
-document
-    .getElementById("btnLimparFiltros")
-    .addEventListener("click", () => {
+function limparFiltros() {
 
-        document.getElementById(
-            "filtroBusca"
-        ).value = "";
-
-        document.getElementById(
-            "filtroCheckin"
-        ).value = "";
-
-        document.getElementById(
-            "filtroCheckout"
-        ).value = "";
-
-        document.getElementById(
-            "filtroStatus"
-        ).value = "";
+    const campos = [
+        "filtroHospede",
+        "filtroQuarto",
+        "filtroCheckin",
+        "filtroCheckout"
+    ];
 
 
-        renderizarReservas();
+    campos.forEach(id => {
+
+        const elemento =
+            document.getElementById(id);
+
+        if (elemento) {
+            elemento.value = "";
+        }
 
     });
 
 
-/* =========================================================
-   ATUALIZAR
-========================================================= */
+    const status =
+        document.getElementById(
+            "filtroStatus"
+        );
 
-document
-    .getElementById("btnAtualizar")
-    .addEventListener(
-        "click",
-        carregarDados
+
+    if (status) {
+        status.value = "";
+    }
+
+
+    renderizarReservas(
+        reservas
     );
 
-
-/* =========================================================
-   LIMPAR FORMULÁRIO
-========================================================= */
-
-document
-    .getElementById("btnLimpar")
-    .addEventListener(
-        "click",
-        limparFormulario
-    );
-
-
-function limparFormulario() {
-
-    form.reset();
-
-    quartoInfo.classList.add(
-        "hidden"
-    );
-
-
-    resumoPeriodo.textContent =
-        "Selecione as datas";
-
-
-    resumoDiarias.textContent =
-        "0";
-
-
-    resumoValor.textContent =
-        "R$ 0,00";
-
 }
 
 
-/* =========================================================
-   QUARTO SELECIONADO
-========================================================= */
-
-quartoSelect.addEventListener(
-    "change",
-    atualizarQuarto
-);
-
-
-function atualizarQuarto() {
-
-    const id =
-        Number(
-            quartoSelect.value
-        );
-
-
-    const quarto =
-        encontrarQuarto(id);
-
-
-    if (!quarto) {
-
-        quartoInfo.classList.add(
-            "hidden"
-        );
-
-        atualizarResumo();
-
-        return;
-
-    }
-
-
-    quartoInfo.classList.remove(
-        "hidden"
-    );
-
-
-    quartoNumero.textContent =
-        `Quarto ${quarto.numero}`;
-
-
-    quartoTipo.textContent =
-        formatarTipo(quarto.tipo);
-
-
-    quartoValor.textContent =
-        formatarMoeda(
-            quarto.valorDiaria
-        );
-
-
-    atualizarResumo();
-
-}
-
-
-/* =========================================================
-   DATAS
-========================================================= */
-
-checkinInput.addEventListener(
-    "change",
-    () => {
-
-        if (
-            checkoutInput.value &&
-            checkinInput.value >
-                checkoutInput.value
-        ) {
-
-            checkoutInput.value = "";
-
-        }
-
-        atualizarResumo();
-
-    }
-);
-
-
-checkoutInput.addEventListener(
-    "change",
-    atualizarResumo
-);
-
-
-function atualizarResumo() {
-
-    const entrada =
-        checkinInput.value;
-
-
-    const saida =
-        checkoutInput.value;
-
-
-    if (!entrada || !saida) {
-
-        resumoPeriodo.textContent =
-            "Selecione as datas";
-
-        resumoDiarias.textContent =
-            "0";
-
-        resumoValor.textContent =
-            "R$ 0,00";
-
-        return;
-
-    }
-
-
-    const diarias =
-        calcularDiarias(
-            entrada,
-            saida
-        );
-
-
-    const quarto =
-        encontrarQuarto(
-            Number(quartoSelect.value)
-        );
-
-
-    const valorDiaria =
-        Number(
-            quarto?.valorDiaria || 0
-        );
-
-
-    const valor =
-        diarias * valorDiaria;
-
-
-    resumoPeriodo.textContent =
-        `${formatarData(entrada)} até ${formatarData(saida)}`;
-
-
-    resumoDiarias.textContent =
-        diarias;
-
-
-    resumoValor.textContent =
-        formatarMoeda(valor);
-
-}
-
-
-/* =========================================================
-   VALIDAÇÃO DE DATAS
-========================================================= */
-
-function validarDatas(
-    entrada,
-    saida
-) {
-
-    const inicio =
-        converterData(entrada);
-
-
-    const fim =
-        converterData(saida);
-
-
-    if (inicio >= fim) {
-
-        mostrarAlerta(
-            "A data de check-out deve ser posterior ao check-in.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    const hoje =
-        converterData(
-            obterDataHoje()
-        );
-
-
-    if (inicio < hoje) {
-
-        mostrarAlerta(
-            "A data de check-in não pode ser anterior a hoje.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    return true;
-
-}
-
-
-/* =========================================================
-   DATA MÍNIMA
-========================================================= */
-
-function definirDatasMinimas() {
-
-    const hoje =
-        obterDataHoje();
-
-
-    checkinInput.min =
-        hoje;
-
-
-    checkoutInput.min =
-        hoje;
-
-}
-
-
-/* =========================================================
-   ESTATÍSTICAS
-========================================================= */
-
-function atualizarEstatisticas() {
-
-    const total =
-        reservas.length;
-
+/* ============================================================
+   INDICADORES
+============================================================ */
+
+function atualizarIndicadores(lista) {
 
     const reservadas =
-        reservas.filter(
+        lista.filter(
             reserva =>
-                String(
+                normalizar(
                     reserva.status
-                ).toUpperCase() ===
-                "RESERVADA"
+                ) === "RESERVADA"
         ).length;
 
 
     const checkin =
-        reservas.filter(
+        lista.filter(
             reserva =>
-                String(
+                normalizar(
                     reserva.status
-                ).toUpperCase() ===
-                "CHECKIN"
+                ) === "CHECKIN"
         ).length;
 
 
     const canceladas =
-        reservas.filter(
+        lista.filter(
             reserva =>
-                String(
+                normalizar(
                     reserva.status
-                ).toUpperCase() ===
-                "CANCELADA"
+                ) === "CANCELADA"
+        ).length;
+
+
+    /*
+     * Próximas = reservas RESERVADA
+     * cujo check-in ainda não ocorreu.
+     */
+
+    const hoje =
+        formatarDataISO(
+            new Date()
+        );
+
+
+    const proximas =
+        lista.filter(
+            reserva => {
+
+                const status =
+                    normalizar(
+                        reserva.status
+                    );
+
+
+                const data =
+                    reserva.dataCheckinPrevista ||
+                    reserva.data_checkin_prevista;
+
+
+                return (
+                    status === "RESERVADA" &&
+                    data >= hoje
+                );
+
+            }
         ).length;
 
 
     document.getElementById(
-        "totalReservas"
-    ).textContent = total;
+        "totalReservadas"
+    ).textContent =
+        reservadas;
 
 
     document.getElementById(
-        "reservasAtivas"
-    ).textContent = reservadas;
+        "totalCheckin"
+    ).textContent =
+        checkin;
 
 
     document.getElementById(
-        "reservasCheckin"
-    ).textContent = checkin;
+        "totalProximas"
+    ).textContent =
+        proximas;
 
 
     document.getElementById(
-        "reservasCanceladas"
-    ).textContent = canceladas;
+        "totalCanceladas"
+    ).textContent =
+        canceladas;
 
 }
 
 
-/* =========================================================
-   UTILITÁRIOS
-========================================================= */
+/* ============================================================
+   CONTADOR
+============================================================ */
+
+function atualizarContador(total) {
+
+    const elemento =
+        document.getElementById(
+            "contadorReservas"
+        );
+
+
+    if (!elemento) {
+        return;
+    }
+
+
+    elemento.textContent =
+        `${total} ${total === 1
+            ? "reserva"
+            : "reservas"
+        }`;
+
+}
+
+
+/* ============================================================
+   FUNÇÕES AUXILIARES
+============================================================ */
 
 function encontrarHospede(id) {
+
+    if (!id) {
+        return null;
+    }
+
 
     return hospedes.find(
         hospede =>
             Number(hospede.id) ===
             Number(id)
-    );
+    ) || null;
 
 }
 
 
 function encontrarQuarto(id) {
 
+    if (!id) {
+        return null;
+    }
+
+
     return quartos.find(
         quarto =>
             Number(quarto.id) ===
             Number(id)
-    );
+    ) || null;
+
+}
+
+
+/* ============================================================
+   DATAS
+============================================================ */
+
+function converterData(data) {
+
+    if (!data) {
+        return null;
+    }
+
+
+    const partes =
+        String(data).split("-");
+
+
+    if (partes.length === 3) {
+
+        return new Date(
+            Number(partes[0]),
+            Number(partes[1]) - 1,
+            Number(partes[2])
+        );
+
+    }
+
+
+    return new Date(data);
 
 }
 
 
 function calcularDiarias(
-    entrada,
-    saida
+    checkin,
+    checkout
 ) {
 
-    if (!entrada || !saida) {
-
+    if (!checkin || !checkout) {
         return 0;
-
     }
 
 
-    const inicio =
-        converterData(entrada);
+    const entrada =
+        converterData(checkin);
 
-
-    const fim =
-        converterData(saida);
+    const saida =
+        converterData(checkout);
 
 
     const diferenca =
-        fim - inicio;
+        saida - entrada;
 
 
     const dias =
-        Math.ceil(
-            diferenca /
-            (1000 * 60 * 60 * 24)
-        );
+        diferenca /
+        (1000 * 60 * 60 * 24);
 
 
-    return dias > 0 ? dias : 0;
+    return dias > 0
+        ? dias
+        : 0;
 
 }
 
 
-function converterData(data) {
+function formatarData(data) {
 
     if (!data) {
-
-        return null;
-
+        return "-";
     }
 
 
     const partes =
-        String(data)
-            .substring(0, 10)
-            .split("-");
+        String(data).split("-");
 
 
-    return new Date(
-        Number(partes[0]),
-        Number(partes[1]) - 1,
-        Number(partes[2])
-    );
+    if (partes.length === 3) {
+
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+    }
+
+
+    return data;
 
 }
 
 
-function obterDataHoje() {
-
-    const hoje =
-        new Date();
-
+function formatarDataISO(data) {
 
     const ano =
-        hoje.getFullYear();
+        data.getFullYear();
 
 
     const mes =
         String(
-            hoje.getMonth() + 1
+            data.getMonth() + 1
         ).padStart(2, "0");
 
 
     const dia =
         String(
-            hoje.getDate()
+            data.getDate()
         ).padStart(2, "0");
 
 
@@ -1701,32 +2275,41 @@ function obterDataHoje() {
 }
 
 
-function formatarData(data) {
+function definirDataMinima() {
 
-    if (!data) {
+    const hoje =
+        formatarDataISO(
+            new Date()
+        );
 
-        return "—";
 
+    const checkin =
+        document.getElementById(
+            "dataCheckin"
+        );
+
+
+    const checkout =
+        document.getElementById(
+            "dataCheckout"
+        );
+
+
+    if (checkin) {
+        checkin.min = hoje;
     }
 
 
-    const partes =
-        String(data)
-            .substring(0, 10)
-            .split("-");
-
-
-    if (partes.length !== 3) {
-
-        return data;
-
+    if (checkout) {
+        checkout.min = hoje;
     }
-
-
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
 
 }
 
+
+/* ============================================================
+   MOEDA
+============================================================ */
 
 function formatarMoeda(valor) {
 
@@ -1742,150 +2325,203 @@ function formatarMoeda(valor) {
 }
 
 
-function formatarCPF(cpf) {
+/* ============================================================
+   STATUS
+============================================================ */
 
-    if (!cpf) {
+function normalizar(valor) {
 
-        return "";
+    return String(
+        valor || ""
+    )
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+        .toUpperCase()
+        .trim();
+
+}
+
+
+function textoStatus(status) {
+
+    switch (status) {
+
+        case "RESERVADA":
+            return "Reservada";
+
+        case "CHECKIN":
+            return "Check-in";
+
+        case "FINALIZADA":
+            return "Finalizada";
+
+        case "CANCELADA":
+            return "Cancelada";
+
+        default:
+            return status || "Desconhecido";
+
+    }
+
+}
+
+
+function classeStatus(status) {
+
+    switch (status) {
+
+        case "RESERVADA":
+            return "status-reservada";
+
+        case "CHECKIN":
+            return "status-checkin";
+
+        case "FINALIZADA":
+            return "status-finalizada";
+
+        case "CANCELADA":
+            return "status-cancelada";
+
+        default:
+            return "";
+
+    }
+
+}
+
+
+/* ============================================================
+   TIPO DE QUARTO
+============================================================ */
+
+function formatarTipoQuarto(tipo) {
+
+    const valor =
+        normalizar(tipo);
+
+
+    switch (valor) {
+
+        case "SIMPLES":
+            return "Simples";
+
+        case "DUPLO":
+            return "Duplo";
+
+        case "SUITE":
+            return "Suíte";
+
+        default:
+            return tipo || "Quarto";
+
+    }
+
+}
+
+
+/* ============================================================
+   INICIAIS
+============================================================ */
+
+function obterIniciais(nome) {
+
+    if (!nome) {
+        return "??";
+    }
+
+
+    const partes =
+        nome
+            .trim()
+            .split(/\s+/);
+
+
+    if (partes.length === 1) {
+
+        return partes[0]
+            .substring(0, 2)
+            .toUpperCase();
 
     }
 
 
-    const numero =
-        String(cpf)
-            .replace(/\D/g, "");
-
-
-    if (numero.length !== 11) {
-
-        return cpf;
-
-    }
-
-
-    return numero.replace(
-        /(\d{3})(\d{3})(\d{3})(\d{2})/,
-        "$1.$2.$3-$4"
-    );
+    return (
+        partes[0][0] +
+        partes[partes.length - 1][0]
+    ).toUpperCase();
 
 }
 
 
-function formatarTipo(tipo) {
+/* ============================================================
+   SEGURANÇA HTML
+============================================================ */
 
-    const tipos = {
+function escaparHTML(valor) {
 
-        SIMPLES: "Quarto simples",
-
-        DUPLO: "Quarto duplo",
-
-        SUITE: "Suíte"
-
-    };
-
-
-    return tipos[
-        String(tipo).toUpperCase()
-    ] || tipo || "Não informado";
-
-}
-
-
-function criarBadgeStatus(status) {
-
-    const nomes = {
-
-        RESERVADA: "Reservada",
-
-        CHECKIN: "Check-in",
-
-        FINALIZADA: "Finalizada",
-
-        CANCELADA: "Cancelada"
-
-    };
-
-
-    const classe =
-        String(status)
-            .toLowerCase()
-            .replace("checkin", "checkin");
-
-
-    return `
-        <span class="status status-${classe}">
-            ${nomes[status] || status}
-        </span>
-    `;
+    return String(valor ?? "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
-/* =========================================================
-   ALERTAS
-========================================================= */
+/* ============================================================
+   MENSAGENS
+============================================================ */
 
-function mostrarAlerta(
+function mostrarMensagem(
     mensagem,
-    tipo = "info"
+    tipo
 ) {
 
-    const alertBox =
-        document.getElementById(
-            "alertBox"
+    /*
+     * Caso o app.js/style.js do projeto
+     * possua um sistema próprio de alertas,
+     * ele pode substituir esta função.
+     */
+
+    if (tipo === "sucesso") {
+
+        console.log(
+            "SUCESSO:",
+            mensagem
         );
 
-
-    alertBox.textContent =
-        mensagem;
-
-
-    alertBox.className =
-        `alert ${tipo}`;
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-
-    setTimeout(() => {
-
-        alertBox.classList.add(
-            "hidden"
+        alert(
+            mensagem
         );
 
-    }, 5000);
+    } else {
 
-}
-
-
-/* =========================================================
-   TRATAMENTO DE ERRO DA API
-========================================================= */
-
-async function obterErroResposta(
-    resposta
-) {
-
-    try {
-
-        const dados =
-            await resposta.json();
-
-
-        return (
-            dados.message ||
-            dados.mensagem ||
-            dados.error ||
-            "Erro ao processar a solicitação."
+        console.error(
+            "ERRO:",
+            mensagem
         );
 
-    } catch {
-
-        return (
-            `Erro HTTP ${resposta.status}`
+        alert(
+            mensagem
         );
 
     }
@@ -1893,56 +2529,35 @@ async function obterErroResposta(
 }
 
 
-/* =========================================================
-   SEGURANÇA
-========================================================= */
+/* ============================================================
+   LOGOUT
+============================================================ */
 
-function escaparHTML(texto) {
+function fazerLogout() {
 
-    return String(texto ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    /*
+     * O projeto já utiliza menu/auth.
+     * Caso auth.js esteja disponível,
+     * utiliza o logout existente.
+     */
+
+    if (
+        typeof auth !== "undefined" &&
+        typeof auth.logout === "function"
+    ) {
+
+        auth.logout();
+
+        return;
+
+    }
+
+
+    /*
+     * Fallback.
+     */
+
+    window.location.href =
+        "login.html";
 
 }
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-document
-    .getElementById("btnLogout")
-    .addEventListener(
-        "click",
-        () => {
-
-            /*
-             * Se o auth.js do projeto possuir
-             * auth.logout(), utilizamos ele.
-             */
-
-            if (
-                typeof auth !== "undefined" &&
-                typeof auth.logout === "function"
-            ) {
-
-                auth.logout();
-
-                return;
-
-            }
-
-
-            /*
-             * Fallback caso o auth.js ainda não
-             * esteja carregado.
-             */
-
-            window.location.href =
-                "login.html";
-
-        }
-    );

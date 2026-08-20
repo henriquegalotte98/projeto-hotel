@@ -1,127 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Quartos | HotelWeb</title>
-
-    <!--
-        Fonte utilizada na identidade visual
-        do sistema.
-    -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!--
-        CSS específico da página de quartos
-    -->
+    <link rel="stylesheet" href="../css/app.css">
     <link rel="stylesheet" href="../css/quartos.css">
-
+    <link rel="stylesheet" href="../css/navigation.css">
 </head>
-
 
 <body>
 
-
     <!-- =====================================================
-         SIDEBAR
+         SIDEBAR (COM TODOS OS IDs CORRETOS)
     ====================================================== -->
 
     <aside class="sidebar">
 
-        <!-- LOGO -->
-
         <div class="logo">
-
-            <div class="logo-icon">
-                🏨
-            </div>
-
-            <div class="logo-text">
-                HotelWeb
-            </div>
-
+            <div class="logo-icon">🏨</div>
+            <div class="logo-text">HotelWeb</div>
         </div>
 
-
-        <!-- MENU -->
-
-        <nav class="menu">
-
-            <a href="dashboard.html">
-                <span class="menu-icon">📊</span>
-                <span>Dashboard</span>
-            </a>
-
-
-            <a href="quartos.html" class="active">
-                <span class="menu-icon">🛏️</span>
-                <span>Quartos</span>
-            </a>
-
-
-            <a href="hospedes.html">
-                <span class="menu-icon">👤</span>
-                <span>Hóspedes</span>
-            </a>
-
-
-            <a href="reservas.html">
-                <span class="menu-icon">📅</span>
-                <span>Reservas</span>
-            </a>
-
-
-            <a href="governanca.html">
-                <span class="menu-icon">🧹</span>
-                <span>Governança</span>
-            </a>
-
-
-            <a href="manutencao.html">
-                <span class="menu-icon">🔧</span>
-                <span>Manutenção</span>
-            </a>
-
-
-            <a href="restaurante.html">
-                <span class="menu-icon">🍽️</span>
-                <span>Restaurante</span>
-            </a>
-
-
-            <a href="relatorios.html">
-                <span class="menu-icon">📈</span>
-                <span>Relatórios</span>
-            </a>
-
-        </nav>
-
-
-        <!-- SAIR -->
+        <ul class="menu" id="menu-lateral">
+            <li id="menu-dashboard"><a href="dashboard.html">📊 Dashboard</a></li>
+            <li id="menu-quartos"><a href="quartos.html" class="active">🛏️ Quartos</a></li>
+            <li id="menu-hospedes"><a href="hospedes.html">👤 Hóspedes</a></li>
+            <li id="menu-reservas"><a href="reservas.html">📅 Reservas</a></li>
+            <li id="menu-governanca"><a href="governanca.html">🧹 Governança</a></li>
+            <li id="menu-manutencao"><a href="manutencao.html">🔧 Manutenção</a></li>
+            <li id="menu-restaurante"><a href="restaurante.html">🍽️ Restaurante</a></li>
+            <li id="menu-relatorios"><a href="relatorios.html">📈 Relatórios</a></li>
+            <li id="menu-usuarios"><a href="usuarios.html">👥 Usuários</a></li>
+        </ul>
 
         <div class="sidebar-footer">
-
             <button type="button" id="btnLogout" class="btn-logout">
-
                 <span>🚪</span>
-
                 <span>Sair</span>
-
             </button>
-
         </div>
 
     </aside>
-
-
 
     <!-- =====================================================
          CONTEÚDO PRINCIPAL
@@ -129,608 +52,201 @@
 
     <main class="main-content">
 
-
-        <!-- =================================================
-             CABEÇALHO
-        ================================================== -->
-
         <header class="topbar">
-
             <div class="page-title">
-
-                <span class="page-kicker">
-                    HOTELWEB
-                </span>
-
-                <h1>
-                    Gerenciamento de Quartos
-                </h1>
-
-                <p>
-                    Controle de disponibilidade, tarifas e limpeza.
-                </p>
-
+                <span class="page-kicker">HOTELWEB</span>
+                <h1>Gerenciamento de Quartos</h1>
+                <p>Controle de disponibilidade, tarifas e limpeza.</p>
             </div>
-
-
-            <!-- USUÁRIO -->
 
             <div class="usuario">
-
-                <div class="usuario-icon">
-                    👤
-                </div>
-
+                <div class="usuario-icon">👤</div>
                 <div>
-
-                    <small>
-                        Usuário conectado
-                    </small>
-
-                    <strong id="usuarioNome">
-                        Usuário
-                    </strong>
-
+                    <small>Usuário conectado</small>
+                    <strong id="usuarioNome">Usuário</strong>
                 </div>
-
             </div>
-
         </header>
 
-
-
-        <!-- =================================================
-             RESUMO
-        ================================================== -->
-
         <section class="resumo">
-
-
-            <!-- TOTAL -->
-
             <div class="resumo-card">
-
-                <div class="resumo-icon total">
-                    🛏️
-                </div>
-
+                <div class="resumo-icon total">🛏️</div>
                 <div class="resumo-info">
-
-                    <span>
-                        Total de quartos
-                    </span>
-
-                    <strong id="totalQuartos">
-                        0
-                    </strong>
-
+                    <span>Total de quartos</span>
+                    <strong id="totalQuartos">0</strong>
                 </div>
-
             </div>
 
-
-            <!-- DISPONÍVEIS -->
-
             <div class="resumo-card">
-
-                <div class="resumo-icon disponivel">
-                    ✓
-                </div>
-
+                <div class="resumo-icon disponivel">✓</div>
                 <div class="resumo-info">
-
-                    <span>
-                        Disponíveis
-                    </span>
-
-                    <strong id="quartosDisponiveis">
-                        0
-                    </strong>
-
+                    <span>Disponíveis</span>
+                    <strong id="quartosDisponiveis">0</strong>
                 </div>
-
             </div>
 
-
-            <!-- OCUPADOS -->
-
             <div class="resumo-card">
-
-                <div class="resumo-icon ocupado">
-                    ●
-                </div>
-
+                <div class="resumo-icon ocupado">●</div>
                 <div class="resumo-info">
-
-                    <span>
-                        Ocupados
-                    </span>
-
-                    <strong id="quartosOcupados">
-                        0
-                    </strong>
-
+                    <span>Ocupados</span>
+                    <strong id="quartosOcupados">0</strong>
                 </div>
-
             </div>
 
-
-            <!-- MANUTENÇÃO -->
-
             <div class="resumo-card">
-
-                <div class="resumo-icon manutencao">
-                    🔧
-                </div>
-
+                <div class="resumo-icon manutencao">🔧</div>
                 <div class="resumo-info">
-
-                    <span>
-                        Manutenção
-                    </span>
-
-                    <strong id="quartosManutencao">
-                        0
-                    </strong>
-
+                    <span>Manutenção</span>
+                    <strong id="quartosManutencao">0</strong>
                 </div>
-
             </div>
-
         </section>
 
-
-
-        <!-- =================================================
-             FORMULÁRIO
-        ================================================== -->
-
-        <section class="content-card">
-
-
-            <!-- CABEÇALHO -->
-
+        <section class="content-card" id="area-administracao-quartos">
             <div class="card-header">
-
                 <div>
-
-                    <span class="section-label">
-                        ADMINISTRAÇÃO
-                    </span>
-
-                    <h2 id="tituloFormulario">
-                        Cadastrar quarto
-                    </h2>
-
-                    <p>
-                        Cadastre ou edite as informações do quarto.
-                    </p>
-
+                    <span class="section-label">ADMINISTRAÇÃO</span>
+                    <h2 id="tituloFormulario">Cadastrar quarto</h2>
+                    <p>Cadastre ou edite as informações do quarto.</p>
                 </div>
-
             </div>
-
-
-            <!-- FORM -->
 
             <form id="formQuarto">
-
-                <!-- ID utilizado na edição -->
-
                 <input type="hidden" id="quartoId">
 
-
                 <div class="form-grid">
-
-
-                    <!-- NÚMERO -->
-
                     <div class="form-group">
-
-                        <label for="numero">
-                            Número do quarto
-                        </label>
-
+                        <label for="numero">Número do quarto</label>
                         <input type="text" id="numero" placeholder="Ex.: 101" required>
-
                     </div>
 
-
-                    <!-- TIPO -->
-
                     <div class="form-group">
-
-                        <label for="tipo">
-                            Tipo
-                        </label>
-
+                        <label for="tipo">Tipo</label>
                         <select id="tipo" required>
-
-                            <option value="">
-                                Selecione o tipo
-                            </option>
-
-                            <option value="SIMPLES">
-                                Simples
-                            </option>
-
-                            <option value="DUPLO">
-                                Duplo
-                            </option>
-
-                            <option value="SUITE">
-                                Suíte
-                            </option>
-
+                            <option value="">Selecione o tipo</option>
+                            <option value="SIMPLES">Simples</option>
+                            <option value="DUPLO">Duplo</option>
+                            <option value="SUITE">Suíte</option>
                         </select>
-
                     </div>
 
-
-                    <!-- VALOR -->
-
                     <div class="form-group">
-
-                        <label for="valorDiaria">
-                            Valor da diária
-                        </label>
-
+                        <label for="valorDiaria">Valor da diária</label>
                         <div class="input-money">
-
-                            <span>
-                                R$
-                            </span>
-
+                            <span>R$</span>
                             <input type="number" id="valorDiaria" placeholder="0,00" step="0.01" min="0" required>
-
                         </div>
-
                     </div>
 
-
-                    <!-- CAFÉ -->
-
                     <div class="form-group">
-
-                        <label for="cafe">
-                            Café da manhã
-                        </label>
-
+                        <label for="cafe">Café da manhã</label>
                         <select id="cafe">
-
-                            <option value="true">
-                                Incluso
-                            </option>
-
-                            <option value="false">
-                                Não incluso
-                            </option>
-
+                            <option value="true">Incluso</option>
+                            <option value="false">Não incluso</option>
                         </select>
-
                     </div>
 
-
-                    <!-- OCUPAÇÃO -->
-
                     <div class="form-group">
-
-                        <label for="statusOcupacao">
-                            Status de ocupação
-                        </label>
-
+                        <label for="statusOcupacao">Status de ocupação</label>
                         <select id="statusOcupacao">
-
-                            <option value="DISPONIVEL">
-                                Disponível
-                            </option>
-
-                            <option value="OCUPADO">
-                                Ocupado
-                            </option>
-
-                            <option value="MANUTENCAO">
-                                Manutenção
-                            </option>
-
+                            <option value="DISPONIVEL">Disponível</option>
+                            <option value="OCUPADO">Ocupado</option>
+                            <option value="MANUTENCAO">Manutenção</option>
                         </select>
-
                     </div>
-
-
-                    <!-- LIMPEZA -->
 
                     <div class="form-group">
-
-                        <label for="statusLimpeza">
-                            Status de limpeza
-                        </label>
-
+                        <label for="statusLimpeza">Status de limpeza</label>
                         <select id="statusLimpeza">
-
-                            <option value="LIMPO">
-                                Limpo
-                            </option>
-
-                            <option value="SUJO">
-                                Sujo
-                            </option>
-
-                            <option value="EM_LIMPEZA">
-                                Em limpeza
-                            </option>
-
-                            <option value="INSPECIONADO">
-                                Inspecionado
-                            </option>
-
+                            <option value="LIMPO">Limpo</option>
+                            <option value="SUJO">Sujo</option>
+                            <option value="EM_LIMPEZA">Em limpeza</option>
+                            <option value="INSPECIONADO">Inspecionado</option>
                         </select>
-
                     </div>
-
                 </div>
-
-
-                <!-- BOTÕES -->
 
                 <div class="form-actions">
-
                     <button type="submit" class="btn btn-primary">
-
-                        <span>
-                            ✓
-                        </span>
-
-                        Salvar quarto
-
+                        <span>✓</span> Salvar quarto
                     </button>
-
-
                     <button type="button" id="btnCancelar" class="btn btn-secondary hidden">
-
                         Cancelar edição
-
                     </button>
-
                 </div>
-
             </form>
-
         </section>
-
-
-
-        <!-- =================================================
-             LISTAGEM
-        ================================================== -->
 
         <section class="content-card">
-
-
-            <!-- CABEÇALHO -->
-
             <div class="card-header list-header">
-
                 <div>
-
-                    <span class="section-label">
-                        INVENTÁRIO
-                    </span>
-
-                    <h2>
-                        Lista de quartos
-                    </h2>
-
-                    <p>
-                        Consulte os quartos cadastrados no sistema.
-                    </p>
-
+                    <span class="section-label">INVENTÁRIO</span>
+                    <h2>Lista de quartos</h2>
+                    <p>Consulte os quartos cadastrados no sistema.</p>
                 </div>
-
             </div>
-
-
-
-            <!-- =================================================
-                 FILTROS
-            ================================================== -->
 
             <div class="filtros">
-
-
-                <!-- STATUS -->
-
                 <div class="form-group">
-
-                    <label for="filtroStatus">
-                        Status
-                    </label>
-
+                    <label for="filtroStatus">Status</label>
                     <select id="filtroStatus">
-
-                        <option value="TODOS">
-                            Todos os status
-                        </option>
-
-                        <option value="DISPONIVEL">
-                            Disponível
-                        </option>
-
-                        <option value="OCUPADO">
-                            Ocupado
-                        </option>
-
-                        <option value="MANUTENCAO">
-                            Manutenção
-                        </option>
-
+                        <option value="TODOS">Todos os status</option>
+                        <option value="DISPONIVEL">Disponível</option>
+                        <option value="OCUPADO">Ocupado</option>
+                        <option value="MANUTENCAO">Manutenção</option>
                     </select>
-
                 </div>
-
-
-                <!-- TIPO -->
 
                 <div class="form-group">
-
-                    <label for="filtroTipo">
-                        Tipo
-                    </label>
-
+                    <label for="filtroTipo">Tipo</label>
                     <select id="filtroTipo">
-
-                        <option value="TODOS">
-                            Todos os tipos
-                        </option>
-
-                        <option value="SIMPLES">
-                            Simples
-                        </option>
-
-                        <option value="DUPLO">
-                            Duplo
-                        </option>
-
-                        <option value="SUITE">
-                            Suíte
-                        </option>
-
+                        <option value="TODOS">Todos os tipos</option>
+                        <option value="SIMPLES">Simples</option>
+                        <option value="DUPLO">Duplo</option>
+                        <option value="SUITE">Suíte</option>
                     </select>
-
                 </div>
-
-
-                <!-- PESQUISA -->
 
                 <div class="form-group pesquisa-group">
-
-                    <label for="pesquisa">
-                        Pesquisar quarto
-                    </label>
-
+                    <label for="pesquisa">Pesquisar quarto</label>
                     <div class="search-wrapper">
-
-                        <span class="search-icon">
-                            🔎
-                        </span>
-
+                        <span class="search-icon">🔎</span>
                         <input type="text" id="pesquisa" placeholder="Digite o número do quarto...">
-
                     </div>
-
                 </div>
-
             </div>
-
-
-
-            <!-- =================================================
-                 TABELA
-            ================================================== -->
 
             <div class="table-wrapper">
-
                 <table>
-
                     <thead>
-
                         <tr>
-
-                            <th>
-                                Quarto
-                            </th>
-
-                            <th>
-                                Tipo
-                            </th>
-
-                            <th>
-                                Diária
-                            </th>
-
-                            <th>
-                                Café
-                            </th>
-
-                            <th>
-                                Ocupação
-                            </th>
-
-                            <th>
-                                Limpeza
-                            </th>
-
-                            <th>
-                                Ações
-                            </th>
-
+                            <th>Quarto</th>
+                            <th>Tipo</th>
+                            <th>Diária</th>
+                            <th>Café</th>
+                            <th>Ocupação</th>
+                            <th>Limpeza</th>
+                            <th id="cabecalho-acoes-quartos">Ações</th>
                         </tr>
-
                     </thead>
-
-
-                    <!--
-                        O quartos.js vai preencher
-                        este tbody automaticamente.
-                    -->
-
                     <tbody id="tabelaQuartos">
-
                         <tr>
-
-                            <td colspan="7" class="loading">
-
-                                Carregando quartos...
-
-                            </td>
-
+                            <td colspan="7" class="loading">Carregando quartos...</td>
                         </tr>
-
                     </tbody>
-
                 </table>
-
             </div>
-
         </section>
 
-
-
-        <!-- =================================================
-             RODAPÉ
-        ================================================== -->
-
         <footer class="page-footer">
-
-            <span>
-                HotelWeb
-            </span>
-
-            <span>
-                Sistema de gerenciamento hoteleiro
-            </span>
-
+            <span>HotelWeb</span>
+            <span>Sistema de gerenciamento hoteleiro</span>
         </footer>
-
 
     </main>
 
-
-
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
-
-    <!--
-        IMPORTANTE:
-        mantenha o caminho do api.js de acordo
-        com a estrutura do seu projeto.
-    -->
-    <!-- ===== SCRIPTS ===== -->
     <script src="../js/api.js"></script>
+    <script src="../js/menu.js"></script>
     <script src="../js/quartos.js"></script>
-
-
 </body>
-
 </html>

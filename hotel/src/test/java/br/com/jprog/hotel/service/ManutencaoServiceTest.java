@@ -4,6 +4,7 @@ import br.com.jprog.hotel.exception.RecursoNaoEncontradoException;
 import br.com.jprog.hotel.model.SolicitacaoManutencao;
 import br.com.jprog.hotel.model.enums.StatusManutencao;
 import br.com.jprog.hotel.repository.ManutencaoRepository;
+import br.com.jprog.hotel.repository.QuartoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,12 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
 /** Testa as regras centrais do serviço de manutenção. */
 class ManutencaoServiceTest {
 
     private ManutencaoRepository repository;
+    private QuartoRepository quartos;
     private ManutencaoService service;
     private SolicitacaoManutencao solicitacao;
     private LocalDateTime agora;
@@ -32,12 +35,15 @@ class ManutencaoServiceTest {
     @BeforeEach
     void preparar() {
         repository = mock(ManutencaoRepository.class);
+        quartos = mock(QuartoRepository.class);
         Clock clock = Clock.fixed(Instant.parse("2026-08-12T22:00:00Z"), ZoneOffset.UTC);
-        service = new ManutencaoService(repository, clock);
+        service = new ManutencaoService(repository, quartos, clock);
         agora = LocalDateTime.of(2026, 8, 12, 22, 0);
         solicitacao = new SolicitacaoManutencao();
         solicitacao.setId(1L);
+        solicitacao.setQuartoId(10L);
         solicitacao.setDescricao("Reparo no ar-condicionado");
+        when(quartos.existsById(10L)).thenReturn(true);
     }
 
     @Test
@@ -50,6 +56,14 @@ class ManutencaoServiceTest {
         assertEquals(StatusManutencao.ABERTA, resultado.getStatus());
         assertEquals(agora, resultado.getAbertaEm());
         assertNull(resultado.getConcluidaEm());
+    }
+
+    @Test
+    void deveRejeitarChamadoParaQuartoInexistente() {
+        when(quartos.existsById(10L)).thenReturn(false);
+
+        assertThrows(RecursoNaoEncontradoException.class, () -> service.abrir(solicitacao));
+        verify(repository, never()).save(solicitacao);
     }
 
     @Test

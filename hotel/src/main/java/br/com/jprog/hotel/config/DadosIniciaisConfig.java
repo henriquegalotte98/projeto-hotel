@@ -16,16 +16,30 @@ public class DadosIniciaisConfig {
             UsuarioRepository repo,
             PasswordEncoder encoder) {
         return args -> {
-            if (repo.findByCpf("00000000000").isEmpty()) {
-                Usuario admin = new Usuario();
-                admin.setNome("Administrador");
-                admin.setCpf("00000000000");
-                admin.setEmail("admin@hotel.local");
-                admin.setSenha(encoder.encode("admin123"));
-                admin.setPapel(Papel.ADMIN.name());
-                admin.setAtivo(true);
-                repo.save(admin);
-            }
+            criarSeNaoExistir(repo, encoder, "Administrador", "00000000000",
+                    "admin@hotel.local", "admin123", Papel.ADMIN);
+            criarSeNaoExistir(repo, encoder, "Administrador", "12345678901",
+                    "admin@hotelweb.com", "123456", Papel.ADMIN);
+            criarSeNaoExistir(repo, encoder, "João Silva", "98765432100",
+                    "joao@hotelweb.com", "123456", Papel.RECEPCIONISTA);
+            criarSeNaoExistir(repo, encoder, "Maria Oliveira", "45678912300",
+                    "maria@hotelweb.com", "123456", Papel.GOVERNANCA);
+            criarSeNaoExistir(repo, encoder, "Carlos Souza", "78912345600",
+                    "carlos@hotelweb.com", "123456", Papel.MANUTENCAO);
         };
+    }
+
+    private void criarSeNaoExistir(UsuarioRepository repo, PasswordEncoder encoder,
+            String nome, String cpf, String email, String senha, Papel papel) {
+        if (repo.findByCpf(cpf).isPresent()) return;
+
+        Usuario usuario = new Usuario();
+        usuario.setNome(nome);
+        usuario.setCpf(cpf);
+        usuario.setEmail(email);
+        usuario.setSenha(encoder.encode(senha));
+        usuario.setPapel(papel.name());
+        usuario.setAtivo(true);
+        repo.save(usuario);
     }
 }

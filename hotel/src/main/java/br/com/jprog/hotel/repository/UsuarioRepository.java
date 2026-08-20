@@ -26,7 +26,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     boolean existsByCpf(String cpf);
 
+    boolean existsByEmail(String email);
+
     boolean existsByCpfAndIdNot(String cpf, Long id);
+
+    boolean existsByEmailAndIdNot(String email, Long id);
     // ❓ Pergunta se já existe um usuário com esse CPF.
     // true  = ✅ existe
     // false = ❌ não existe

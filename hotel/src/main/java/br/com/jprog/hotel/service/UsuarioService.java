@@ -56,6 +56,7 @@ public class UsuarioService {
     @Transactional
     public Usuario criar(Usuario usuario) {
         validarCpfDuplicadoNaCriacao(usuario.getCpf());
+        validarEmailDuplicadoNaCriacao(usuario.getEmail());
         usuario.setId(null);
         usuario.setSenha(criptografarSenhaObrigatoria(usuario.getSenha()));
         usuario.setAtivo(true);
@@ -70,6 +71,7 @@ public class UsuarioService {
     public Usuario atualizar(Long id, Usuario dadosAtualizados) {
         Usuario usuario = buscar(id);
         validarCpfDuplicadoNaAtualizacao(dadosAtualizados.getCpf(), id);
+        validarEmailDuplicadoNaAtualizacao(dadosAtualizados.getEmail(), id);
 
         usuario.setNome(dadosAtualizados.getNome());
         usuario.setCpf(dadosAtualizados.getCpf());
@@ -104,6 +106,18 @@ public class UsuarioService {
     private void validarCpfDuplicadoNaAtualizacao(String cpf, Long id) {
         if (usuarioRepository.existsByCpfAndIdNot(cpf, id)) {
             throw new IllegalArgumentException("CPF já cadastrado");
+        }
+    }
+
+    private void validarEmailDuplicadoNaCriacao(String email) {
+        if (usuarioRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("E-mail já cadastrado");
+        }
+    }
+
+    private void validarEmailDuplicadoNaAtualizacao(String email, Long id) {
+        if (usuarioRepository.existsByEmailAndIdNot(email, id)) {
+            throw new IllegalArgumentException("E-mail já cadastrado para outro usuário");
         }
     }
 
