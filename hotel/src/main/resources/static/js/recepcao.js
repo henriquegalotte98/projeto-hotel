@@ -3,6 +3,8 @@
 // ============================================================
 
 let reservas = [];
+// Guarda a reserva que está sendo conferida no modal de check-out.
+let reservaCheckoutId = null;
 
 
 // ============================================================
@@ -18,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
     carregarReservas();
 
     configurarFiltros();
+
+    configurarModalDetalhes();
 
 });
 
@@ -519,47 +523,107 @@ async function realizarCheckin(id) {
 // ============================================================
 
 async function realizarCheckout(id) {
-
-    const confirmar =
-        confirm(
-            `Deseja realizar o check-out da reserva #${id}?`
-        );
-
-    if (!confirmar) return;
-
-
     try {
-
-        await apiRequest(
-            `/reservas/${id}/checkout`,
-            "POST"
-        );
-
-
-        mostrarMensagem(
-            "Check-out realizado com sucesso!",
-            "sucesso"
-        );
-
-
-        await carregarReservas();
-
-
+        // O resumo financeiro é calculado no back-end para evitar valores
+        // diferentes entre a interface e a regra de cobrança.
+        const reserva = reservas.find(item => Number(item.id) === Number(id)) || await apiRequest(`/reservas/${id}`);
+        const resumo = await apiRequest(`/reservas/${id}/checkout/resumo`);
+        reservaCheckoutId = id;
+        preencherCheckout(reserva, resumo);
+        document.getElementById("modalCheckout")?.classList.add("aberto");
+        document.getElementById("btnFecharCheckout")?.focus();
     } catch (erro) {
-
-        console.error(
-            "Erro no check-out:",
-            erro
-        );
-
-        mostrarMensagem(
-            erro.message ||
-            "Não foi possível realizar o check-out.",
-            "erro"
-        );
-
+        console.error("Erro ao preparar check-out:", erro);
+        mostrarMensagem(erro.message || "Não foi possível carregar a conferência.", "erro");
     }
+}
 
+function preencherCheckout(reserva, resumo) {
+    const consumos = Array.isArray(resumo.consumos) ? resumo.consumos : [];
+    const hospede = reserva.hospede?.nome || "Hóspede não informado";
+    const quarto = reserva.quarto?.numero || "-";
+    document.getElementById("checkoutHospede").textContent = `${hospede} — Reserva #${reserva.id}`;
+    document.getElementById("checkoutQuarto").textContent = `Quarto ${quarto}`;
+
+    // A saída antecipada é permitida, mas fica destacada para conferência.
+    const prevista = String(reserva.dataCheckoutPrevista || "").slice(0, 10);
+    const hoje = new Date().toISOString().slice(0, 10);
+    document.getElementById("checkoutAvisoData").textContent = prevista && hoje < prevista
+        ? `Saída antecipada: prevista para ${formatarData(prevista)}.`
+        : "";
+
+    const quantidade = Number(resumo.quantidadeDiarias || 1);
+    document.getElementById("checkoutQuantidadeDiarias").textContent = `${quantidade} ${quantidade === 1 ? "diária" : "diárias"}`;
+    document.getElementById("checkoutValorDiaria").textContent = formatarMoeda(resumo.valorDiaria);
+    document.getElementById("checkoutTotalDiarias").textContent = formatarMoeda(resumo.totalDiarias);
+
+    const lista = document.getElementById("checkoutConsumos");
+    lista.replaceChildren();
+    if (!consumos.length) {
+        const vazio = document.createElement("p");
+        vazio.className = "checkout-vazio";
+        vazio.textContent = "Nenhum consumo registrado para esta hospedagem.";
+        lista.appendChild(vazio);
+    }
+    // Montagem via DOM/textContent protege descrições digitadas pelo usuário.
+    consumos.forEach(consumo => {
+        const item = document.createElement("div");
+        item.className = "checkout-consumo-item";
+        const dados = document.createElement("div");
+        const descricao = document.createElement("strong");
+        descricao.textContent = consumo.descricao;
+        const data = document.createElement("small");
+        data.textContent = new Date(consumo.dataLancamento).toLocaleString("pt-BR");
+        dados.append(descricao, data);
+        const valor = document.createElement("strong");
+        valor.textContent = formatarMoeda(consumo.valor);
+        const remover = document.createElement("button");
+        remover.type = "button";
+        remover.className = "btn-remover-consumo";
+        remover.textContent = "Remover";
+        remover.addEventListener("click", () => removerConsumoCheckout(consumo.id, consumo.descricao));
+        item.append(dados, valor, remover);
+        lista.appendChild(item);
+    });
+    document.getElementById("checkoutTotal").textContent = formatarMoeda(resumo.totalConsumos);
+    document.getElementById("checkoutTotalGeral").textContent = formatarMoeda(resumo.totalGeral);
+}
+
+async function removerConsumoCheckout(id, descricao) {
+    // A API aceita a remoção apenas enquanto a hospedagem está em CHECKIN.
+    if (!confirm(`Remover o consumo "${descricao}" desta hospedagem?`)) return;
+    try {
+        await apiRequest(`/consumos/${id}`, "DELETE");
+        await realizarCheckout(reservaCheckoutId);
+    } catch (erro) {
+        mostrarMensagem(erro.message || "Não foi possível remover o consumo.", "erro");
+    }
+}
+
+async function confirmarCheckout() {
+    if (!reservaCheckoutId) return;
+    const botao = document.getElementById("btnConfirmarCheckout");
+    // Bloqueia confirmações duplicadas enquanto a requisição está em andamento.
+    botao.disabled = true;
+    try {
+        await apiRequest(`/reservas/${reservaCheckoutId}/checkout`, "POST");
+        fecharModalCheckout();
+        mostrarMensagem("Check-out realizado com sucesso!", "sucesso");
+        await carregarReservas();
+    } catch (erro) {
+        mostrarMensagem(erro.message || "Não foi possível realizar o check-out.", "erro");
+    } finally {
+        botao.disabled = false;
+    }
+}
+
+function fecharModalCheckout() {
+    document.getElementById("modalCheckout")?.classList.remove("aberto");
+    reservaCheckoutId = null;
+}
+
+function formatarMoeda(valor) {
+    return Number(valor || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
 
@@ -755,6 +819,8 @@ function mostrarDetalhes(id) {
         .getElementById("modalDetalhes")
         .classList.add("aberto");
 
+    document.getElementById("btnFecharModalDetalhes")?.focus();
+
 }
 
 
@@ -839,5 +905,36 @@ function mostrarMensagem(texto, tipo) {
             "mensagem";
 
     }, 4000);
+
+}
+
+function configurarModalDetalhes() {
+
+    const modal = document.getElementById("modalDetalhes");
+    document.getElementById("btnFecharModalDetalhes")?.addEventListener("click", fecharModal);
+    document.getElementById("btnFecharModalRodape")?.addEventListener("click", fecharModal);
+    document.getElementById("btnFecharCheckout")?.addEventListener("click", fecharModalCheckout);
+    document.getElementById("btnCancelarCheckout")?.addEventListener("click", fecharModalCheckout);
+    document.getElementById("btnConfirmarCheckout")?.addEventListener("click", confirmarCheckout);
+
+    // Clicar no fundo escuro fecha o modal; clicar no conteúdo não fecha.
+    modal?.addEventListener("click", evento => {
+        if (evento.target === modal) fecharModal();
+    });
+
+    const modalCheckout = document.getElementById("modalCheckout");
+    modalCheckout?.addEventListener("click", evento => {
+        if (evento.target === modalCheckout) fecharModalCheckout();
+    });
+
+    // Escape fecha qualquer modal que estiver aberto.
+    document.addEventListener("keydown", evento => {
+        if (evento.key === "Escape" && modal?.classList.contains("aberto")) {
+            fecharModal();
+        }
+        if (evento.key === "Escape" && modalCheckout?.classList.contains("aberto")) {
+            fecharModalCheckout();
+        }
+    });
 
 }

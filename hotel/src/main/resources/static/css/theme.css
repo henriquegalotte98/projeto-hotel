@@ -1,0 +1,64 @@
+:root {
+    --primary: #222059;
+    --primary-light: #37748C;
+    --accent: #37748C;
+    --accent-hover: #222059;
+    --bg-body: #F2F2F2;
+    --bg-card: #ffffff;
+    --text-main: #222059;
+    --text-muted: #37748C;
+    --border: #B8D9D3;
+    --success: #37748C;
+    --warning: #37748C;
+    --danger: #222059;
+    --hotel-primary: #222059;
+    --hotel-secondary: #37748C;
+    --hotel-soft: #B8D9D3;
+    --hotel-surface: #F2F2F2;
+}
+
+body { background-color: var(--hotel-surface); color: var(--hotel-primary); }
+.login-page {
+    background: linear-gradient(rgba(34, 32, 89, .88), rgba(55, 116, 140, .84)),
+                url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed !important;
+}
+body > aside, body > .sidebar { background: var(--hotel-primary) !important; }
+header, .topbar { background: #fff !important; border-color: var(--hotel-soft) !important; }
+header > button[onclick*="fazerLogout"],
+header > .maintenance-logout,
+header > .relatorios-logout,
+header > .restaurante-logout,
+header > .btn-logout { display: none !important; }
+.card, .content-card, .resumo-card, .stat-card, .summary-card, .modal-conteudo, .modal-box {
+    border-color: var(--hotel-soft) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 5px 18px rgba(34, 32, 89, .08) !important;
+}
+a { color: var(--hotel-secondary); }
+h1, h2, h3, h4, strong { color: var(--hotel-primary); }
+button, .btn, .btn-primary { border-color: transparent; }
+.btn-primary, button[type="submit"], .btn-confirmar-checkout {
+    background: var(--hotel-primary) !important;
+    color: #fff !important;
+}
+.btn-primary:hover, button[type="submit"]:hover, .btn-confirmar-checkout:hover {
+    background: var(--hotel-secondary) !important;
+}
+.btn-secondary { border-color: var(--hotel-secondary) !important; color: var(--hotel-primary) !important; }
+.btn-danger, .btn-delete, .btn-cancelar, .btn-remover-consumo {
+    background: var(--hotel-secondary) !important;
+    color: #fff !important;
+}
+input, select, textarea { border-color: var(--hotel-soft) !important; }
+input:focus, select:focus, textarea:focus {
+    border-color: var(--hotel-secondary) !important;
+    box-shadow: 0 0 0 3px rgba(55, 116, 140, .18) !important;
+    outline: none;
+}
+.badge, .status-badge { border-color: var(--hotel-soft); }
+.section-label, .page-kicker { color: var(--hotel-secondary) !important; }
+table thead, table th { background: rgba(184, 217, 211, .34) !important; color: var(--hotel-primary) !important; }
+table td { border-color: rgba(184, 217, 211, .72) !important; }
+.modal { background: rgba(34, 32, 89, .62) !important; }
+.login-logo { background: var(--hotel-primary) !important; border-color: var(--hotel-soft) !important; }
+::selection { background: var(--hotel-soft); color: var(--hotel-primary); }

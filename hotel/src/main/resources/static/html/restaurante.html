@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../css/app.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/restaurante.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
     <aside>
@@ -46,15 +48,34 @@
                 <h1>Restaurante</h1>
                 <p class="subtitle">Lançamento e acompanhamento de consumos extras das reservas.</p>
 
-                <section class="card restaurante-status" aria-labelledby="restaurante-status-titulo">
-                    <div class="restaurante-status-icon" aria-hidden="true">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
+                <section class="card" aria-labelledby="titulo-lancamento">
+                    <h2 id="titulo-lancamento">Lançar consumo</h2>
+                    <form id="form-consumo" class="consumo-form">
+                        <div class="form-group">
+                            <label for="reservaId">Hóspede / quarto</label>
+                            <select id="reservaId" required>
+                                <option value="" selected disabled>Carregando hospedagens...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <input id="descricao" maxlength="255" required placeholder="Ex.: Jantar, frigobar, lavanderia">
+                        </div>
+                        <div class="form-group">
+                            <label for="valor">Valor</label>
+                            <input id="valor" type="number" min="0.01" step="0.01" required placeholder="0,00">
+                        </div>
+                        <button type="submit" class="btn-primary"><i class="fa-solid fa-plus"></i> Adicionar consumo</button>
+                    </form>
+                </section>
+
+                <section class="card" aria-labelledby="titulo-consumos">
+                    <div class="consumos-header">
+                        <h2 id="titulo-consumos">Consumos da hospedagem</h2>
+                        <strong id="total-consumos">Total: R$ 0,00</strong>
                     </div>
-                    <div>
-                        <h2 id="restaurante-status-titulo">Serviço temporariamente indisponível</h2>
-                        <p id="restaurante-status-mensagem" role="status" aria-live="polite">
-                            A API de consumo extra ainda não está disponível no servidor. Nenhum lançamento pode ser realizado neste momento.
-                        </p>
+                    <div id="lista-consumos" class="lista-consumos" aria-live="polite">
+                        Selecione uma hospedagem para consultar os consumos.
                     </div>
                 </section>
             </div>

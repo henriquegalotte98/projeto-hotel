@@ -1,9 +1,9 @@
 /* Aparencia compartilhada do menu lateral em todas as telas internas. */
 :root {
     --nav-width: 280px;
-    --nav-bg: #0f172a;
-    --nav-text: #94a3b8;
-    --nav-accent: #b45309;
+    --nav-bg: #222059;
+    --nav-text: #B8D9D3;
+    --nav-accent: #37748C;
 }
 
 body > aside,
@@ -44,6 +44,8 @@ body > .sidebar {
     padding: 24px 16px !important;
     gap: 8px !important;
     list-style: none;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .menu li { display: block; }
@@ -60,7 +62,37 @@ body > .sidebar {
 .menu a:hover,
 .menu a.active {
     color: #fff !important;
-    background: rgba(180, 83, 9, .14) !important;
+    background: rgba(55, 116, 140, .32) !important;
+}
+
+.nav-logout {
+    flex: 0 0 auto;
+    padding: 14px 16px 18px;
+    border-top: 1px solid rgba(184, 217, 211, .2);
+    background: var(--nav-bg);
+}
+
+.nav-logout-button {
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1px solid rgba(184, 217, 211, .24);
+    border-radius: 12px;
+    background: rgba(184, 217, 211, .1);
+    color: #F2F2F2;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.nav-logout-button:hover,
+.nav-logout-button:focus-visible {
+    background: #37748C;
+    border-color: #B8D9D3;
+    outline: none;
 }
 
 .menu a.active {

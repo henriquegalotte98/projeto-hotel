@@ -1,5 +1,6 @@
 package br.com.jprog.hotel.controller;
 import br.com.jprog.hotel.dto.ReservaRequest;
+import br.com.jprog.hotel.dto.CheckoutResumoResponse;
 import br.com.jprog.hotel.model.Reserva;
 import br.com.jprog.hotel.service.ReservaService;
 import jakarta.validation.Valid;
@@ -30,4 +31,5 @@ public class ReservaController {
     @PatchMapping("/{id}/cancelar") public Reserva cancelar(@PathVariable Long id) { return service.cancelar(id); }
     @PostMapping("/{id}/checkin") public Reserva checkin(@PathVariable Long id) { return service.checkin(id); }
     @PostMapping("/{id}/checkout") public Reserva checkout(@PathVariable Long id) { return service.checkout(id); }
+    @GetMapping("/{id}/checkout/resumo") public CheckoutResumoResponse resumoCheckout(@PathVariable Long id) { return service.resumoCheckout(id); }
 }

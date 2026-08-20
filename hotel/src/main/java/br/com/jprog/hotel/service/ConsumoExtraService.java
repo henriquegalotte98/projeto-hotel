@@ -60,7 +60,13 @@ public class ConsumoExtraService {
     }
 
     @Transactional
-    public void excluir(Long id) { repository.delete(buscar(id)); }
+    public void excluir(Long id) {
+        ConsumoExtra consumo = buscar(id);
+        if (consumo.getReserva().getStatus() != StatusReserva.CHECKIN) {
+            throw new RegraNegocioException("Consumos só podem ser removidos antes do check-out");
+        }
+        repository.delete(consumo);
+    }
 
     private Reserva buscarReserva(Long id) {
         return reservas.findById(id).orElseThrow(() ->

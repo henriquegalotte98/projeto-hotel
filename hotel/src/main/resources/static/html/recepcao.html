@@ -9,6 +9,8 @@
 
     <link rel="stylesheet" href="../css/app.css">
     <link rel="stylesheet" href="../css/recepcao.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/theme.css">
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -383,6 +385,37 @@
 
     </div>
 
+    <div id="modalCheckout" class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalCheckout">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <h2 id="tituloModalCheckout"><i class="fa-solid fa-receipt"></i> Conferência do check-out</h2>
+                <button type="button" id="btnFecharCheckout" class="btn-fechar" aria-label="Fechar conferência" title="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="checkout-resumo">
+                <p><strong id="checkoutHospede">Hóspede</strong></p>
+                <p id="checkoutQuarto">Quarto</p>
+                <p id="checkoutAvisoData" class="checkout-aviso"></p>
+            </div>
+            <div class="checkout-diarias">
+                <div><span>Diárias</span><strong id="checkoutQuantidadeDiarias">1 diária</strong></div>
+                <div><span>Valor da diária</span><strong id="checkoutValorDiaria">R$ 0,00</strong></div>
+                <div><span>Subtotal das diárias</span><strong id="checkoutTotalDiarias">R$ 0,00</strong></div>
+            </div>
+            <h3>Consumos realizados</h3>
+            <div id="checkoutConsumos" class="checkout-consumos"></div>
+            <div class="checkout-total"><span>Total de consumos</span><strong id="checkoutTotal">R$ 0,00</strong></div>
+            <div class="checkout-total checkout-total-geral"><span>Total geral</span><strong id="checkoutTotalGeral">R$ 0,00</strong></div>
+            <div class="modal-footer checkout-acoes">
+                <button type="button" id="btnCancelarCheckout" class="btn-modal-fechar">Voltar</button>
+                <button type="button" id="btnConfirmarCheckout" class="btn-confirmar-checkout">
+                    <i class="fa-solid fa-check"></i> Confirmar check-out
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- =====================================================
          MODAL DETALHES
@@ -390,20 +423,26 @@
 
     <div
         id="modalDetalhes"
-        class="modal">
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tituloModalDetalhes">
 
         <div class="modal-conteudo">
 
             <div class="modal-header">
 
-                <h2>
+                <h2 id="tituloModalDetalhes">
                     <i class="fa-solid fa-calendar-check"></i>
                     Detalhes da Reserva
                 </h2>
 
                 <button
+                    type="button"
+                    id="btnFecharModalDetalhes"
                     class="btn-fechar"
-                    onclick="fecharModal()">
+                    aria-label="Fechar detalhes da reserva"
+                    title="Fechar">
 
                     <i class="fa-solid fa-xmark"></i>
 
@@ -416,6 +455,12 @@
 
                 <!-- preenchido pelo JavaScript -->
 
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnFecharModalRodape" class="btn-modal-fechar">
+                    Fechar
+                </button>
             </div>
 
         </div>
