@@ -72,6 +72,7 @@ class UsuarioServiceTest {
     void deveCriarUsuarioAtivoComSenhaBCrypt() {
         Usuario usuario = usuario(null, "12345678901", "senha-aberta");
         when(usuarioRepository.existsByCpf(usuario.getCpf())).thenReturn(false);
+        when(usuarioRepository.existsByEmail(usuario.getEmail())).thenReturn(false);
         when(usuarioRepository.save(usuario)).thenReturn(usuario);
 
         Usuario resultado = usuarioService.criar(usuario);
@@ -116,6 +117,22 @@ class UsuarioServiceTest {
         when(usuarioRepository.existsByCpfAndIdNot(atualizacao.getCpf(), 1L)).thenReturn(true);
 
         assertThrows(IllegalArgumentException.class, () -> usuarioService.atualizar(1L, atualizacao));
+        verify(usuarioRepository, never()).save(existente);
+    }
+
+    @Test
+    void deveImpedirAtualizacaoComEmailDeOutroUsuario() {
+        Usuario existente = usuario(1L, "12345678901", "hash");
+        Usuario atualizacao = usuario(null, "12345678901", "");
+        atualizacao.setEmail("email.existente@hotelweb.com");
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(existente));
+        when(usuarioRepository.existsByEmailAndIdNot(atualizacao.getEmail(), 1L)).thenReturn(true);
+
+        IllegalArgumentException erro = assertThrows(
+                IllegalArgumentException.class,
+                () -> usuarioService.atualizar(1L, atualizacao));
+
+        assertEquals("E-mail já cadastrado para outro usuário", erro.getMessage());
         verify(usuarioRepository, never()).save(existente);
     }
 

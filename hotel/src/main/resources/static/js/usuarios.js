@@ -1,5 +1,5 @@
 // ============================================================
-// USUÁRIOS - CRUD completo (Dev 02)
+// USUÁRIOS - CRUD completo (Dev 02) - CORRIGIDO
 // ============================================================
 
 /**
@@ -63,9 +63,6 @@ async function carregarUsuarios() {
             </tr>
         `;
 
-        // ============================================================
-        // CHAMADA REAL PARA A API
-        // ============================================================
         const usuarios = await apiRequest('/usuarios', 'GET');
 
         if (!usuarios || usuarios.length === 0) {
@@ -84,15 +81,16 @@ async function carregarUsuarios() {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${usuario.id || '-'}</td>
-                <td><strong>${usuario.nome || '-'}</strong></td>
                 <td>${formatarCPF(usuario.cpf) || '-'}</td>
+                <td><strong>${usuario.nome || '-'}</strong></td>
+                <td>${usuario.email || '-'}</td>
                 <td><span class="badge badge-${(usuario.papel || '').toLowerCase()}">${usuario.papel || '-'}</span></td>
                 <td style="text-align: center;">
                     <div class="action-buttons" style="justify-content: center;">
-                        <button class="btn-edit" onclick="editarUsuario(${usuario.id || ''})">
+                        <button class="btn-edit" onclick="editarUsuario(${usuario.id})">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-                        <button class="btn-delete" onclick="desativarUsuario(${usuario.id || ''})">
+                        <button class="btn-delete" onclick="desativarUsuario(${usuario.id})">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -138,9 +136,6 @@ function abrirCadastro() {
  */
 async function editarUsuario(id) {
     try {
-        // ============================================================
-        // CHAMADA REAL PARA A API
-        // ============================================================
         const usuario = await apiRequest(`/usuarios/${id}`, 'GET');
 
         document.getElementById('usuarioId').value = usuario.id;
@@ -148,6 +143,7 @@ async function editarUsuario(id) {
         document.getElementById('cpf').value = usuario.cpf || '';
         document.getElementById('email').value = usuario.email || '';
         document.getElementById('papel').value = usuario.papel || '';
+        document.getElementById('senha').value = '';
         document.getElementById('senha').required = false;
         document.getElementById('senha').placeholder = 'Deixe em branco para manter a atual';
         document.getElementById('senhaHelp').textContent = 'Digite uma nova senha apenas se quiser alterar';
@@ -196,15 +192,9 @@ async function salvarUsuario(event) {
 
     try {
         if (id) {
-            // ============================================================
-            // CHAMADA REAL PARA A API
-            // ============================================================
             await apiRequest(`/usuarios/${id}`, 'PUT', dados);
             alert('Usuário atualizado com sucesso!');
         } else {
-            // ============================================================
-            // CHAMADA REAL PARA A API
-            // ============================================================
             await apiRequest('/usuarios', 'POST', dados);
             alert('Usuário cadastrado com sucesso!');
         }
@@ -226,9 +216,6 @@ async function desativarUsuario(id) {
     }
 
     try {
-        // ============================================================
-        // CHAMADA REAL PARA A API
-        // ============================================================
         await apiRequest(`/usuarios/${id}`, 'DELETE');
         alert('Usuário desativado com sucesso!');
         carregarUsuarios();

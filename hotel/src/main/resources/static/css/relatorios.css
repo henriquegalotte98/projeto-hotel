@@ -281,3 +281,10 @@
     .card-filtro, .card-indicador, .card-grafico, .card-tabela { padding: 16px; }
     .grafico-container { height: 230px; }
 }
+.grafico-indisponivel {
+    display: grid;
+    min-height: 220px;
+    place-items: center;
+    color: #64748b;
+    text-align: center;
+}

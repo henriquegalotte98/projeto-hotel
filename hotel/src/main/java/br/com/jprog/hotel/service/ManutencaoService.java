@@ -4,6 +4,7 @@ import br.com.jprog.hotel.exception.RecursoNaoEncontradoException;
 import br.com.jprog.hotel.model.SolicitacaoManutencao;
 import br.com.jprog.hotel.model.enums.StatusManutencao;
 import br.com.jprog.hotel.repository.ManutencaoRepository;
+import br.com.jprog.hotel.repository.QuartoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,21 +18,27 @@ import java.util.List;
 public class ManutencaoService {
 
     private final ManutencaoRepository repository;
+    private final QuartoRepository quartos;
     private final Clock clock;
 
     @Autowired
-    public ManutencaoService(ManutencaoRepository repository) {
-        this(repository, Clock.systemDefaultZone());
+    public ManutencaoService(ManutencaoRepository repository, QuartoRepository quartos) {
+        this(repository, quartos, Clock.systemDefaultZone());
     }
 
-    ManutencaoService(ManutencaoRepository repository, Clock clock) {
+    ManutencaoService(ManutencaoRepository repository, QuartoRepository quartos, Clock clock) {
         this.repository = repository;
+        this.quartos = quartos;
         this.clock = clock;
     }
 
     /** Abre um chamado com status inicial e data controlados pelo serviço. */
     @Transactional
     public SolicitacaoManutencao abrir(SolicitacaoManutencao solicitacao) {
+        if (!quartos.existsById(solicitacao.getQuartoId())) {
+            throw new RecursoNaoEncontradoException(
+                    "Quarto não encontrado: " + solicitacao.getQuartoId());
+        }
         solicitacao.setId(null);
         solicitacao.setStatus(StatusManutencao.ABERTA);
         solicitacao.setAbertaEm(LocalDateTime.now(clock));
