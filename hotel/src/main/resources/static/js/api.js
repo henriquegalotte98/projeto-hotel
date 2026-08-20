@@ -30,10 +30,19 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
         }
 
         if (!response.ok) {
-            const errorMessage = data?.message || data || 'Erro na requisição';
+            const errorMessage = data?.erro || data?.message || data || 'Erro na requisição';
             const error = new Error(errorMessage);
             error.status = response.status;
             error.data = data;
+
+            if (response.status === 401 && endpoint !== '/auth/login') {
+                localStorage.removeItem('usuarioLogado');
+                localStorage.removeItem('token');
+                if (!window.location.pathname.endsWith('/login.html')) {
+                    window.location.replace('login.html');
+                }
+            }
+
             throw error;
         }
 

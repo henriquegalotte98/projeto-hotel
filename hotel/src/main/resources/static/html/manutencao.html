@@ -48,8 +48,10 @@
                 <h2><i class="fa-solid fa-plus"></i> Abrir Novo Chamado</h2>
                 <form id="form-chamado">
                     <div class="form-group">
-                        <label for="quartoId">ID do quarto:</label>
-                        <input type="number" id="quartoId" min="1" step="1" required placeholder="Ex.: 1">
+                        <label for="quartoId">Quarto:</label>
+                        <select id="quartoId" required>
+                            <option value="" selected disabled>Carregando quartos...</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="descricao">Descrição do Problema:</label>

@@ -20,7 +20,7 @@
         document.getElementById("modal-historico")?.addEventListener("click", evento => {
             if (evento.target.id === "modal-historico") fecharModal();
         });
-        await carregarChamados();
+        await Promise.all([carregarQuartos(), carregarChamados()]);
     }
 
     function obterUsuario() {
@@ -40,17 +40,57 @@
 
     async function criarChamado(evento) {
         evento.preventDefault();
+        const formulario = evento.currentTarget;
+        const botaoEnviar = formulario.querySelector('button[type="submit"]');
         const quartoId = Number(document.getElementById("quartoId")?.value);
         const descricao = document.getElementById("descricao")?.value.trim();
         if (!Number.isInteger(quartoId) || quartoId <= 0 || !descricao) return;
 
+        if (botaoEnviar) botaoEnviar.disabled = true;
         try {
             await apiRequest("/manutencao", "POST", { quartoId, descricao });
-            evento.currentTarget.reset();
+            formulario.reset();
             await carregarChamados();
         } catch (erro) {
             alert(erro.data?.erro || erro.message || "Não foi possível abrir o chamado.");
+        } finally {
+            if (botaoEnviar) botaoEnviar.disabled = false;
         }
+    }
+
+    async function carregarQuartos() {
+        const seletor = document.getElementById("quartoId");
+        const botaoEnviar = document.querySelector('#form-chamado button[type="submit"]');
+        if (!seletor) return;
+
+        seletor.disabled = true;
+        if (botaoEnviar) botaoEnviar.disabled = true;
+
+        try {
+            const resposta = await apiRequest("/quartos");
+            const quartos = Array.isArray(resposta) ? resposta : [];
+            seletor.replaceChildren(criarOpcao("", quartos.length ? "Selecione um quarto" : "Nenhum quarto cadastrado", true));
+
+            quartos
+                .slice()
+                .sort((a, b) => String(a.numero).localeCompare(String(b.numero), "pt-BR", { numeric: true }))
+                .forEach(quarto => seletor.appendChild(criarOpcao(quarto.id, `${quarto.numero}`)));
+
+            seletor.disabled = quartos.length === 0;
+            if (botaoEnviar) botaoEnviar.disabled = quartos.length === 0;
+        } catch (erro) {
+            seletor.replaceChildren(criarOpcao("", "Não foi possível carregar os quartos", true));
+            console.error("Erro ao carregar quartos:", erro);
+        }
+    }
+
+    function criarOpcao(valor, texto, desabilitada = false) {
+        const opcao = document.createElement("option");
+        opcao.value = String(valor);
+        opcao.textContent = texto;
+        opcao.disabled = desabilitada;
+        opcao.selected = desabilitada;
+        return opcao;
     }
 
     async function carregarChamados() {

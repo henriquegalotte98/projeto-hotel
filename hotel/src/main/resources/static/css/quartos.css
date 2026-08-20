@@ -328,7 +328,15 @@ body {
 
     margin-left: 250px;
 
-    min-height: 100vh;
+    height: 100vh;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    scroll-behavior: smooth;
 
     padding: 35px;
 
@@ -889,6 +897,14 @@ body {
 .form-actions {
 
     display: flex;
+
+    position: relative;
+
+    z-index: 2;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #e2e8f0;
 
     gap: 10px;
 

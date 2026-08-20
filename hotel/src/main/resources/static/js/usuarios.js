@@ -143,6 +143,7 @@ async function editarUsuario(id) {
         document.getElementById('cpf').value = usuario.cpf || '';
         document.getElementById('email').value = usuario.email || '';
         document.getElementById('papel').value = usuario.papel || '';
+        document.getElementById('senha').value = '';
         document.getElementById('senha').required = false;
         document.getElementById('senha').placeholder = 'Deixe em branco para manter a atual';
         document.getElementById('senhaHelp').textContent = 'Digite uma nova senha apenas se quiser alterar';

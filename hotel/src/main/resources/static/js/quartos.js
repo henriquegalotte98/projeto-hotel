@@ -9,25 +9,22 @@ let usuarioLogado = null;
 // INICIALIZAÇÃO
 // ============================================================
 
-document.addEventListener("DOMContentLoaded", () => {
-    verificarUsuario();
-    carregarQuartos();
+document.addEventListener("DOMContentLoaded", async () => {
+    const autenticado = await verificarUsuario();
+    if (!autenticado) return;
+
     configurarEventos();
+    await carregarQuartos();
 });
 
 // ============================================================
 // VERIFICA USUÁRIO LOGADO E APLICA REGRAS
 // ============================================================
 
-function verificarUsuario() {
-    const usuarioStr = localStorage.getItem("usuarioLogado");
-    if (!usuarioStr) {
-        window.location.href = "login.html";
-        return;
-    }
-
+async function verificarUsuario() {
     try {
-        usuarioLogado = JSON.parse(usuarioStr);
+        usuarioLogado = await apiRequest("/auth/me");
+        localStorage.setItem("usuarioLogado", JSON.stringify(usuarioLogado));
         const nome = document.getElementById("usuarioNome");
         if (nome) {
             nome.textContent = usuarioLogado.nome || "Usuário";
@@ -38,21 +35,18 @@ function verificarUsuario() {
         // ============================================================
 
         // 1. Esconde o formulário de cadastro se NÃO for ADMIN
-        const formSection = document.querySelector(".content-card:first-of-type"); // Pega o card do formulário
-        if (formSection && usuarioLogado.papel !== 'ADMIN') {
-            formSection.style.display = 'none';
-        }
+        const formSection = document.getElementById("area-administracao-quartos");
+        if (formSection) formSection.hidden = !ehAdmin();
 
         // 2. Esconde a coluna de "Ações" na tabela se NÃO for ADMIN
-        const thAcoes = document.querySelector("thead th:last-child");
-        if (thAcoes && usuarioLogado.papel !== 'ADMIN') {
-            thAcoes.style.display = 'none';
-        }
+        const thAcoes = document.getElementById("cabecalho-acoes-quartos");
+        if (thAcoes) thAcoes.hidden = !ehAdmin();
+
+        return true;
 
     } catch (erro) {
-        console.error("Erro ao carregar usuário:", erro);
-        localStorage.removeItem("usuarioLogado");
-        window.location.href = "login.html";
+        console.error("Sessão inválida ou expirada:", erro);
+        return false;
     }
 }
 
@@ -65,7 +59,7 @@ async function carregarQuartos() {
     if (tabela) {
         tabela.innerHTML = `
             <tr>
-                <td colspan="7" style="text-align:center;">
+                    <td colspan="${ehAdmin() ? 7 : 6}" style="text-align:center;">
                     <i class="fa-solid fa-spinner fa-spin"></i> Carregando quartos...
                 </td>
             </tr>
@@ -124,7 +118,7 @@ function renderizarQuartos() {
     if (quartosFiltrados.length === 0) {
         tabela.innerHTML = `
             <tr>
-                <td colspan="7" style="text-align:center;">
+                <td colspan="${ehAdmin() ? 7 : 6}" style="text-align:center;">
                     Nenhum quarto encontrado.
                 </td>
             </tr>
@@ -139,7 +133,7 @@ function renderizarQuartos() {
         
         // Só mostra a coluna de ações se for ADMIN
         let colunaAcoes = '';
-        if (usuarioLogado && usuarioLogado.papel === 'ADMIN') {
+        if (ehAdmin()) {
             colunaAcoes = `
                 <td>
                     <button type="button" class="btn btn-secondary" onclick="editarQuarto(${quarto.id})">
@@ -150,9 +144,6 @@ function renderizarQuartos() {
                     </button>
                 </td>
             `;
-        } else {
-            // Se não for ADMIN, coloca um espaço vazio ou "---"
-            colunaAcoes = `<td style="text-align:center; color:#94a3b8;">---</td>`;
         }
 
         tr.innerHTML = `
@@ -192,7 +183,7 @@ async function salvarQuarto(evento) {
     evento.preventDefault();
 
     // Segurança extra: se não for ADMIN, bloqueia
-    if (!usuarioLogado || usuarioLogado.papel !== 'ADMIN') {
+    if (!ehAdmin()) {
         alert("Apenas administradores podem cadastrar ou editar quartos.");
         return;
     }
@@ -251,7 +242,7 @@ async function salvarQuarto(evento) {
 
 async function editarQuarto(id) {
     // Segurança extra: se não for ADMIN, bloqueia
-    if (!usuarioLogado || usuarioLogado.papel !== 'ADMIN') {
+    if (!ehAdmin()) {
         alert("Apenas administradores podem editar quartos.");
         return;
     }
@@ -284,7 +275,7 @@ async function editarQuarto(id) {
 
 async function excluirQuarto(id) {
     // Segurança extra: se não for ADMIN, bloqueia
-    if (!usuarioLogado || usuarioLogado.papel !== 'ADMIN') {
+    if (!ehAdmin()) {
         alert("Apenas administradores podem excluir quartos.");
         return;
     }
@@ -370,6 +361,10 @@ function formatarValor(valor) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
+}
+
+function ehAdmin() {
+    return String(usuarioLogado?.papel || '').replace(/^ROLE_/, '') === 'ADMIN';
 }
 
 // ============================================================
