@@ -261,7 +261,9 @@ async function editarQuarto(id) {
         document.getElementById("tituloFormulario").textContent = "Editar quarto";
         document.getElementById("btnCancelar").classList.remove("hidden");
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        const areaFormulario = document.getElementById("area-administracao-quartos");
+        areaFormulario?.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.setTimeout(() => document.getElementById("numero")?.focus(), 350);
 
     } catch (error) {
         console.error("Erro ao carregar quarto:", error);
